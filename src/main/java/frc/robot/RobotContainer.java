@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.autos.*;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
+import frc.robot.subsystems.Aim.Aim;
 import frc.robot.subsystems.Shooter.Shooter;
 import frc.robot.subsystems.Shooter.Shooter.ShooterState;
 import frc.robot.subsystems.Trigger.ShootTrigger;
@@ -26,7 +27,7 @@ import frc.robot.subsystems.intake.Intake;
 public class RobotContainer {
     /* Controllers */
     private final Joystick driver = new Joystick(0);
-    private final Joystick tester = new Joystick(2);
+    // private final Joystick tester = new Joystick(2);
 
     /* Drive Controls */
     private final int translationAxis = 1;
@@ -39,15 +40,18 @@ public class RobotContainer {
     // private final JoystickButton button_intake = new getRawAxis(3);
     // private final JoystickButton button_intakereverse = new getRawAxis(2);
     private final JoystickButton button_amp = new JoystickButton(driver, 3);
-    private final JoystickButton button_trigger = new JoystickButton(driver, 1);
+    // private final JoystickButton button_trigger = new JoystickButton(driver, 1);
     private final JoystickButton button_flywheelCoasting = new JoystickButton(driver, 4);
     private final JoystickButton button_flywheelStop = new JoystickButton(driver, 2);
+
+    private final JoystickButton button_auto_aim = new JoystickButton(driver, 1);
 
     /* Subsystems */
     private final Swerve s_Swerve = new Swerve();
     private final ShootTrigger c_trigger = new ShootTrigger();
     private final Intake c_intake = new Intake(c_trigger);
     private final Shooter c_shooter = new Shooter(c_trigger);
+    private final Aim c_aim = new Aim();
 
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -88,17 +92,21 @@ public class RobotContainer {
                 new ShooterCmd(c_shooter, ShooterState.Stop);
             })
         );
-        button_trigger.onTrue(new InstantCommand(()->{
-                new ShooterCmd(c_shooter, ShooterState.Shootout);
-            }));
+        // button_trigger.onTrue(new InstantCommand(()->{
+        //         new ShooterCmd(c_shooter, ShooterState.Shootout);
+        //     }));
         button_amp.onTrue(new InstantCommand(()->{
                 new ShooterCmd(c_shooter, ShooterState.ShootAmp);
             }));
 
-        new JoystickButton(tester, 1).whileTrue(s_Swerve.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
-        new JoystickButton(tester, 2).whileTrue(s_Swerve.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
-        new JoystickButton(tester, 3).whileTrue(s_Swerve.sysIdDynamic(SysIdRoutine.Direction.kForward));
-        new JoystickButton(tester, 4).whileTrue(s_Swerve.sysIdDynamic(SysIdRoutine.Direction.kReverse));
+        button_auto_aim.onTrue(new InstantCommand(()->{
+            new AimCmd(c_aim, s_Swerve);
+        }));
+
+        // new JoystickButton(tester, 1).whileTrue(s_Swerve.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
+        // new JoystickButton(tester, 2).whileTrue(s_Swerve.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
+        // new JoystickButton(tester, 3).whileTrue(s_Swerve.sysIdDynamic(SysIdRoutine.Direction.kForward));
+        // new JoystickButton(tester, 4).whileTrue(s_Swerve.sysIdDynamic(SysIdRoutine.Direction.kReverse));
 
     }
 

@@ -193,4 +193,7 @@ public final class Constants {
         public static double AmpUpSpeed = 20; //TODO
         public static double AmpDownSpeed = 30; //TODO
     }
+
+    public static String LIME_LIGHT_NOTE_NAME = "limelight-note";
+    public static String LIME_LIGHT_AIM_NAME = "limelight-aim";
 }

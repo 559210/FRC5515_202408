@@ -18,4 +18,6 @@ public class StateController {
     }
 
     public boolean isAutoAimming = false;
+    public double aimTx = 0;
+    public double aimTy = 0;
 }

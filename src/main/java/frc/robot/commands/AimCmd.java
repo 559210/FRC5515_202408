@@ -2,6 +2,8 @@ package frc.robot.commands;
 
 import java.util.function.DoubleSupplier;
 
+import com.pathplanner.lib.path.PathPlannerTrajectory.State;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.Timer;
@@ -34,22 +36,39 @@ public class AimCmd extends Command {
         StateController.getInstance().isAutoAimming = true;
     }
 
+    int count = 0;
     @Override
     public void execute() {
-        double epsilon = 0.01;
+        StateController sc = StateController.getInstance();
+        double epsilon = 0.5;
         double translationVal = m_Aim.limelight_range_proportional(); // the value's range is unknown! by majun
         double rotationVal = m_Aim.limelight_aim_proportional(); // the value's range is unknown! by majun
         double absTrans = Math.abs(translationVal);
         double absRot = Math.abs(rotationVal);
 
-        // rotation first， then translate
-        if (absRot > epsilon) {
-            translationVal = 0;
-        }
-        else {
-            rotationVal = 0;
-        }
-        if (absTrans >= epsilon || absRot >= epsilon) {
+        double absTx = Math.abs(sc.aimTx);
+        double absTy = Math.abs(sc.aimTy);
+
+        // rotation first, then translate
+        // if (absTx > epsilon) {
+        //     // translationVal = 0;
+        // }
+        // else {
+        //     rotationVal = 0;
+        // }
+        count++;
+        SmartDashboard.putString("auto_aim", "----------- START -----------");
+        SmartDashboard.putNumber("auto_aim_count", count);
+        SmartDashboard.putNumber("auto_aim_trans", absTy);
+        SmartDashboard.putNumber("auto_aim_rot", absTx);
+        if (absTx >= epsilon || absTy >= epsilon) {
+ 
+            if (absTx < epsilon) {
+                rotationVal = 0;
+            }
+            if (absTy < epsilon) {
+                translationVal = 0;
+            }
             double strafeVal = 0;
             s_Swerve.drive(
                 new Translation2d(translationVal, strafeVal), 
@@ -59,8 +78,12 @@ public class AimCmd extends Command {
             );
         }
         else {
-            isDone = true;
+
         }
+            if (count >= 100) {
+                isDone = true;
+            }
+            
     }
 
     @Override
@@ -70,6 +93,7 @@ public class AimCmd extends Command {
 
     @Override
     public boolean isFinished() {
+        SmartDashboard.putBoolean("auto_aim_isDone", isDone);
         return isDone;
     }
 }
