@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 // import frc.robot.Constants.CanID;
 // import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants;
+import frc.robot.StateController;
 import frc.robot.subsystems.Trigger.ShootTrigger;
 import frc.robot.subsystems.Trigger.ShootTrigger.TriggerState;
 
@@ -138,6 +139,7 @@ public class Intake extends SubsystemBase {
           if(isSensored()){
             this.intakeState = IntakeState.Intake_sensored;
             this.isSensored = true;
+            StateController.getInstance().intakeAimStop = true;
           }
         }
       break;

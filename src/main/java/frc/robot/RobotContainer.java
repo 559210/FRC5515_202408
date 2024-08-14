@@ -17,6 +17,7 @@ import frc.robot.subsystems.Shooter.Shooter;
 import frc.robot.subsystems.Shooter.Shooter.ShooterState;
 import frc.robot.subsystems.Trigger.ShootTrigger;
 import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.IntakeAim.IntakeAim;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -52,6 +53,7 @@ public class RobotContainer {
     private final Intake c_intake = new Intake(c_trigger);
     private final Shooter c_shooter = new Shooter(c_trigger);
     private final Aim c_aim = new Aim();
+    private final IntakeAim c_intakeAim = new IntakeAim();
 
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -65,7 +67,8 @@ public class RobotContainer {
                 () -> -driver.getRawAxis(rotationAxis), 
                 () -> robotCentric.getAsBoolean()
             )
-            ,new IntakeCmd(c_intake, ()->driver.getRawAxis(2), ()->driver.getRawAxis(3))
+            // ,new IntakeCmd(c_intake, ()->driver.getRawAxis(2), ()->driver.getRawAxis(3))
+            ,new IntakeAimCmd(s_Swerve, c_intakeAim, c_intake, ()->driver.getRawAxis(2), ()->driver.getRawAxis(3))
             )
         );
 
@@ -117,6 +120,7 @@ public class RobotContainer {
      */
     public Command getAutonomousCommand() {
         // An ExampleCommand will run in autonomous
-        return new exampleAuto(s_Swerve);
+        return s_Swerve.followPathCommand("Example Path");
+        // return new exampleAuto(s_Swerve);
     }
 }
