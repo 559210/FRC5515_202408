@@ -1,5 +1,8 @@
 package frc.robot;
 
+import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.PathPlannerAuto;
+
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
@@ -120,7 +123,12 @@ public class RobotContainer {
      */
     public Command getAutonomousCommand() {
         // An ExampleCommand will run in autonomous
-        return s_Swerve.followPathCommand("Example Path");
+        
+        // return s_Swerve.followPathCommand("Test");
+        NamedCommands.registerCommand("init", new ShooterCmd(c_shooter, ShooterState.Coasting));
+        NamedCommands.registerCommand("intake", new IntakeForPathPlannerCmd(c_intake, ()->0,()->0.2));
+        NamedCommands.registerCommand("shoot", new ShooterCmd(c_shooter, ShooterState.ShootAmp));
+        return s_Swerve.followPathPlannerAuto("testAuto");
         // return new exampleAuto(s_Swerve);
     }
 }
