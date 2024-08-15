@@ -66,7 +66,7 @@ public class IntakeAimCmd extends Command {
         s_Swerve.drive(
                 new Translation2d(translationVal, strafeVal),
                 rotationVal,
-                true,
+                false,
                 true);
     }
 
