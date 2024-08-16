@@ -13,34 +13,45 @@ import frc.robot.Constants;
 import frc.robot.StateController;
 import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.Aim.Aim;
+import frc.robot.subsystems.Candle.Candle;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.Intake.IntakeState;
 
 public class AimCmd extends Command {
     private Swerve s_Swerve;
     private Aim m_Aim;
+    private Candle candle;
 
     private boolean isDone = false;
     // private Timer ellapsedTime_Trigger = new Timer();
 
-    public AimCmd(Aim aimSubSystem, Swerve swerve) {
+    public AimCmd(Aim aimSubSystem, Candle candleSubsys, Swerve swerve) {
         this.m_Aim = aimSubSystem;
         s_Swerve = swerve;
+        candle = candleSubsys;
         addRequirements(m_Aim);
-        addRequirements(s_Swerve);
+        // addRequirements(s_Swerve);
         schedule();
     }
 
     @Override
     public void initialize() {
+        SmartDashboard.putBoolean("Aim working", true);
         StateController.getInstance().isAutoAimming = true;
+        candle.blue();
+        isDone = false;
     }
 
     int count = 0;
     @Override
     public void execute() {
+        if (!m_Aim.isTargetValid()) {
+            // isDone = true;
+            return;
+        }
+        StateController.getInstance().isAutoAimming = true;
         StateController sc = StateController.getInstance();
-        double epsilon = 0.5;
+        double epsilon = 1;
         double translationVal = m_Aim.limelight_range_proportional(); // the value's range is unknown! by majun
         double rotationVal = m_Aim.limelight_aim_proportional(); // the value's range is unknown! by majun
         double absTrans = Math.abs(translationVal);
@@ -70,6 +81,7 @@ public class AimCmd extends Command {
                 translationVal = 0;
             }
             double strafeVal = 0;
+            candle.yellow();
             s_Swerve.drive(
                 new Translation2d(translationVal, strafeVal), 
                 rotationVal, 
@@ -78,16 +90,18 @@ public class AimCmd extends Command {
             );
         }
         else {
-
+            candle.red();
+            isDone = true;
         }
-            if (count >= 100) {
-                isDone = true;
-            }
-            
     }
 
+    int interruptedCount = 0;
     @Override
     public void end(boolean interrupted) {
+        interruptedCount++;
+        SmartDashboard.putNumber("Aim interrupted", interruptedCount);
+        SmartDashboard.putBoolean("Aim working2", false);
+        candle.red();
         StateController.getInstance().isAutoAimming = false;
     }
 

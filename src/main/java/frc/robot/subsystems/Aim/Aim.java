@@ -21,6 +21,9 @@ public class Aim  extends SubsystemBase {
     public void update() {
 
     }
+    public boolean isTargetValid() {
+        return LimelightHelpers.getTV(Constants.LIME_LIGHT_AIM_NAME);
+    }
     // simple proportional turning control with Limelight.
     // "proportional control" is a control algorithm in which the output is
     // proportional to the error.

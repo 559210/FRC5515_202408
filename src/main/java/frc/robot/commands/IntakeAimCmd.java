@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.StateController;
 import frc.robot.subsystems.Swerve;
+import frc.robot.subsystems.Candle.Candle;
 import frc.robot.subsystems.IntakeAim.IntakeAim;
 import frc.robot.subsystems.intake.Intake.IntakeState;
 
@@ -18,14 +19,15 @@ public class IntakeAimCmd extends Command {
     private Swerve s_Swerve;
     private DoubleSupplier leftTriggerButton;
     private DoubleSupplier rightTriggerButton;
-    
+    private Candle m_candle;
     // private Timer ellapsedTime_Trigger = new Timer();
 
-    public IntakeAimCmd(Swerve swerve, IntakeAim m_IntakeAimSubSystem, Intake m_IntakeSubsystem,
+    public IntakeAimCmd(Swerve swerve, IntakeAim m_IntakeAimSubSystem, Intake m_IntakeSubsystem, Candle candle,
             DoubleSupplier LTButton,
             DoubleSupplier RTButton) {
         this.m_Intake = m_IntakeSubsystem;
         m_IntakeAim = m_IntakeAimSubSystem;
+        m_candle = candle;
         s_Swerve = swerve;
         this.leftTriggerButton = LTButton;
         this.rightTriggerButton = RTButton;
@@ -35,15 +37,18 @@ public class IntakeAimCmd extends Command {
         schedule();
     }
 
-    int initCount = 0;
     @Override
     public void initialize() {
-        initCount++;
-        SmartDashboard.putNumber("init Coiunt", initCount);
         // ellapsedTime_Trigger.start();
+        SmartDashboard.putNumber("intake aim rotVal", 0);
+        SmartDashboard.putNumber("intake aim translationVal", 0);
     }
 
     protected void updateAutoAim() {
+        if (!m_IntakeAim.isTargetValid()) {
+            StateController.getInstance().intakeAimStop = true;
+            return;
+        }
         StateController sc = StateController.getInstance();
         double epsilon = 0.5;
         double translationVal = 0;
@@ -52,7 +57,6 @@ public class IntakeAimCmd extends Command {
         double rotationVal = m_IntakeAim.limelight_aim_proportional(); // the value's range is unknown! by majun
         // double absTrans = Math.abs(translationVal);
         double absTx = Math.abs(StateController.getInstance().intakeAimTx);
-        SmartDashboard.putNumber("rot val+++", rotationVal);
         double absRot = Math.abs(rotationVal);
 
         if (absRot > epsilon) {
@@ -62,6 +66,8 @@ public class IntakeAimCmd extends Command {
             translationVal = 0.5;
         }
 
+        SmartDashboard.putNumber("intake aim rotVal", rotationVal);
+        SmartDashboard.putNumber("intake aim translationVal", translationVal);
         double strafeVal = 0;
         s_Swerve.drive(
                 new Translation2d(translationVal, strafeVal),
@@ -70,7 +76,6 @@ public class IntakeAimCmd extends Command {
                 true);
     }
 
-    int ccc = 0;
 
     @Override
     public void execute() {
@@ -88,11 +93,14 @@ public class IntakeAimCmd extends Command {
             if (m_Intake.intakeState != IntakeState.NoteReady && m_Intake.intakeState != IntakeState.Intake_sensored) {
                 m_Intake.update(IntakeState.Intake);
                 if (StateController.getInstance().intakeAimStop == false) {
-                    ccc++;
-                    SmartDashboard.putNumber("cccc", ccc);
+                    StateController.getInstance().isAutoIntakeAimming = true;
                     updateAutoAim();
                 }
-
+                else {
+                    
+                    StateController.getInstance().isAutoIntakeAimming = false;
+                    SmartDashboard.putString("lastState", m_Intake.intakeState.toString());
+                }
             }
 
         } else {
@@ -105,11 +113,15 @@ public class IntakeAimCmd extends Command {
         // }else{
 
         // }
+        if (m_Intake.isTriggerOk()) {
+            m_candle.blinkGreenThenHold();
+        }
         m_Intake.update();
     }
 
     @Override
     public void end(boolean interrupted) {
+        StateController.getInstance().isAutoAimming = false;
     }
 
     @Override

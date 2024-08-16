@@ -9,6 +9,7 @@ import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 
 
@@ -29,12 +30,16 @@ public class TeleopSwerve extends Command {
         this.robotCentricSup = robotCentricSup;
     }
     
+    int cout = 0;
     @Override
     public void execute() {
-
+        cout++;
+        SmartDashboard.putNumber("tele exe", cout);
         StateController sc = StateController.getInstance();
-        if (sc.isAutoAimming) {
+        SmartDashboard.putBoolean("autoAiming", sc.isAutoAimming);
+        if (sc.isAutoAimming || sc.isAutoIntakeAimming) {
             // i don't know if this excute function is running when other command executing. by majun
+            
         }
         else {
             /* Get Values, Deadband*/

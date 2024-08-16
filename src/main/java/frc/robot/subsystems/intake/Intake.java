@@ -182,6 +182,10 @@ public class Intake extends SubsystemBase {
     return !intakeSensor.get();
   }
 
+  public boolean isTriggerOk() {
+    return i_trigger.getNoteReady();
+  }
+
   @Override
   public void periodic() {    
     SmartDashboard.putBoolean("intakeSensor0", intakeSensor.get());

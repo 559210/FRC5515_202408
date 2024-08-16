@@ -194,6 +194,11 @@ public final class Constants {
         public static double AmpDownSpeed = 30; //TODO
     }
 
+    public static final class Candle {
+        public static final int candleID = 24;
+        public static final String candleBusName = "rio";
+    }
+
     public static String LIME_LIGHT_NOTE_NAME = "limelight-note";
     public static String LIME_LIGHT_AIM_NAME = "limelight-aim";
 }

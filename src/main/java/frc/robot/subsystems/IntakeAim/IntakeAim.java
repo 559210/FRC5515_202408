@@ -14,8 +14,9 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 
 public class IntakeAim  extends SubsystemBase {
     PIDController pidRot = new PIDController(0.015, 0.01, 0.00125);
-    PIDController pidTrans = new PIDController(0.2, 0, 0);
-    CoordinaryFilter filter;
+    PIDController pidTrans = new PIDController(0.3, 0, 0);
+    CoordinaryFilter filterX;
+    CoordinaryFilter filterY;
     public IntakeAim() {
     }
 
@@ -24,15 +25,25 @@ public class IntakeAim  extends SubsystemBase {
     }
 
     public void reset() {
-        filter = null;
+        pidRot = new PIDController(0.015, 0.01, 0.00125);
+        pidTrans = new PIDController(0.3, 0, 0);
+        filterX = null;
+        filterY = null;
     }
 
-    protected CoordinaryFilter lazyCreateFilter() {
-        if (filter == null) {
-            filter = new CoordinaryFilter(0.6);
+    protected void lazyCreateFilter() {
+        if (filterX == null) {
+            filterX = new CoordinaryFilter(0.6);
         }
-        return filter;
+        if (filterY == null) {
+            filterY = new CoordinaryFilter(0.6);
+        }
     }
+
+    public boolean isTargetValid() {
+        return LimelightHelpers.getTV(Constants.LIME_LIGHT_NOTE_NAME);
+    }
+
     // simple proportional turning control with Limelight.
     // "proportional control" is a control algorithm in which the output is
     // proportional to the error.
@@ -54,9 +65,10 @@ public class IntakeAim  extends SubsystemBase {
         // rightmost edge of
         // your limelight 3 feed, tx should return roughly 31 degrees.
         double tx = LimelightHelpers.getTX(Constants.LIME_LIGHT_NOTE_NAME);
+        
         SmartDashboard.putNumber("o tx", tx);
         StateController.getInstance().intakeAimTx = tx;
-        tx = filter.calc(tx);
+        tx = filterX.calc(tx);
         SmartDashboard.putNumber("n tx", tx);
         StateController.getInstance().aimTx = tx;
         // double targetingAngularVelocity = LimelightHelpers.getTX(Constants.LIME_LIGHT_AIM_NAME) * kP;
@@ -85,7 +97,7 @@ public class IntakeAim  extends SubsystemBase {
         // double targetingForwardSpeed = LimelightHelpers.getTY(Constants.LIME_LIGHT_AIM_NAME) * kP;
         double ty = LimelightHelpers.getTY(Constants.LIME_LIGHT_NOTE_NAME);
         StateController.getInstance().intakeAimTy = ty;
-        ty = filter.calc(ty);
+        ty = filterY.calc(ty);
         StateController.getInstance().aimTy = ty;
         double targetingForwardSpeed = pidTrans.calculate(ty);
         targetingForwardSpeed *= Constants.Swerve.maxSpeed;

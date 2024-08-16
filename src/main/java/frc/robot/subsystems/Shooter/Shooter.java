@@ -155,7 +155,10 @@ public class Shooter extends SubsystemBase {
   }
 
   int coastingCount = 0;
+  
   public void update(ShooterState state){
+            coastingCount++;
+        SmartDashboard.putNumber("coasting count1 1", coastingCount);
     this.shooterState = state;
     switch(state){
       case Stop:

@@ -131,7 +131,10 @@ public class Swerve extends SubsystemBase {
         swerveOdometry = new SwerveDriveOdometry(Constants.Swerve.swerveKinematics, getGyroYaw(), getModulePositions());
     }
 
+    int drivecount = 0;
     public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop) {
+        drivecount++;
+        SmartDashboard.putNumber("drive number", drivecount);
         SwerveModuleState[] swerveModuleStates =
             Constants.Swerve.swerveKinematics.toSwerveModuleStates(
                 fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(
@@ -181,7 +184,10 @@ public class Swerve extends SubsystemBase {
         return swerveOdometry.getPoseMeters();
     }
 
+    int poseCount = 0;
     public void setPose(Pose2d pose) {
+        poseCount++;
+        SmartDashboard.putNumber("setPose count", poseCount);
         swerveOdometry.resetPosition(getGyroYaw(), getModulePositions(), pose);
     }
 
@@ -291,7 +297,7 @@ public class Swerve extends SubsystemBase {
                     new PIDConstants(1.0, 0.0, 0.0), // Rotation PID constants
                     3, // Max module speed, in m/s
                     0.4, // Drive base radius in meters. Distance from robot center to furthest module.
-                    new ReplanningConfig() // Default path replanning config. See the API for the options here
+                    new ReplanningConfig(true, true) // Default path replanning config. See the API for the options here
             ),
             () -> {
                 // Boolean supplier that controls when the path will be mirrored for the red
