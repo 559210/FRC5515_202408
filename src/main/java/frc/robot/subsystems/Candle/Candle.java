@@ -36,28 +36,27 @@ public class Candle extends SubsystemBase {
     int g = 0;
     int b = 0;
 
-
-
     enum Mode {
         Hold,
         BlinkThenHold,
     }
-    
+
     Mode mode = Mode.Hold;
     double blinkStartTime = 0;
     double BLINK_ON_DURATION = 0.5;
     double BLINK_OFF_DURATION = 0.25;
     double BLINE_ROUND_TIME = BLINK_ON_DURATION + BLINK_OFF_DURATION;
     double BLINK_TIMES = 3;
+
     public Candle() {
 
     }
 
     public void white() {
-                mode = Mode.Hold;
+        mode = Mode.Hold;
         isOn = true;
         r = 255;
-        g = 255; 
+        g = 255;
         b = 255;
     }
 
@@ -65,7 +64,7 @@ public class Candle extends SubsystemBase {
         mode = Mode.Hold;
         isOn = true;
         r = 255;
-        g = 255; 
+        g = 255;
         b = 0;
     }
 
@@ -73,7 +72,7 @@ public class Candle extends SubsystemBase {
         mode = Mode.Hold;
         isOn = true;
         r = 255;
-        g = 0; 
+        g = 0;
         b = 0;
     }
 
@@ -101,28 +100,24 @@ public class Candle extends SubsystemBase {
     public void update() {
         if (isOn) {
             switch (mode) {
-                case Hold:
-                {
+                case Hold: {
                     led.setLEDs(r, g, b);
                     break;
                 }
-                case BlinkThenHold:
-                {
+                case BlinkThenHold: {
                     double now = Timer.getFPGATimestamp();
                     double dt = now - blinkStartTime;
                     long round = Math.round(dt / BLINE_ROUND_TIME);
                     if (round >= BLINK_TIMES) {
                         mode = Mode.Hold;
-                    }
-                    else {
+                    } else {
                         double dur = dt;
                         while (dur >= BLINE_ROUND_TIME) {
                             dur -= BLINE_ROUND_TIME;
                         }
                         if (dur <= BLINK_ON_DURATION) {
                             led.setLEDs(r, g, b);
-                        }
-                        else {
+                        } else {
                             led.setLEDs(0, 0, 0);
                         }
                     }
@@ -132,8 +127,7 @@ public class Candle extends SubsystemBase {
                 default:
                     break;
             }
-        }
-        else {
+        } else {
             led.setLEDs(0, 0, 0);
         }
     }

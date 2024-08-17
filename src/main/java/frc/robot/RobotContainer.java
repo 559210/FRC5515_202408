@@ -152,7 +152,7 @@ public class RobotContainer {
         //     new IntakeForPathPlannerCmd(s_Swerve, c_intakeAim, c_intake, candle,3)
         // );
         NamedCommands.registerCommand("shoot", new InstantCommand(()->{
-            new ShooterCmd(c_shooter, candle, ShooterState.ShootAmp);
+            new ShooterCmd(c_shooter, candle, ShooterState.Shootout);
         }));
         return s_Swerve.followPathPlannerAuto("testauto2");
         // return new exampleAuto(s_Swerve);

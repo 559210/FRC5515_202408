@@ -201,4 +201,25 @@ public final class Constants {
 
     public static String LIME_LIGHT_NOTE_NAME = "limelight-note";
     public static String LIME_LIGHT_AIM_NAME = "limelight-aim";
+
+    public static final class AprilTag {
+        public static double ampOffsetYInLimeLight = 0;
+
+        // .Blue Source (right to left) - ID 1, 2
+        // .Red Speaker (right to left) - ID 3, 4
+        // .Red Amp - ID 5
+        // .Blue Amp - ID 6
+        // .Blue Speaker (right to left) - ID 7, 8 
+        // .Red Source (right to left) - ID 9,10
+        // .Red Stage (counter-clockwise starting at Stage Left) - ID 11, 12, 13
+        // .Blue Stage (counter-clockwise starting at Center Stage) - ID 14, 15, 16
+        public static int[][] ampIds = {
+            {5, }, // red, according to DriverStation.Alliance
+            {6, }  // blue
+        };
+        public static int[][] speakerIds = {
+            {4, }, // red
+            {8, }, // blue
+        };
+    }
 }

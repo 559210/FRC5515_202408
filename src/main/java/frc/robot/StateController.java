@@ -1,5 +1,6 @@
 package frc.robot;
 
+import edu.wpi.first.wpilibj.DriverStation;
 
 public class StateController {  
     private volatile static StateController instance;  
@@ -11,11 +12,31 @@ public class StateController {
             synchronized (StateController.class) {  
                 if (instance == null) {  
                     instance = new StateController();  
+                    instance.init();
                 }  
             }  
         }  
         return instance;  
     }
+
+    private void init() {
+        var alliance = DriverStation.getAlliance();
+        if (alliance.isPresent()) {
+            myAlliance = alliance.get();
+            switch (myAlliance) {
+                case Red:
+                    myAllianceIndex = 0;
+                    break;
+                case Blue:
+                    myAllianceIndex = 1;
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+    public DriverStation.Alliance myAlliance = DriverStation.Alliance.Red;
+    public int myAllianceIndex = 0;
 
     public boolean isAutoAimming = false;
     public boolean isAutoIntakeAimming = false;

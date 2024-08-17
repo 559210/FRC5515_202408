@@ -49,19 +49,20 @@ public class IntakeForPathPlannerCmd extends Command {
         // ellapsedTime_Trigger.start();
         startTime = Timer.getFPGATimestamp();
         isStart = true;
+        isDone = false;
     }
 
     protected void updateAutoAim() {
         if (!m_IntakeAim.isTargetValid()) {
-                                            s_Swerve.drive(
-                        new Translation2d(0, 0),
-                        0,
-                        false,
-                        true);
+            s_Swerve.drive(
+                    new Translation2d(0, 0),
+                    0,
+                    false,
+                    true);
             StateController.getInstance().intakeAimStop = true;
             return;
         }
-        StateController sc = StateController.getInstance();
+        
         double epsilon = 0.5;
         double translationVal = 0;
         // double translationVal = m_IntakeAim.limelight_range_proportional(); // the
