@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 
 import frc.robot.autos.*;
@@ -17,6 +18,7 @@ import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.Aim.Aim;
 import frc.robot.subsystems.Candle.Candle;
+import frc.robot.subsystems.Elevator.Elevator;
 import frc.robot.subsystems.Shooter.Shooter;
 import frc.robot.subsystems.Shooter.Shooter.ShooterState;
 import frc.robot.subsystems.Trigger.ShootTrigger;
@@ -61,6 +63,7 @@ public class RobotContainer {
     private final Aim c_aim = new Aim();
     private final IntakeAim c_intakeAim = new IntakeAim();
     private final Candle candle = new Candle();
+    private final Elevator elevator = new Elevator();
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
@@ -118,6 +121,9 @@ public class RobotContainer {
             new AimCmd(c_aim, candle, s_Swerve)
         );
 
+        new POVButton(driver, 0).whileTrue(new ElevatorCommand(elevator, true));
+        new POVButton(driver, 180).whileTrue(new ElevatorCommand(elevator, false));
+
         // new JoystickButton(tester, 1).whileTrue(s_Swerve.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
         // new JoystickButton(tester, 2).whileTrue(s_Swerve.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
         // new JoystickButton(tester, 3).whileTrue(s_Swerve.sysIdDynamic(SysIdRoutine.Direction.kForward));
@@ -152,7 +158,7 @@ public class RobotContainer {
         //     new IntakeForPathPlannerCmd(s_Swerve, c_intakeAim, c_intake, candle,3)
         // );
         NamedCommands.registerCommand("shoot", new InstantCommand(()->{
-            new ShooterCmd(c_shooter, candle, ShooterState.ShootAmp);
+            new ShooterCmd(c_shooter, candle, ShooterState.Shootout);
         }));
         return s_Swerve.followPathPlannerAuto("testauto2");
         // return new exampleAuto(s_Swerve);

@@ -97,7 +97,7 @@ public final class Constants {
             public static final int driveMotorID = 1;
             public static final int angleMotorID = 2;
             public static final int canCoderID = 9;
-            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(-129.90);//TODO
+            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(-131.90);//TODO
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }
@@ -117,7 +117,7 @@ public final class Constants {
             public static final int driveMotorID = 5;
             public static final int angleMotorID = 6;
             public static final int canCoderID = 11;
-            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(27.9);//TODO
+            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(29.5);//TODO
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }
@@ -127,7 +127,7 @@ public final class Constants {
             public static final int driveMotorID = 7;
             public static final int angleMotorID = 8;
             public static final int canCoderID = 12;
-            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(60.3);//TODO
+            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(59.4);//TODO
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }
@@ -175,7 +175,22 @@ public final class Constants {
         public static final double KA = 0.0;
         public static double HelpIntake = 30;//TODO
         public static double HelpIntakeReverse = -30;//TODO
-        public static double shootout = 30;//TODO
+        public static double shootout = 60;//TODO
+    }
+
+    public static final class Elevator {
+        public static final int elevatorMotorID = 25;
+        public static final double KP = 0.1;
+        public static final double KI = 0.0;
+        public static final double KD = 0.0;
+        public static final double KV = 0.1;
+        public static final double KS = 0.05;
+        public static final double KA = 0.07;
+        public static final double Velocity = 100.0;
+        public static final double Acceleration = 600.0;
+        public static final double Jerk = 0.0;
+        public static final double Top = 0.0; //TODO
+        public static final double Bottom = 0.0; //TODO
     }
 
     public static final class Shooter {
@@ -187,11 +202,11 @@ public final class Constants {
         public static final double flywheelKV = 0.0;
         public static final double flywheelKS = 0.0;
         public static final double flywheelKA = 0.0;
-        public static double shootingCoasting = 20;
+        public static double shootingCoasting = 32;
         public static double shootingSpeaker = 60; //TODO
         public static double flywheelTolerance = 0.72;
-        public static double AmpUpSpeed = 20; //TODO
-        public static double AmpDownSpeed = 30; //TODO
+        public static double AmpUpSpeed = 15; //TODO
+        public static double AmpDownSpeed = 60; //TODO
     }
 
     public static final class Candle {

@@ -13,8 +13,8 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 
 public class IntakeAim  extends SubsystemBase {
-    PIDController pidRot = new PIDController(0.015, 0.01, 0.00125);
-    PIDController pidTrans = new PIDController(0.3, 0, 0);
+    PIDController pidRot = new PIDController(0.0085, 0, 0.001);
+    PIDController pidTrans = new PIDController(1.5, 0, 0);
     CoordinaryFilter filterX;
     CoordinaryFilter filterY;
     public IntakeAim() {
@@ -25,18 +25,18 @@ public class IntakeAim  extends SubsystemBase {
     }
 
     public void reset() {
-        pidRot = new PIDController(0.015, 0.01, 0.00125);
-        pidTrans = new PIDController(0.3, 0, 0);
+        pidRot = new PIDController(0.0085, 0, 0.001);
+        pidTrans = new PIDController(1.5, 0, 0);
         filterX = null;
         filterY = null;
     }
 
     protected void lazyCreateFilter() {
         if (filterX == null) {
-            filterX = new CoordinaryFilter(0.6);
+            filterX = new CoordinaryFilter(0.8);
         }
         if (filterY == null) {
-            filterY = new CoordinaryFilter(0.6);
+            filterY = new CoordinaryFilter(0.8);
         }
     }
 

@@ -12,8 +12,8 @@ import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 
 public class Aim  extends SubsystemBase {
-    PIDController pidRot = new PIDController(0.015, 0.01, 0.00125);
-    PIDController pidTrans = new PIDController(0.1, 0, 0);
+    PIDController pidRot = new PIDController(0.015, 0.01, 0.0015);
+    PIDController pidTrans = new PIDController(0.1, 0, .01);
 
     public Aim() {
     }
