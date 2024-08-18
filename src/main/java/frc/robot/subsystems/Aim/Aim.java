@@ -1,11 +1,15 @@
 package frc.robot.subsystems.Aim;
 
+import java.util.stream.IntStream;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.LimelightHelpers;
 import frc.robot.StateController;
+import frc.robot.LimelightHelpers.LimelightResults;
+import frc.robot.LimelightHelpers.LimelightTarget_Fiducial;
 import frc.robot.subsystems.Swerve;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.networktables.NetworkTableEntry;
@@ -15,14 +19,32 @@ public class Aim  extends SubsystemBase {
     PIDController pidRot = new PIDController(0.015, 0.01, 0.0015);
     PIDController pidTrans = new PIDController(0.1, 0, .01);
 
+    String llName = Constants.LIME_LIGHT_AIM_NAME;
+
     public Aim() {
+        StateController sc = StateController.getInstance();
+        var array1 = Constants.AprilTag.speakerIds[sc.myAllianceIndex];
+        var array2 = Constants.AprilTag.ampIds[sc.myAllianceIndex];
+        int[] mergedArray = IntStream.concat(IntStream.of(array1), IntStream.of(array2)).toArray();
+        LimelightHelpers.SetFiducialIDFiltersOverride(llName, mergedArray);
     }
 
     public void update() {
 
     }
     public boolean isTargetValid() {
-        return LimelightHelpers.getTV(Constants.LIME_LIGHT_AIM_NAME);
+        return LimelightHelpers.getTV(llName);
+    }
+
+    private boolean isSpeaker(int id) {
+        StateController sc = StateController.getInstance();
+        int[] array1 = Constants.AprilTag.speakerIds[sc.myAllianceIndex];
+        for (int element : array1) {
+            if (element == id) {
+                return true;
+            }
+        }
+        return false;
     }
     // simple proportional turning control with Limelight.
     // "proportional control" is a control algorithm in which the output is
@@ -43,15 +65,16 @@ public class Aim  extends SubsystemBase {
         // tx ranges from (-hfov/2) to (hfov/2) in degrees. If your target is on the
         // rightmost edge of
         // your limelight 3 feed, tx should return roughly 31 degrees.
-        double tx = LimelightHelpers.getTX(Constants.LIME_LIGHT_AIM_NAME);
+
+        double tx = LimelightHelpers.getTX(llName);
         StateController.getInstance().aimTx = tx;
-        // double targetingAngularVelocity = LimelightHelpers.getTX(Constants.LIME_LIGHT_AIM_NAME) * kP;
+        // double targetingAngularVelocity = LimelightHelpers.getTX(llName) * kP;
 
         double targetingAngularVelocity = pidRot.calculate(-tx);
         // convert to radians per second for our drive method
         targetingAngularVelocity *= Constants.Swerve.maxAngularVelocity;
 
-        // pidRot.calculate(-LimelightHelpers.getTX(Constants.LIME_LIGHT_AIM_NAME));
+        // pidRot.calculate(-LimelightHelpers.getTX(llName));
 
         // invert since tx is positive when the target is to the right of the crosshair
         targetingAngularVelocity *= -1.0;
@@ -66,9 +89,16 @@ public class Aim  extends SubsystemBase {
     // if your limelight and target are mounted at the same or similar heights, use
     // "ta" (area) for target ranging rather than "ty"
     public double limelight_range_proportional() {
-        // double kP = .1;
-        // double targetingForwardSpeed = LimelightHelpers.getTY(Constants.LIME_LIGHT_AIM_NAME) * kP;
-        double ty = LimelightHelpers.getTY(Constants.LIME_LIGHT_AIM_NAME);
+        double offsetY = 0;
+        LimelightResults results = LimelightHelpers.getLatestResults(llName);
+        if (results.targets_Fiducials.length > 0) {
+            LimelightTarget_Fiducial fiducial = results.targets_Fiducials[0];
+            if (!isSpeaker((int)Math.round(fiducial.fiducialID))) {
+                offsetY = Constants.AprilTag.ampOffsetYInLimeLight;
+            }
+        }
+        
+        double ty = LimelightHelpers.getTY(llName) + offsetY;
         StateController.getInstance().aimTy = ty;
         double targetingForwardSpeed = pidTrans.calculate(ty);
         targetingForwardSpeed *= Constants.Swerve.maxSpeed;;
