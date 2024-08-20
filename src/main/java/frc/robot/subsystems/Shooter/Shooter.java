@@ -52,6 +52,10 @@ public class Shooter extends SubsystemBase {
   //   return instance;
   // }
 
+  public boolean isNoteReady() {
+    return s_trigger.getNoteReady();
+  }
+
 
   public Shooter(ShootTrigger strigger) {
      /* Motor Inverts and Neutral Mode */
@@ -162,7 +166,7 @@ public class Shooter extends SubsystemBase {
     this.shooterState = state;
     switch(state){
       case Stop:
-        update(FlywheelState.Stop);
+        updateFlyWheel(FlywheelState.Stop);
         this.s_trigger.update(TriggerState.Stop);
         this.shooterState = ShooterState.IDLE;
       break;
@@ -170,15 +174,15 @@ public class Shooter extends SubsystemBase {
 
       break;
       case ShootingSpeaker:
-        update(FlywheelState.ShootingSpeaker);
+        updateFlyWheel(FlywheelState.ShootingSpeaker);
       break;
       case Coasting:
         coastingCount++;
         SmartDashboard.putNumber("coasting count", coastingCount);
-        update(FlywheelState.Coasting);
+        updateFlyWheel(FlywheelState.Coasting);
       break;
       case Shootout:
-        update(FlywheelState.ShootingSpeaker);
+        updateFlyWheel(FlywheelState.ShootingSpeaker);
         if(Math.abs(flywheelUpMotor.getVelocity().getValue()/Constants.Shooter.shootingSpeaker)
           >Constants.Shooter.flywheelTolerance
         ){
@@ -203,9 +207,10 @@ public class Shooter extends SubsystemBase {
 
       break;
       case ShootAmp:
-        this.flywheelState = FlywheelState.ShootAmp;
+        // this.flywheelState = FlywheelState.ShootAmp;
+        updateFlyWheel(FlywheelState.ShootAmp);
         if(Math.abs(flywheelUpMotor.getVelocity().getValue()/Constants.Shooter.AmpUpSpeed)
-          >Constants.Shooter.flywheelTolerance
+          >0.05
         ){
           if(ellapsedTime_Reset_trigger.get()>2){
             flag=true;
@@ -234,7 +239,7 @@ public class Shooter extends SubsystemBase {
 
   }
 
-  public void update(FlywheelState state){
+  public void updateFlyWheel(FlywheelState state){
     this.flywheelState = state;
     switch(state){
       case Stop:

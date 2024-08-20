@@ -189,8 +189,10 @@ public final class Constants {
         public static final double Velocity = 100.0;
         public static final double Acceleration = 600.0;
         public static final double Jerk = 0.0;
-        public static final double Top = 0.0; //TODO
-        public static final double Bottom = 0.0; //TODO
+        // public static final double Top = 255.0; //TODO
+        // public static final double Bottom = 5.0; //TODO
+        public static final double Top = 0; //TODO
+        public static final double Bottom = -195; //TODO
     }
 
     public static final class Shooter {
@@ -202,11 +204,11 @@ public final class Constants {
         public static final double flywheelKV = 0.0;
         public static final double flywheelKS = 0.0;
         public static final double flywheelKA = 0.0;
-        public static double shootingCoasting = 32;
+        public static double shootingCoasting = 10;
         public static double shootingSpeaker = 60; //TODO
         public static double flywheelTolerance = 0.72;
-        public static double AmpUpSpeed = 15; //TODO
-        public static double AmpDownSpeed = 60; //TODO
+        public static double AmpUpSpeed = 5; //TODO
+        public static double AmpDownSpeed = 19; //TODO
     }
 
     public static final class Candle {
@@ -234,7 +236,7 @@ public final class Constants {
         };
         public static int[][] speakerIds = {
             {4, }, // red
-            {8, }, // blue
+            {7, }, // blue
         };
     }
 }

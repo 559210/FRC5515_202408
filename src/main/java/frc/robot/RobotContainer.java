@@ -47,6 +47,7 @@ public class RobotContainer {
     private final JoystickButton robotCentric = new JoystickButton(driver, 6);
     // private final JoystickButton button_intake = new getRawAxis(3);
     // private final JoystickButton button_intakereverse = new getRawAxis(2);
+    //
     private final JoystickButton button_amp = new JoystickButton(driver, 3);
     private final JoystickButton button_trigger = new JoystickButton(driver, 1);
 
@@ -55,6 +56,9 @@ public class RobotContainer {
 
     private final JoystickButton button_flywheelCoasting = new JoystickButton(driver2, 4);
     private final JoystickButton button_flywheelStop = new JoystickButton(driver2, 2);
+
+    // private final JoystickButton button_elevator_up = new JoystickButton(driver, 3);
+    // private final JoystickButton button_elevator_down = new JoystickButton(driver, 1);
     /* Subsystems */
     private final Swerve s_Swerve = new Swerve();
     private final ShootTrigger c_trigger = new ShootTrigger();
@@ -121,13 +125,21 @@ public class RobotContainer {
             new AimCmd(c_aim, candle, s_Swerve)
         );
 
-        new POVButton(driver, 0).whileTrue(new ElevatorCommand(elevator, true));
-        new POVButton(driver, 180).whileTrue(new ElevatorCommand(elevator, false));
+        // button_elevator_up.onTrue(new InstantCommand(()->{
+        //     new ElevatorCommand(elevator, true);
+        // }));
+        // button_elevator_down.onTrue(new InstantCommand(()->{
+        //     new ElevatorCommand(elevator, false);
+        // }));
+        // button_elevator_up.onTrue(new ElevatorCommand(elevator, true));
+        // button_elevator_down.onTrue(new ElevatorCommand(elevator, false));
 
         // new JoystickButton(tester, 1).whileTrue(s_Swerve.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
         // new JoystickButton(tester, 2).whileTrue(s_Swerve.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
         // new JoystickButton(tester, 3).whileTrue(s_Swerve.sysIdDynamic(SysIdRoutine.Direction.kForward));
         // new JoystickButton(tester, 4).whileTrue(s_Swerve.sysIdDynamic(SysIdRoutine.Direction.kReverse));
+        new POVButton(driver, 0).whileTrue(new ElevatorCommand(elevator, true));
+        new POVButton(driver, 180).whileTrue(new ElevatorCommand(elevator, false));
 
     }
 
@@ -146,21 +158,21 @@ public class RobotContainer {
         NamedCommands.registerCommand("aim", 
             new AimCmd(c_aim, candle, s_Swerve)
         );
-        for (int i = 1; i <= 100; ++i) {
-            NamedCommands.registerCommand("intake" + String.valueOf(i), 
-                new IntakeForPathPlannerCmd(s_Swerve, c_intakeAim, c_intake, candle,3)
-            );
-        }
-        // NamedCommands.registerCommand("intake1", 
-        //     new IntakeForPathPlannerCmd(s_Swerve, c_intakeAim, c_intake, candle,3)
-        // );
-        // NamedCommands.registerCommand("intake2", 
-        //     new IntakeForPathPlannerCmd(s_Swerve, c_intakeAim, c_intake, candle,3)
-        // );
+        // for (int i = 1; i <= 100; ++i) {
+        //     NamedCommands.registerCommand("intake" + String.valueOf(i), 
+        //         new IntakeForPathPlannerCmd(s_Swerve, c_intakeAim, c_intake, candle,3, false)
+        //     );
+        // }
+        NamedCommands.registerCommand("intakeA", 
+            new IntakeForPathPlannerCmd(s_Swerve, c_intakeAim, c_intake, candle, 3, false)
+        );
+        NamedCommands.registerCommand("intake", 
+            new IntakeForPathPlannerCmd(s_Swerve, c_intakeAim, c_intake, candle, 3, true)
+        );
         NamedCommands.registerCommand("shoot", new InstantCommand(()->{
             new ShooterCmd(c_shooter, candle, ShooterState.Shootout);
         }));
-        return s_Swerve.followPathPlannerAuto("testauto2");
+        return s_Swerve.followPathPlannerAuto("A3");
         // return new exampleAuto(s_Swerve);
     }
 }

@@ -16,7 +16,6 @@ import frc.robot.Constants;
 public class Elevator extends SubsystemBase {
   /** Creates a new ExampleSubsystem. */
   public Elevator() {
-    configElevator();
   }
 
   public static final TalonFX Elevator = new TalonFX(Constants.Elevator.elevatorMotorID,"rio");
@@ -25,8 +24,10 @@ public class Elevator extends SubsystemBase {
 
   @Override
   public void periodic() {
+    // This method will be called once per scheduler run
+    SmartDashboard.putNumber("Elevator Position", Elevator.getPosition().getValue());
+    SmartDashboard.putBoolean("Elevator Top", elevatorTop());
   }
-
   @Override
   public void simulationPeriodic() {
     // This method will be called once per scheduler run during simulation
@@ -35,8 +36,8 @@ public class Elevator extends SubsystemBase {
   private TalonFXConfiguration ElevatorConfiguration() {
     TalonFXConfiguration elevatorConfiguration = new TalonFXConfiguration();
     elevatorConfiguration.MotorOutput.NeutralMode = NeutralModeValue.Coast;
-    elevatorConfiguration.SoftwareLimitSwitch.ForwardSoftLimitThreshold = 296;
-    elevatorConfiguration.SoftwareLimitSwitch.ReverseSoftLimitThreshold = 4;
+    elevatorConfiguration.SoftwareLimitSwitch.ForwardSoftLimitThreshold = -200;
+    elevatorConfiguration.SoftwareLimitSwitch.ReverseSoftLimitThreshold = 0;
     elevatorConfiguration.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
     elevatorConfiguration.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
 
@@ -52,21 +53,33 @@ public class Elevator extends SubsystemBase {
     return elevatorConfiguration;
   }
 
-  private void configElevator() {
+  public void configElevator() {
     // Elevator.getConfigurator().apply(new TalonFXConfiguration());
     Elevator.getConfigurator().apply(ElevatorConfiguration());
   }
 
+  int upC = 0;
+  int dC = 0;
   public void elevatorUp() {
+    upC++;
+    SmartDashboard.putNumber("EUp", upC);
     motionMagicVoltage.Position = Constants.Elevator.Top;
     Elevator.setControl(motionMagicVoltage);
   }
 
   public void elevatorDown() {
+    dC++;
+    SmartDashboard.putNumber("EDown", dC);
     motionMagicVoltage.Position = Constants.Elevator.Bottom;
     Elevator.setControl(motionMagicVoltage);
   }
-
+  
+  public static boolean elevatorTop() {
+    if (Elevator.getPosition().getValue() == Constants.Elevator.Top)
+      return true;
+    else
+      return false;
+  }
   // public void elevator() {
   //   if (elevatorTop)
   //     elevatorDown();

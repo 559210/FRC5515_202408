@@ -1,6 +1,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class StateController {  
     private volatile static StateController instance;  
@@ -22,7 +23,9 @@ public class StateController {
     private void init() {
         var alliance = DriverStation.getAlliance();
         if (alliance.isPresent()) {
+            SmartDashboard.putBoolean("isPresent", true);
             myAlliance = alliance.get();
+            
             switch (myAlliance) {
                 case Red:
                     myAllianceIndex = 0;
@@ -34,6 +37,11 @@ public class StateController {
                     break;
             }
         }
+        else {
+            SmartDashboard.putBoolean("isPresent", false);
+        }
+
+        SmartDashboard.putString("Allience", myAlliance.toString());
     }
     public DriverStation.Alliance myAlliance = DriverStation.Alliance.Red;
     public int myAllianceIndex = 0;

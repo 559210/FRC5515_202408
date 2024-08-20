@@ -43,10 +43,10 @@ public class Candle extends SubsystemBase {
 
     Mode mode = Mode.Hold;
     double blinkStartTime = 0;
-    double BLINK_ON_DURATION = 0.5;
-    double BLINK_OFF_DURATION = 0.25;
+    double BLINK_ON_DURATION = 0.1;
+    double BLINK_OFF_DURATION = 0.05;
     double BLINE_ROUND_TIME = BLINK_ON_DURATION + BLINK_OFF_DURATION;
-    double BLINK_TIMES = 3;
+    double BLINK_TIMES = 10;
 
     public Candle() {
 
@@ -85,6 +85,9 @@ public class Candle extends SubsystemBase {
     }
 
     public void blinkGreenThenHold() {
+        if (mode == Mode.BlinkThenHold) {
+            return;
+        }
         mode = Mode.BlinkThenHold;
         isOn = true;
         r = 0;

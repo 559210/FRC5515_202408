@@ -28,7 +28,9 @@ public class IntakeForPathPlannerCmd extends Command {
     double startTime = 0;
     double m_maxTime = 0;
 
-    public IntakeForPathPlannerCmd(Swerve swerve, IntakeAim m_IntakeAimSubSystem, Intake m_IntakeSubsystem, Candle candle, double maxTime) {
+    boolean m_isNoAim = true;
+
+    public IntakeForPathPlannerCmd(Swerve swerve, IntakeAim m_IntakeAimSubSystem, Intake m_IntakeSubsystem, Candle candle, double maxTime, boolean noAim) {
         this.m_Intake = m_IntakeSubsystem;
         m_IntakeAim = m_IntakeAimSubSystem;
         m_IntakeAim = m_IntakeAimSubSystem;
@@ -38,6 +40,7 @@ public class IntakeForPathPlannerCmd extends Command {
         addRequirements(m_IntakeAimSubSystem);
         schedule();
         m_maxTime = maxTime;
+        m_isNoAim = noAim;
     }
 
     int initCount = 0;
@@ -53,12 +56,13 @@ public class IntakeForPathPlannerCmd extends Command {
     }
 
     protected void updateAutoAim() {
+
         if (!m_IntakeAim.isTargetValid()) {
-            s_Swerve.drive(
-                    new Translation2d(0, 0),
-                    0,
-                    false,
-                    true);
+            // s_Swerve.drive(
+            //         new Translation2d(0, 0),
+            //         0,
+            //         false,
+            //         true);
             StateController.getInstance().intakeAimStop = true;
             return;
         }
@@ -82,11 +86,14 @@ public class IntakeForPathPlannerCmd extends Command {
         SmartDashboard.putNumber("intake aim rotVal", rotationVal);
         SmartDashboard.putNumber("intake aim translationVal", translationVal);
         double strafeVal = 0;
-        s_Swerve.drive(
+        if (!m_isNoAim) {
+            s_Swerve.drive(
                 new Translation2d(translationVal, strafeVal),
                 rotationVal,
                 false,
-                true);
+                true);        
+        }
+
     }
     @Override
     public void execute() {

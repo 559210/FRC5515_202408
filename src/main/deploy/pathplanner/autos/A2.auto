@@ -3,9 +3,9 @@
   "startingPose": {
     "position": {
       "x": 0.75,
-      "y": 6.65
+      "y": 4.45
     },
-    "rotation": 60.0
+    "rotation": -61.17903268579082
   },
   "command": {
     "type": "sequential",
@@ -14,43 +14,37 @@
         {
           "type": "path",
           "data": {
-            "pathName": "P1"
+            "pathName": "A2 P1"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "P2"
+            "pathName": "A2 P2"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "P3"
+            "pathName": "A2 P3"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "P4"
+            "pathName": "A2 P4"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "P5"
+            "pathName": "A2 P5"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "P6"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "P7"
+            "pathName": "A2 P6"
           }
         }
       ]

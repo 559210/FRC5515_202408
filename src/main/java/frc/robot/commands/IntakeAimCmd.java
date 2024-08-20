@@ -77,6 +77,7 @@ public class IntakeAimCmd extends Command {
     }
 
 
+    int greenCount = 0;
     @Override
     public void execute() {
         // SmartDashboard.putNumber("ellapsedTime_leftTrigger",ellapsedTime_Trigger.get());
@@ -94,12 +95,12 @@ public class IntakeAimCmd extends Command {
                 m_Intake.update(IntakeState.Intake);
                 if (StateController.getInstance().intakeAimStop == false) {
                     StateController.getInstance().isAutoIntakeAimming = true;
+                    m_candle.blue();
                     updateAutoAim();
                 }
                 else {
                     
                     StateController.getInstance().isAutoIntakeAimming = false;
-                    SmartDashboard.putString("lastState", m_Intake.intakeState.toString());
                 }
             }
 
@@ -114,7 +115,12 @@ public class IntakeAimCmd extends Command {
 
         // }
         if (m_Intake.isTriggerOk()) {
+            greenCount++;
+            SmartDashboard.putNumber("greencount", greenCount);
             m_candle.blinkGreenThenHold();
+        }
+        else {
+            m_candle.red();
         }
         m_Intake.update();
     }

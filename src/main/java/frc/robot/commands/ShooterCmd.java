@@ -14,14 +14,12 @@ public class ShooterCmd extends Command {
   private Shooter m_Shooter;
   private Candle m_candle;
   // private Timer ellapsedTime_rightTrigger = new Timer();
-  
+
   public ShooterCmd(Shooter m_Shooter, Candle candle, ShooterState ss) {
     this.m_Shooter = m_Shooter;
     this.m_Shooter.shooterState = ss;
     this.m_candle = candle;
-    if (m_Shooter.shooterState == ShooterState.Shootout || m_Shooter.shooterState == ShooterState.ShootAmp) {
-      m_candle.red();
-    }
+
     addRequirements(m_Shooter);
     schedule();
   }
@@ -29,6 +27,9 @@ public class ShooterCmd extends Command {
   @Override
   public void initialize() {
     // ellapsedTime_rightTrigger.start();
+    if (m_Shooter.shooterState == ShooterState.Shootout || m_Shooter.shooterState == ShooterState.ShootAmp) {
+      m_candle.red();
+    }
   }
 
 

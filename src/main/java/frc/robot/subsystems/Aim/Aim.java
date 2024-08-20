@@ -17,16 +17,19 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 
 public class Aim  extends SubsystemBase {
     PIDController pidRot = new PIDController(0.015, 0.01, 0.0015);
-    PIDController pidTrans = new PIDController(0.1, 0, .01);
+    PIDController pidTrans = new PIDController(0.06, 0, .01);
 
     String llName = Constants.LIME_LIGHT_AIM_NAME;
 
     public Aim() {
-        StateController sc = StateController.getInstance();
-        var array1 = Constants.AprilTag.speakerIds[sc.myAllianceIndex];
-        var array2 = Constants.AprilTag.ampIds[sc.myAllianceIndex];
-        int[] mergedArray = IntStream.concat(IntStream.of(array1), IntStream.of(array2)).toArray();
-        LimelightHelpers.SetFiducialIDFiltersOverride(llName, mergedArray);
+        // StateController sc = StateController.getInstance();
+        // var array1 = Constants.AprilTag.speakerIds[sc.myAllianceIndex];
+        // var array2 = Constants.AprilTag.ampIds[sc.myAllianceIndex];
+        // int[] mergedArray = IntStream.concat(IntStream.of(array1), IntStream.of(array2)).toArray();
+        // SmartDashboard.putNumber("filters override count", mergedArray.length);
+        // SmartDashboard.putNumber("filters override item1", mergedArray[0]);
+        // SmartDashboard.putNumber("filters override item1", mergedArray[1]);
+        // LimelightHelpers.SetFiducialIDFiltersOverride(llName, mergedArray);
     }
 
     public void update() {
@@ -37,13 +40,21 @@ public class Aim  extends SubsystemBase {
     }
 
     private boolean isSpeaker(int id) {
+        SmartDashboard.putNumber("isSpeaker id", id);
+
+        SmartDashboard.putString("isSpeaker true", "unknow");
+        SmartDashboard.putString("isSpeaker false", "unknow");
         StateController sc = StateController.getInstance();
         int[] array1 = Constants.AprilTag.speakerIds[sc.myAllianceIndex];
+        SmartDashboard.putNumber("array len", array1.length);
+        SmartDashboard.putNumber("array item 0", array1[0]);
         for (int element : array1) {
             if (element == id) {
+                SmartDashboard.putString("isSpeaker true", "true");
                 return true;
             }
         }
+        SmartDashboard.putString("isSpeaker false", "false");
         return false;
     }
     // simple proportional turning control with Limelight.
@@ -90,13 +101,13 @@ public class Aim  extends SubsystemBase {
     // "ta" (area) for target ranging rather than "ty"
     public double limelight_range_proportional() {
         double offsetY = 0;
-        LimelightResults results = LimelightHelpers.getLatestResults(llName);
-        if (results.targets_Fiducials.length > 0) {
-            LimelightTarget_Fiducial fiducial = results.targets_Fiducials[0];
-            if (!isSpeaker((int)Math.round(fiducial.fiducialID))) {
-                offsetY = Constants.AprilTag.ampOffsetYInLimeLight;
-            }
+        double fid = LimelightHelpers.getFiducialID(llName);
+
+        SmartDashboard.putNumber("fid value", fid);
+        if (!isSpeaker((int)Math.round(fid))) {
+            offsetY = Constants.AprilTag.ampOffsetYInLimeLight;
         }
+
         
         double ty = LimelightHelpers.getTY(llName) + offsetY;
         StateController.getInstance().aimTy = ty;
