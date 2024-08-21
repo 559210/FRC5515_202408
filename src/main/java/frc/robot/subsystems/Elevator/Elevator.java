@@ -11,11 +11,14 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.lib.util.COTSTalonFXSwerveConstants;
 import frc.robot.Constants;
 
 public class Elevator extends SubsystemBase {
   /** Creates a new ExampleSubsystem. */
   public Elevator() {
+
+    configElevator();
   }
 
   public static final TalonFX Elevator = new TalonFX(Constants.Elevator.elevatorMotorID,"rio");
@@ -36,16 +39,17 @@ public class Elevator extends SubsystemBase {
   private TalonFXConfiguration ElevatorConfiguration() {
     TalonFXConfiguration elevatorConfiguration = new TalonFXConfiguration();
     elevatorConfiguration.MotorOutput.NeutralMode = NeutralModeValue.Coast;
-    elevatorConfiguration.SoftwareLimitSwitch.ForwardSoftLimitThreshold = 0;
-    elevatorConfiguration.SoftwareLimitSwitch.ReverseSoftLimitThreshold = -200;
-    elevatorConfiguration.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
-    elevatorConfiguration.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
+    // elevatorConfiguration.SoftwareLimitSwitch.ForwardSoftLimitThreshold = 200;
+    // elevatorConfiguration.SoftwareLimitSwitch.ReverseSoftLimitThreshold = 0;
+    // elevatorConfiguration.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
+    // elevatorConfiguration.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
 
     elevatorConfiguration.Slot0.kP = Constants.Elevator.KP;
     elevatorConfiguration.Slot0.kI = Constants.Elevator.KI;
     elevatorConfiguration.Slot0.kD = Constants.Elevator.KD;
     elevatorConfiguration.Slot0.kS = Constants.Elevator.KS;
     elevatorConfiguration.Slot0.kV = Constants.Elevator.KV;
+    elevatorConfiguration.Slot0.kA = Constants.Elevator.KA;
 
     elevatorConfiguration.MotionMagic.MotionMagicCruiseVelocity = Constants.Elevator.Velocity;
     elevatorConfiguration.MotionMagic.MotionMagicAcceleration = Constants.Elevator.Acceleration;
@@ -53,7 +57,7 @@ public class Elevator extends SubsystemBase {
     return elevatorConfiguration;
   }
 
-  public void configElevator() {
+  private void configElevator() {
     // Elevator.getConfigurator().apply(new TalonFXConfiguration());
     Elevator.getConfigurator().apply(ElevatorConfiguration());
   }

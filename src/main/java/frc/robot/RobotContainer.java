@@ -44,18 +44,19 @@ public class RobotContainer {
 
     /* Driver Buttons */
     private final JoystickButton zeroGyro = new JoystickButton(driver, 5);
-    private final JoystickButton robotCentric = new JoystickButton(driver, 6);
+    // private final JoystickButton robotCentric = new JoystickButton(driver, 6);
+    
     // private final JoystickButton button_intake = new getRawAxis(3);
     // private final JoystickButton button_intakereverse = new getRawAxis(2);
     //
-    private final JoystickButton button_amp = new JoystickButton(driver, 3);
-    private final JoystickButton button_trigger = new JoystickButton(driver, 1);
+    private final JoystickButton button_amp = new JoystickButton(driver, 1);
+    private final JoystickButton button_trigger = new JoystickButton(driver, 6);
 
 
     private final JoystickButton button_auto_aim = new JoystickButton(driver, 4);
 
-    private final JoystickButton button_flywheelCoasting = new JoystickButton(driver2, 4);
-    private final JoystickButton button_flywheelStop = new JoystickButton(driver2, 2);
+    private final JoystickButton button_flywheelCoasting = new JoystickButton(driver2, 5);
+    private final JoystickButton button_flywheelStop = new JoystickButton(driver2, 6);
 
     // private final JoystickButton button_elevator_up = new JoystickButton(driver, 3);
     // private final JoystickButton button_elevator_down = new JoystickButton(driver, 1);
@@ -78,7 +79,8 @@ public class RobotContainer {
                 () -> -driver.getRawAxis(translationAxis), 
                 () -> -driver.getRawAxis(strafeAxis), 
                 () -> -driver.getRawAxis(rotationAxis), 
-                () -> robotCentric.getAsBoolean()
+                // () -> robotCentric.getAsBoolean()
+                () -> false
             )
             // ,new IntakeCmd(c_intake, ()->driver.getRawAxis(2), ()->driver.getRawAxis(3))
             ,new IntakeAimCmd(s_Swerve, c_intakeAim, c_intake, candle, ()->driver.getRawAxis(2), ()->driver.getRawAxis(3))
@@ -138,8 +140,12 @@ public class RobotContainer {
         // new JoystickButton(tester, 2).whileTrue(s_Swerve.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
         // new JoystickButton(tester, 3).whileTrue(s_Swerve.sysIdDynamic(SysIdRoutine.Direction.kForward));
         // new JoystickButton(tester, 4).whileTrue(s_Swerve.sysIdDynamic(SysIdRoutine.Direction.kReverse));
-        new POVButton(driver, 0).whileTrue(new ElevatorCommand(elevator, true));
-        new POVButton(driver, 180).whileTrue(new ElevatorCommand(elevator, false));
+        new POVButton(driver, 0).whileTrue(
+            new ElevatorCommand(elevator, true)
+        );
+        new POVButton(driver, 180).whileTrue(
+            new ElevatorCommand(elevator, false)
+        );
 
     }
 

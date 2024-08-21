@@ -128,6 +128,10 @@ public class Intake extends SubsystemBase {
         if(!isSensored()){
           this.i_trigger.setNoteReady(true);
           this.intakeState = IntakeState.NoteReady;
+          
+          intakeSparkStop();
+          intakeFalconStop();
+          this.i_trigger.update(TriggerState.Stop);
         }
         this.isSensored = false;
       break;
