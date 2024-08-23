@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems.Elevator;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -28,8 +29,8 @@ public class Elevator extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("Elevator Position", Elevator.getPosition().getValue());
-    SmartDashboard.putBoolean("Elevator Top", elevatorTop());
+    // SmartDashboard.putNumber("Elevator Position", Elevator.getPosition().getValue());
+    // SmartDashboard.putBoolean("Elevator Top", elevatorTop());
   }
   @Override
   public void simulationPeriodic() {
@@ -74,12 +75,21 @@ public class Elevator extends SubsystemBase {
   public void elevatorDown() {
     dC++;
     SmartDashboard.putNumber("EDown", dC);
-    motionMagicVoltage.Position = Constants.Elevator.Bottom;
-    Elevator.setControl(motionMagicVoltage);
+
+    if (Elevator.getPosition().getValue() <= Constants.Elevator.Bottom) {
+      var p = ElevatorConfiguration();
+      p.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+      Elevator.getConfigurator().apply(p);
+    }
+    else {
+      motionMagicVoltage.Position = Constants.Elevator.Bottom;
+      Elevator.setControl(motionMagicVoltage);
+    }
+   
   }
   
   public static boolean elevatorTop() {
-    if (Elevator.getPosition().getValue() == Constants.Elevator.Top)
+    if (Elevator.getPosition().getValue() >= Constants.Elevator.Top)
       return true;
     else
       return false;

@@ -7,9 +7,9 @@
     "test"
   ],
   "autoFolders": [],
-  "defaultMaxVel": 2.0,
-  "defaultMaxAccel": 2.0,
+  "defaultMaxVel": 3.5,
+  "defaultMaxAccel": 4.0,
   "defaultMaxAngVel": 500.0,
   "defaultMaxAngAccel": 690.0,
-  "maxModuleSpeed": 2.0
+  "maxModuleSpeed": 3.5
 }

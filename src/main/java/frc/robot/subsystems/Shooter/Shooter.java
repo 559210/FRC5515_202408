@@ -162,7 +162,7 @@ public class Shooter extends SubsystemBase {
   
   public void update(ShooterState state){
             coastingCount++;
-        SmartDashboard.putNumber("coasting count1 1", coastingCount);
+        // SmartDashboard.putNumber("coasting count1 1", coastingCount);
     this.shooterState = state;
     switch(state){
       case Stop:
@@ -178,7 +178,7 @@ public class Shooter extends SubsystemBase {
       break;
       case Coasting:
         coastingCount++;
-        SmartDashboard.putNumber("coasting count", coastingCount);
+        // SmartDashboard.putNumber("coasting count", coastingCount);
         updateFlyWheel(FlywheelState.Coasting);
       break;
       case Shootout:
@@ -294,13 +294,13 @@ public class Shooter extends SubsystemBase {
 
   @Override
   public void periodic() {
-    // SmartDashboard.putBoolean("shooterSensor0", triggerSensorLeft.get());
-    SmartDashboard.putNumber("ellapsedTime_Reset_trigger", ellapsedTime_Reset_trigger.get());
-    SmartDashboard.putNumber("ShooterVelocity", getShooterVelocity());
-    SmartDashboard.putString("shooterState", this.shooterState.toString());
-    SmartDashboard.putString("flywheelState", this.flywheelState.toString());
-    SmartDashboard.putNumber("flywheelLeftMotor getVelocity", flywheelUpMotor.getVelocity().getValue());
-    SmartDashboard.putBoolean("flagboolean", flag);
+    // // SmartDashboard.putBoolean("shooterSensor0", triggerSensorLeft.get());
+    // SmartDashboard.putNumber("ellapsedTime_Reset_trigger", ellapsedTime_Reset_trigger.get());
+    // SmartDashboard.putNumber("ShooterVelocity", getShooterVelocity());
+    // SmartDashboard.putString("shooterState", this.shooterState.toString());
+    // SmartDashboard.putString("flywheelState", this.flywheelState.toString());
+    // SmartDashboard.putNumber("flywheelLeftMotor getVelocity", flywheelUpMotor.getVelocity().getValue());
+    // SmartDashboard.putBoolean("flagboolean", flag);
 
   }
 }

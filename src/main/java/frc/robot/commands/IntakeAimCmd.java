@@ -40,8 +40,8 @@ public class IntakeAimCmd extends Command {
     @Override
     public void initialize() {
         // ellapsedTime_Trigger.start();
-        SmartDashboard.putNumber("intake aim rotVal", 0);
-        SmartDashboard.putNumber("intake aim translationVal", 0);
+        // SmartDashboard.putNumber("intake aim rotVal", 0);
+        // SmartDashboard.putNumber("intake aim translationVal", 0);
     }
 
     protected void updateAutoAim() {
@@ -66,8 +66,8 @@ public class IntakeAimCmd extends Command {
             translationVal = 0.5;
         }
 
-        SmartDashboard.putNumber("intake aim rotVal", rotationVal);
-        SmartDashboard.putNumber("intake aim translationVal", translationVal);
+        // SmartDashboard.putNumber("intake aim rotVal", rotationVal);
+        // SmartDashboard.putNumber("intake aim translationVal", translationVal);
         double strafeVal = 0;
         s_Swerve.drive(
                 new Translation2d(translationVal, strafeVal),
@@ -80,7 +80,7 @@ public class IntakeAimCmd extends Command {
     int greenCount = 0;
     @Override
     public void execute() {
-        // SmartDashboard.putNumber("ellapsedTime_leftTrigger",ellapsedTime_Trigger.get());
+        // // SmartDashboard.putNumber("ellapsedTime_leftTrigger",ellapsedTime_Trigger.get());
         // if(ellapsedTime_Trigger.hasElapsed(0.5)){
         // ellapsedTime_Trigger.reset();
         if (leftTriggerButton.getAsDouble() > 0.15) {
@@ -105,6 +105,7 @@ public class IntakeAimCmd extends Command {
             }
 
         } else {
+            StateController.getInstance().isAutoIntakeAimming = false;
             StateController.getInstance().intakeAimStop = false;
             m_IntakeAim.reset();
         }
@@ -116,7 +117,7 @@ public class IntakeAimCmd extends Command {
         // }
         if (m_Intake.isTriggerOk()) {
             greenCount++;
-            SmartDashboard.putNumber("greencount", greenCount);
+            // SmartDashboard.putNumber("greencount", greenCount);
             m_candle.blinkGreenThenHold();
         }
         else {

@@ -136,11 +136,11 @@ public class ShootTrigger extends SubsystemBase {
 
   @Override
   public void periodic() {
-    // SmartDashboard.putBoolean("shooterSensor0", triggerSensorLeft.get());
-    SmartDashboard.putNumber("triggerVelocity", getTriggerVelocity());
-    SmartDashboard.putNumber("triggerMotor", triggerMotor.getPosition().getValue());
-    SmartDashboard.putString("triggerState", this.triggerState.toString());
-    SmartDashboard.putBoolean("isNoteReady", this.isNoteReady);
+    // // SmartDashboard.putBoolean("shooterSensor0", triggerSensorLeft.get());
+    // SmartDashboard.putNumber("triggerVelocity", getTriggerVelocity());
+    // SmartDashboard.putNumber("triggerMotor", triggerMotor.getPosition().getValue());
+    // SmartDashboard.putString("triggerState", this.triggerState.toString());
+    // SmartDashboard.putBoolean("isNoteReady", this.isNoteReady);
 
   }
 }

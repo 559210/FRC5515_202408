@@ -34,9 +34,9 @@ public class TeleopSwerve extends Command {
     @Override
     public void execute() {
         cout++;
-        SmartDashboard.putNumber("tele exe", cout);
+        // SmartDashboard.putNumber("tele exe", cout);
         StateController sc = StateController.getInstance();
-        SmartDashboard.putBoolean("autoAiming", sc.isAutoAimming);
+        // SmartDashboard.putBoolean("autoAiming", sc.isAutoAimming);
         if (sc.isAutoAimming || sc.isAutoIntakeAimming) {
             // i don't know if this excute function is running when other command executing. by majun
             

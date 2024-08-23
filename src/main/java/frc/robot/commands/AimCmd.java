@@ -36,7 +36,7 @@ public class AimCmd extends Command {
 
     @Override
     public void initialize() {
-        SmartDashboard.putBoolean("Aim working", true);
+        // SmartDashboard.putBoolean("Aim working", true);
         StateController.getInstance().isAutoAimming = true;
         candle.blue();
         isDone = false;
@@ -68,10 +68,10 @@ public class AimCmd extends Command {
         //     rotationVal = 0;
         // }
         count++;
-        SmartDashboard.putString("auto_aim", "----------- START -----------");
-        SmartDashboard.putNumber("auto_aim_count", count);
-        SmartDashboard.putNumber("auto_aim_trans", absTy);
-        SmartDashboard.putNumber("auto_aim_rot", absTx);
+        // SmartDashboard.putString("auto_aim", "----------- START -----------");
+        // SmartDashboard.putNumber("auto_aim_count", count);
+        // SmartDashboard.putNumber("auto_aim_trans", absTy);
+        // SmartDashboard.putNumber("auto_aim_rot", absTx);
         if (absTx >= epsilon || absTy >= epsilon) {
  
             if (absTx < epsilon) {
@@ -99,15 +99,15 @@ public class AimCmd extends Command {
     @Override
     public void end(boolean interrupted) {
         interruptedCount++;
-        SmartDashboard.putNumber("Aim interrupted", interruptedCount);
-        SmartDashboard.putBoolean("Aim working2", false);
+        // SmartDashboard.putNumber("Aim interrupted", interruptedCount);
+        // SmartDashboard.putBoolean("Aim working2", false);
         candle.red();
         StateController.getInstance().isAutoAimming = false;
     }
 
     @Override
     public boolean isFinished() {
-        SmartDashboard.putBoolean("auto_aim_isDone", isDone);
+        // SmartDashboard.putBoolean("auto_aim_isDone", isDone);
         return isDone;
     }
 }

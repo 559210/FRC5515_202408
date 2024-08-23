@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.5,
-        "y": 7.0
+        "x": 1.4682680793933023,
+        "y": 7.359047860952865
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.8409378998852783,
-        "y": 6.4390452951522015
+        "x": 1.495173990347982,
+        "y": 7.183134366268733
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.5,
-        "y": 6.2
+        "x": 1.4682680793933023,
+        "y": 6.464820929641859
       },
       "prevControl": {
-        "x": 1.83662516589804,
-        "y": 6.394350630147236
+        "x": 1.2776951268188257,
+        "y": 6.494139845422547
       },
       "nextControl": null,
       "isLocked": false,
@@ -33,7 +33,7 @@
   "eventMarkers": [
     {
       "name": "shoot 2",
-      "waypointRelativePos": 1.0,
+      "waypointRelativePos": 0.8,
       "command": {
         "type": "parallel",
         "data": {
@@ -43,20 +43,20 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 2.0,
-    "maxAcceleration": 2.0,
+    "maxVelocity": 3.5,
+    "maxAcceleration": 4.0,
     "maxAngularVelocity": 500.0,
     "maxAngularAcceleration": 690.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 26.053495310491023,
+    "rotation": 36.469234390051845,
     "rotateFast": false
   },
   "reversed": false,
   "folder": "A1",
   "previewStartingState": {
-    "rotation": 0,
+    "rotation": 0.0,
     "velocity": 0
   },
   "useDefaultConstraints": true

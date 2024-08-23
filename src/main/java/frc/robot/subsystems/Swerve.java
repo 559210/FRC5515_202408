@@ -134,7 +134,7 @@ public class Swerve extends SubsystemBase {
     int drivecount = 0;
     public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop) {
         drivecount++;
-        SmartDashboard.putNumber("drive number", drivecount);
+        // SmartDashboard.putNumber("drive number", drivecount);
         SwerveModuleState[] swerveModuleStates =
             Constants.Swerve.swerveKinematics.toSwerveModuleStates(
                 fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(
@@ -187,7 +187,7 @@ public class Swerve extends SubsystemBase {
     int poseCount = 0;
     public void setPose(Pose2d pose) {
         poseCount++;
-        SmartDashboard.putNumber("setPose count", poseCount);
+        // SmartDashboard.putNumber("setPose count", poseCount);
         swerveOdometry.resetPosition(getGyroYaw(), getModulePositions(), pose);
     }
 
@@ -205,7 +205,7 @@ public class Swerve extends SubsystemBase {
 
     public Rotation2d getGyroYaw() {
         // return new Rotation2d();
-        SmartDashboard.putNumber("gryo111", gyro.getYaw().getValue());
+        // SmartDashboard.putNumber("gryo111", gyro.getYaw().getValue());
         return Rotation2d.fromDegrees(gyro.getYaw().getValue());
     }
 
@@ -225,11 +225,11 @@ public class Swerve extends SubsystemBase {
             }
         }
         for(SwerveModule mod : mSwerveMods){
-            SmartDashboard.putNumber("Mod " + mod.moduleNumber + " CANcoder", mod.getCANcoder().getDegrees());
-            SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Angle", mod.getPosition().angle.getDegrees());
-            SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Velocity", mod.getState().speedMetersPerSecond);    
+            // SmartDashboard.putNumber("Mod " + mod.moduleNumber + " CANcoder", mod.getCANcoder().getDegrees());
+            // SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Angle", mod.getPosition().angle.getDegrees());
+            // SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Velocity", mod.getState().speedMetersPerSecond);    
         }
-        SmartDashboard.putNumber("Gyro",getGyroYaw().getDegrees());
+        // SmartDashboard.putNumber("Gyro",getGyroYaw().getDegrees());
     }
 
     public ChassisSpeeds getRobotRelativeSpeeds(){
@@ -251,7 +251,7 @@ public class Swerve extends SubsystemBase {
     public Command followPathCommand(String pathName) {
         
         PathPlannerPath path = PathPlannerPath.fromPathFile(pathName);
-        SmartDashboard.putString("instance1: ", path.toString());
+        // SmartDashboard.putString("instance1: ", path.toString());
         // return new PathPlannerAuto("testAuto");
         // AutoBuilder.configureHolonomic
         return new FollowPathHolonomic(
@@ -285,7 +285,7 @@ public class Swerve extends SubsystemBase {
 
     public Command followPathPlannerAuto(String autoName) {
         // PathPlannerPath path = PathPlannerPath.fromPathFile(pathName);
-        // SmartDashboard.putString("instance1: ", path.toString());
+        // // SmartDashboard.putString("instance1: ", path.toString());
         AutoBuilder.configureHolonomic(
             this::getPose,
             this::setPose,

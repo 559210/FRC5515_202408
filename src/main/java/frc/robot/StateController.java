@@ -23,7 +23,7 @@ public class StateController {
     private void init() {
         var alliance = DriverStation.getAlliance();
         if (alliance.isPresent()) {
-            SmartDashboard.putBoolean("isPresent", true);
+            // SmartDashboard.putBoolean("isPresent", true);
             myAlliance = alliance.get();
             
             switch (myAlliance) {
@@ -38,10 +38,10 @@ public class StateController {
             }
         }
         else {
-            SmartDashboard.putBoolean("isPresent", false);
+            // SmartDashboard.putBoolean("isPresent", false);
         }
 
-        SmartDashboard.putString("Allience", myAlliance.toString());
+        // SmartDashboard.putString("Allience", myAlliance.toString());
     }
     public DriverStation.Alliance myAlliance = DriverStation.Alliance.Red;
     public int myAllianceIndex = 0;

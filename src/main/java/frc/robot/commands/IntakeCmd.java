@@ -31,7 +31,7 @@ public class IntakeCmd extends Command {
 
   @Override
   public void execute() {
-    // SmartDashboard.putNumber("ellapsedTime_leftTrigger",ellapsedTime_Trigger.get());
+    // // SmartDashboard.putNumber("ellapsedTime_leftTrigger",ellapsedTime_Trigger.get());
     // if(ellapsedTime_Trigger.hasElapsed(0.5)){
     //   ellapsedTime_Trigger.reset();
       if(leftTriggerButton.getAsDouble()>0.15){

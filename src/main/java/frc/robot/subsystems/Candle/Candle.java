@@ -138,7 +138,7 @@ public class Candle extends SubsystemBase {
     @Override
     public void periodic() {
         update();
-        SmartDashboard.putBoolean("Led is On", isOn);
-        SmartDashboard.putString("Led Mode", mode.toString());
+        // SmartDashboard.putBoolean("Led is On", isOn);
+        // SmartDashboard.putString("Led Mode", mode.toString());
     }
 }

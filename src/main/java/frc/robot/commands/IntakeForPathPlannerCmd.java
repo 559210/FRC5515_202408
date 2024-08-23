@@ -47,7 +47,7 @@ public class IntakeForPathPlannerCmd extends Command {
     @Override
     public void initialize() {
         initCount++;
-        SmartDashboard.putNumber("==initcount", initCount);
+        // SmartDashboard.putNumber("==initcount", initCount);
         m_IntakeAim.reset();
         // ellapsedTime_Trigger.start();
         startTime = Timer.getFPGATimestamp();
@@ -82,9 +82,9 @@ public class IntakeForPathPlannerCmd extends Command {
             rotationVal = 0;
             translationVal = 0.5;
         }
-        SmartDashboard.putNumber("=== abs rot", absTx);
-        SmartDashboard.putNumber("intake aim rotVal", rotationVal);
-        SmartDashboard.putNumber("intake aim translationVal", translationVal);
+        // SmartDashboard.putNumber("=== abs rot", absTx);
+        // SmartDashboard.putNumber("intake aim rotVal", rotationVal);
+        // SmartDashboard.putNumber("intake aim translationVal", translationVal);
         double strafeVal = 0;
         if (!m_isNoAim) {
             s_Swerve.drive(
@@ -98,7 +98,7 @@ public class IntakeForPathPlannerCmd extends Command {
     @Override
     public void execute() {
         if (isStart) {
-            SmartDashboard.putString("===intake state", StateController.getInstance().intakeAimStop?"true":"false");
+            // SmartDashboard.putString("===intake state", StateController.getInstance().intakeAimStop?"true":"false");
             if (m_Intake.intakeState != IntakeState.NoteReady && m_Intake.intakeState != IntakeState.Intake_sensored)
             {
                 m_Intake.update(IntakeState.Intake);
@@ -112,8 +112,8 @@ public class IntakeForPathPlannerCmd extends Command {
             }    
 
             // if (m_Intake.isSensored) {
-            SmartDashboard.putString("===state", m_Intake.intakeState.toString());
-            SmartDashboard.putBoolean("===isTriggerReady", m_Intake.isTriggerOk());
+            // SmartDashboard.putString("===state", m_Intake.intakeState.toString());
+            // SmartDashboard.putBoolean("===isTriggerReady", m_Intake.isTriggerOk());
             if (m_Intake.intakeState == IntakeState.Stop || m_Intake.isTriggerOk()) {
                 m_Intake.update(IntakeState.Stop);
                 StateController.getInstance().intakeAimStop = false;

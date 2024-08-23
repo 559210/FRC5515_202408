@@ -66,10 +66,10 @@ public class IntakeAim  extends SubsystemBase {
         // your limelight 3 feed, tx should return roughly 31 degrees.
         double tx = LimelightHelpers.getTX(Constants.LIME_LIGHT_NOTE_NAME);
         
-        SmartDashboard.putNumber("o tx", tx);
+        // SmartDashboard.putNumber("o tx", tx);
         StateController.getInstance().intakeAimTx = tx;
         tx = filterX.calc(tx);
-        SmartDashboard.putNumber("n tx", tx);
+        // SmartDashboard.putNumber("n tx", tx);
         StateController.getInstance().aimTx = tx;
         // double targetingAngularVelocity = LimelightHelpers.getTX(Constants.LIME_LIGHT_AIM_NAME) * kP;
 

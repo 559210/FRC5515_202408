@@ -192,8 +192,8 @@ public class Intake extends SubsystemBase {
 
   @Override
   public void periodic() {    
-    SmartDashboard.putBoolean("intakeSensor0", intakeSensor.get());
-    SmartDashboard.putString("intakeState", this.intakeState.toString());
-    SmartDashboard.putNumber("intake Encoder", m_encoder.getPosition());
+    // SmartDashboard.putBoolean("intakeSensor0", intakeSensor.get());
+    // SmartDashboard.putString("intakeState", this.intakeState.toString());
+    // SmartDashboard.putNumber("intake Encoder", m_encoder.getPosition());
   }
 }

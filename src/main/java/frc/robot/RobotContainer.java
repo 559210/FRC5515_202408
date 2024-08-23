@@ -57,7 +57,7 @@ public class RobotContainer {
 
     private final JoystickButton button_flywheelCoasting = new JoystickButton(driver2, 5);
     private final JoystickButton button_flywheelStop = new JoystickButton(driver2, 6);
-
+    private final JoystickButton button_reset = new JoystickButton(driver2, 1);
     // private final JoystickButton button_elevator_up = new JoystickButton(driver, 3);
     // private final JoystickButton button_elevator_down = new JoystickButton(driver, 1);
     /* Subsystems */
@@ -127,6 +127,7 @@ public class RobotContainer {
             new AimCmd(c_aim, candle, s_Swerve)
         );
 
+        button_reset.onTrue(new ResetCmd(s_Swerve, c_intakeAim));
         // button_elevator_up.onTrue(new InstantCommand(()->{
         //     new ElevatorCommand(elevator, true);
         // }));
@@ -161,9 +162,9 @@ public class RobotContainer {
         NamedCommands.registerCommand("init", new InstantCommand(()->{
             new ShooterCmd(c_shooter, candle, ShooterState.Coasting);
         }));
-        NamedCommands.registerCommand("aim", 
-            new AimCmd(c_aim, candle, s_Swerve)
-        );
+        // NamedCommands.registerCommand("aim", 
+        //     new AimCmd(c_aim, candle, s_Swerve)
+        // );
         // for (int i = 1; i <= 100; ++i) {
         //     NamedCommands.registerCommand("intake" + String.valueOf(i), 
         //         new IntakeForPathPlannerCmd(s_Swerve, c_intakeAim, c_intake, candle,3, false)
@@ -178,7 +179,8 @@ public class RobotContainer {
         NamedCommands.registerCommand("shoot", new InstantCommand(()->{
             new ShooterCmd(c_shooter, candle, ShooterState.Shootout);
         }));
-        return s_Swerve.followPathPlannerAuto("A3");
+        // return s_Swerve.followPathPlannerAuto("A3");
+        return s_Swerve.followPathPlannerAuto("A4");
         // return new exampleAuto(s_Swerve);
     }
 }
