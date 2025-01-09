@@ -9,9 +9,6 @@ import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-import com.revrobotics.CANSparkBase.IdleMode;
-import com.revrobotics.CANSparkFlex;
-import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DutyCycle;
@@ -67,8 +64,8 @@ public class Shooter extends SubsystemBase {
     /* Current Limiting */
     flywheelUpconfig.CurrentLimits.SupplyCurrentLimitEnable = true;
     flywheelUpconfig.CurrentLimits.SupplyCurrentLimit = 20;
-    flywheelUpconfig.CurrentLimits.SupplyCurrentThreshold = 30;
-    flywheelUpconfig.CurrentLimits.SupplyTimeThreshold = 0.02;
+    flywheelUpconfig.CurrentLimits.SupplyCurrentLowerLimit = 30;
+    flywheelUpconfig.CurrentLimits.SupplyCurrentLowerTime = 0.02;
 
      /* Open and Closed Loop Ramping */
     flywheelUpconfig.OpenLoopRamps.VoltageOpenLoopRampPeriod = 2;
@@ -92,8 +89,8 @@ public class Shooter extends SubsystemBase {
     /* Current Limiting */
     flywheelDownconfig.CurrentLimits.SupplyCurrentLimitEnable = true;
     flywheelDownconfig.CurrentLimits.SupplyCurrentLimit = 20;
-    flywheelDownconfig.CurrentLimits.SupplyCurrentThreshold = 30;
-    flywheelDownconfig.CurrentLimits.SupplyTimeThreshold = 0.02;
+    flywheelDownconfig.CurrentLimits.SupplyCurrentLowerLimit = 30;
+    flywheelDownconfig.CurrentLimits.SupplyCurrentLowerTime = 0.02;
 
      /* Open and Closed Loop Ramping */
     flywheelDownconfig.OpenLoopRamps.VoltageOpenLoopRampPeriod = 2;
@@ -183,7 +180,7 @@ public class Shooter extends SubsystemBase {
       break;
       case Shootout:
         updateFlyWheel(FlywheelState.ShootingSpeaker);
-        if(Math.abs(flywheelUpMotor.getVelocity().getValue()/Constants.Shooter.shootingSpeaker)
+        if(Math.abs(flywheelUpMotor.getVelocity().getValueAsDouble()/Constants.Shooter.shootingSpeaker)
           >Constants.Shooter.flywheelTolerance
         ){
           if(ellapsedTime_Reset_trigger.get()>2){
@@ -209,7 +206,7 @@ public class Shooter extends SubsystemBase {
       case ShootAmp:
         // this.flywheelState = FlywheelState.ShootAmp;
         updateFlyWheel(FlywheelState.ShootAmp);
-        if(Math.abs(flywheelUpMotor.getVelocity().getValue()/Constants.Shooter.AmpUpSpeed)
+        if(Math.abs(flywheelUpMotor.getVelocity().getValueAsDouble()/Constants.Shooter.AmpUpSpeed)
           >0.05
         ){
           if(ellapsedTime_Reset_trigger.get()>2){
@@ -280,11 +277,11 @@ public class Shooter extends SubsystemBase {
   }
 
   public double getFlywheelVelocity(){
-    return flywheelUpMotor.getVelocity().getValue();
+    return flywheelUpMotor.getVelocity().getValueAsDouble();
   }
 
   public double getShooterVelocity(){
-    return flywheelUpMotor.getVelocity().getValue();
+    return flywheelUpMotor.getVelocity().getValueAsDouble();
   }
 
   public void stopflywheel(){
@@ -299,7 +296,7 @@ public class Shooter extends SubsystemBase {
     SmartDashboard.putNumber("ShooterVelocity", getShooterVelocity());
     SmartDashboard.putString("shooterState", this.shooterState.toString());
     SmartDashboard.putString("flywheelState", this.flywheelState.toString());
-    SmartDashboard.putNumber("flywheelLeftMotor getVelocity", flywheelUpMotor.getVelocity().getValue());
+    SmartDashboard.putNumber("flywheelLeftMotor getVelocity", flywheelUpMotor.getVelocity().getValueAsDouble());
     SmartDashboard.putBoolean("flagboolean", flag);
 
   }

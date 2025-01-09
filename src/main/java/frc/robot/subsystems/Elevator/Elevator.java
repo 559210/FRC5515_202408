@@ -25,7 +25,7 @@ public class Elevator extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("Elevator Position", Elevator.getPosition().getValue());
+    SmartDashboard.putNumber("Elevator Position", Elevator.getPosition().getValueAsDouble());
     SmartDashboard.putBoolean("Elevator Top", elevatorTop());
   }
   @Override
@@ -35,17 +35,18 @@ public class Elevator extends SubsystemBase {
 
   private TalonFXConfiguration ElevatorConfiguration() {
     TalonFXConfiguration elevatorConfiguration = new TalonFXConfiguration();
-    elevatorConfiguration.MotorOutput.NeutralMode = NeutralModeValue.Coast;
-    elevatorConfiguration.SoftwareLimitSwitch.ForwardSoftLimitThreshold = 0;
-    elevatorConfiguration.SoftwareLimitSwitch.ReverseSoftLimitThreshold = -200;
-    elevatorConfiguration.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
-    elevatorConfiguration.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
+    // elevatorConfiguration.MotorOutput.NeutralMode = NeutralModeValue.Coast;
+    // elevatorConfiguration.SoftwareLimitSwitch.ForwardSoftLimitThreshold = 0;
+    // elevatorConfiguration.SoftwareLimitSwitch.ReverseSoftLimitThreshold = -200;
+    // elevatorConfiguration.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
+    // elevatorConfiguration.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
 
     elevatorConfiguration.Slot0.kP = Constants.Elevator.KP;
     elevatorConfiguration.Slot0.kI = Constants.Elevator.KI;
     elevatorConfiguration.Slot0.kD = Constants.Elevator.KD;
     elevatorConfiguration.Slot0.kS = Constants.Elevator.KS;
     elevatorConfiguration.Slot0.kV = Constants.Elevator.KV;
+    elevatorConfiguration.Slot0.kA = Constants.Elevator.KA;
 
     elevatorConfiguration.MotionMagic.MotionMagicCruiseVelocity = Constants.Elevator.Velocity;
     elevatorConfiguration.MotionMagic.MotionMagicAcceleration = Constants.Elevator.Acceleration;
@@ -63,19 +64,19 @@ public class Elevator extends SubsystemBase {
   public void elevatorUp() {
     upC++;
     SmartDashboard.putNumber("EUp", upC);
-    motionMagicVoltage.Position = Constants.Elevator.Top;
-    Elevator.setControl(motionMagicVoltage);
+    // motionMagicVoltage.Position = Constants.Elevator.Top;
+    Elevator.setControl(motionMagicVoltage.withPosition(Constants.Elevator.Top));
   }
 
   public void elevatorDown() {
     dC++;
     SmartDashboard.putNumber("EDown", dC);
     motionMagicVoltage.Position = Constants.Elevator.Bottom;
-    Elevator.setControl(motionMagicVoltage);
+    Elevator.setControl(motionMagicVoltage.withPosition(Constants.Elevator.Bottom));
   }
   
   public static boolean elevatorTop() {
-    if (Elevator.getPosition().getValue() == Constants.Elevator.Top)
+    if (Elevator.getPosition().getValueAsDouble() == Constants.Elevator.Top)
       return true;
     else
       return false;

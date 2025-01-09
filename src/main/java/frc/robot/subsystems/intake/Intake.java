@@ -6,12 +6,15 @@ import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-import com.revrobotics.CANSparkBase.IdleMode;
-import com.revrobotics.CANSparkLowLevel.MotorType;
-import com.revrobotics.CANSparkMax;
+import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.config.SparkMaxConfig;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+import com.revrobotics.spark.SparkBase.ResetMode;
+import com.revrobotics.spark.SparkBase.PersistMode;
+import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.REVLibError;
 import com.revrobotics.RelativeEncoder;
-
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -24,8 +27,8 @@ import frc.robot.subsystems.Trigger.ShootTrigger.TriggerState;
 
 public class Intake extends SubsystemBase {
   private ShootTrigger i_trigger;
-  private CANSparkMax intakeLeftMotor = new CANSparkMax(Constants.Intake.intakeLeftMotorID,MotorType.kBrushless);
-  private CANSparkMax intakeRightMotor = new CANSparkMax(Constants.Intake.intakeRightMotorID,MotorType.kBrushless);
+  private SparkMax intakeLeftMotor = new SparkMax(Constants.Intake.intakeLeftMotorID,MotorType.kBrushless);
+  private SparkMax intakeRightMotor = new SparkMax(Constants.Intake.intakeRightMotorID,MotorType.kBrushless);
   private TalonFX intakeFalconMotor = new TalonFX(Constants.Intake.intakeFalconMotorID,Constants.canivore_name);
   REVLibError revError;
   RelativeEncoder m_encoder;
@@ -45,20 +48,37 @@ public class Intake extends SubsystemBase {
 
   public Intake(ShootTrigger iTrigger) {
     this.i_trigger = iTrigger;
-    intakeLeftMotor.restoreFactoryDefaults();
-    intakeRightMotor.restoreFactoryDefaults();
-    intakeLeftMotor.setIdleMode(IdleMode.kCoast);
-    intakeRightMotor.setIdleMode(IdleMode.kCoast);
-    intakeLeftMotor.setInverted(true);
-    intakeRightMotor.setInverted(false);
-    intakeLeftMotor.setSmartCurrentLimit(30, 80, 5700);
-    intakeRightMotor.setSmartCurrentLimit(30, 80, 5700);
-    intakeLeftMotor.burnFlash();
-    intakeRightMotor.burnFlash();
-    for(int i=0;i<5;i++){
-      intakeRightMotor.follow(intakeLeftMotor,true);
-      if(revError==REVLibError.kOk)break;
-    }
+    SparkMaxConfig leftConfig = new SparkMaxConfig();
+    leftConfig
+      .inverted(true)
+      .idleMode(IdleMode.kCoast)
+      .smartCurrentLimit(30, 80, 5700);
+    intakeLeftMotor.configure(leftConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+
+    SparkMaxConfig rightConfig = new SparkMaxConfig();
+    rightConfig
+      .inverted(false)
+      .idleMode(IdleMode.kCoast)
+      .follow(intakeLeftMotor, true)
+      .smartCurrentLimit(30, 80, 5700);
+    intakeRightMotor.configure(rightConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+
+    // 2024 code below
+    // intakeLeftMotor.restoreFactoryDefaults();
+    // intakeRightMotor.restoreFactoryDefaults();
+    // intakeLeftMotor.setIdleMode(IdleMode.kCoast);
+    // intakeRightMotor.setIdleMode(IdleMode.kCoast);
+    // intakeLeftMotor.setInverted(true);
+    // intakeRightMotor.setInverted(false);
+    // intakeLeftMotor.setSmartCurrentLimit(30, 80, 5700);
+    // intakeRightMotor.setSmartCurrentLimit(30, 80, 5700);
+    // intakeLeftMotor.burnFlash();
+    // intakeRightMotor.burnFlash();
+    // for(int i=0;i<5;i++){
+    //   intakeRightMotor
+    //   intakeRightMotor.follow(intakeLeftMotor,true);
+    //   if(revError==REVLibError.kOk)break;
+    // }
 
     m_intakeEncoder = intakeLeftMotor.getEncoder();
     m_encoder = intakeRightMotor.getEncoder();
@@ -71,8 +91,8 @@ public class Intake extends SubsystemBase {
     /* Current Limiting */
     intakeFalconMotorConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
     intakeFalconMotorConfig.CurrentLimits.SupplyCurrentLimit = 20;
-    intakeFalconMotorConfig.CurrentLimits.SupplyCurrentThreshold = 30;
-    intakeFalconMotorConfig.CurrentLimits.SupplyTimeThreshold = 0.02;
+    intakeFalconMotorConfig.CurrentLimits.SupplyCurrentLowerLimit = 30;
+    intakeFalconMotorConfig.CurrentLimits.SupplyCurrentLowerTime = 0.02;
 
      /* Open and Closed Loop Ramping */
     intakeFalconMotorConfig.OpenLoopRamps.VoltageOpenLoopRampPeriod = 2;

@@ -1,9 +1,6 @@
 package frc.robot.commands;
 
 import java.util.function.DoubleSupplier;
-
-import com.pathplanner.lib.path.PathPlannerTrajectory.State;
-
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.Timer;
