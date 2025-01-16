@@ -127,7 +127,7 @@ public class IntakeAimCmd extends Command {
 
     @Override
     public void end(boolean interrupted) {
-        StateController.getInstance().isAutoAimming = false;
+        StateController.getInstance().isAutoIntakeAimming = false;
     }
 
     @Override
