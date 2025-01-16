@@ -12,11 +12,10 @@ import edu.wpi.first.math.util.Units;
 import frc.lib.util.COTSTalonFXSwerveConstants;
 import frc.lib.util.SwerveModuleConstants;
 
-public final class Constants {
+public final class Constants2025 {
     public static final double stickDeadband = 0.1;
     public static final String canivore_name = "Canivore5515";
-    public static final CTREConfigs ctreConfigs = new CTREConfigs(0);
-    public static final CTREConfigs ctreConfigs2 = new CTREConfigs(1);
+    public static final CTREConfigs2025 ctreConfigs = new CTREConfigs2025();
 
     public static final class Swerve {
         public static final int pigeonID = 0;
@@ -99,7 +98,7 @@ public final class Constants {
             public static final int driveMotorID = 1;
             public static final int angleMotorID = 2;
             public static final int canCoderID = 9;
-            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(-131.90);//TODO
+            public static final Rotation2d angleOffset = Rotation2d.fromRotations(-0.009033);
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }
@@ -109,7 +108,7 @@ public final class Constants {
             public static final int driveMotorID = 3;
             public static final int angleMotorID = 4;
             public static final int canCoderID = 10;
-            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(-170.41);//TODO
+            public static final Rotation2d angleOffset = Rotation2d.fromRotations(-0.477051);
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }
@@ -119,7 +118,7 @@ public final class Constants {
             public static final int driveMotorID = 5;
             public static final int angleMotorID = 6;
             public static final int canCoderID = 11;
-            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(29.5);//TODO
+            public static final Rotation2d angleOffset = Rotation2d.fromRotations(-0.355225);
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }
@@ -129,116 +128,9 @@ public final class Constants {
             public static final int driveMotorID = 7;
             public static final int angleMotorID = 8;
             public static final int canCoderID = 12;
-            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(59.4);//TODO
+            public static final Rotation2d angleOffset = Rotation2d.fromRotations(0.263916);
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }
-    }
-
-    public static final class AutoConstants { //TODO: The below constants are used in the example auto, and must be tuned to specific robot
-        public static final double kMaxSpeedMetersPerSecond = 3;
-        public static final double kMaxAccelerationMetersPerSecondSquared = 3;
-        public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
-        public static final double kMaxAngularSpeedRadiansPerSecondSquared = Math.PI;
-    
-        public static final double kPXController = 1;
-        public static final double kPYController = 1;
-        public static final double kPThetaController = 1;
-    
-        /* Constraint for the motion profilied robot angle controller */
-        public static final TrapezoidProfile.Constraints kThetaControllerConstraints =
-            new TrapezoidProfile.Constraints(
-                kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
-    }
-
-    public static final class Intake {
-        public static final int intakeFalconMotorID = 13;
-        public static final int intakeLeftMotorID = 14;
-        public static final int intakeRightMotorID = 15;
-        public static final double ForwardSpeed_spark = 0.3;//TODO
-        public static final double ReverseSpeed_spark = -0.3;//TODO
-        public static final double ForwardSpeed_falcon = 30;//TODO
-        public static final double ReverseSpeed_falcon = -30;//TODO
-        public static final double KP = 0.5;
-        public static final double KI = 0;
-        public static final double KD = 0;
-        public static final double KS = 0;
-        public static final double KV = 0;
-        public static final double KA = 0;
-    }
-    
-    public static final class Trigger {
-        public static final int triggerMotorID = 23;
-        public static final double KP = 0.5;
-        public static final double KI = 0.0;
-        public static final double KD = 0.0;
-        public static final double KV = 0.0;
-        public static final double KS = 0.0;
-        public static final double KA = 0.0;
-        public static double HelpIntake = 30;//TODO
-        public static double HelpIntakeReverse = -30;//TODO
-        public static double shootout = 60;//TODO
-    }
-
-    public static final class Elevator {
-        public static final int elevatorMotorID = 25;
-        public static final double KP = 0.1;
-        public static final double KI = 0.0;
-        public static final double KD = 0.0;
-        public static final double KV = 0.1;
-        public static final double KS = 0.05;
-        public static final double KA = 0.07;
-        public static final double Velocity = 100.0;
-        public static final double Acceleration = 600.0;
-        public static final double Jerk = 0.0;
-        // public static final double Top = 255.0; //TODO
-        // public static final double Bottom = 5.0; //TODO
-        public static final double Top = 0; //TODO
-        public static final double Bottom = -195; //TODO
-    }
-
-    public static final class Shooter {
-        public static final int flywheelUpMotorID = 21;
-        public static final int flywheelDownMotorID = 22;
-        public static final double flywheelKP = 0.5;
-        public static final double flywheelKI = 0.0;
-        public static final double flywheelKD = 0.0;
-        public static final double flywheelKV = 0.0;
-        public static final double flywheelKS = 0.0;
-        public static final double flywheelKA = 0.0;
-        public static double shootingCoasting = 10;
-        public static double shootingSpeaker = 60; //TODO
-        public static double flywheelTolerance = 0.72;
-        public static double AmpUpSpeed = 5; //TODO
-        public static double AmpDownSpeed = 19; //TODO
-    }
-
-    public static final class Candle {
-        public static final int candleID = 24;
-        public static final String candleBusName = "rio";
-    }
-
-    public static String LIME_LIGHT_NOTE_NAME = "limelight-note";
-    public static String LIME_LIGHT_AIM_NAME = "limelight-aim";
-
-    public static final class AprilTag {
-        public static double ampOffsetYInLimeLight = 0;
-
-        // .Blue Source (right to left) - ID 1, 2
-        // .Red Speaker (right to left) - ID 3, 4
-        // .Red Amp - ID 5
-        // .Blue Amp - ID 6
-        // .Blue Speaker (right to left) - ID 7, 8 
-        // .Red Source (right to left) - ID 9,10
-        // .Red Stage (counter-clockwise starting at Stage Left) - ID 11, 12, 13
-        // .Blue Stage (counter-clockwise starting at Center Stage) - ID 14, 15, 16
-        public static int[][] ampIds = {
-            {5, }, // red, according to DriverStation.Alliance
-            {6, }  // blue
-        };
-        public static int[][] speakerIds = {
-            {4, }, // red
-            {7, }, // blue
-        };
     }
 }
