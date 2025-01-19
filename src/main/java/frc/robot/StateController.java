@@ -53,4 +53,8 @@ public class StateController {
     public double intakeAimTx = 0;
     public double intakeAimTy = 0;
     public boolean intakeAimStop = false;
+
+    // 2025 below
+    public boolean useVisionOdometry = false;
+    public boolean aimMoveCmdRunning = false;
 }

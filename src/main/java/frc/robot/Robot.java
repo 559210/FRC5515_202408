@@ -4,8 +4,6 @@
 
 package frc.robot;
 
-import com.pathplanner.lib.commands.PathPlannerAuto;
-
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -73,9 +71,11 @@ public class Robot extends TimedRobot {
 
     @Override
     public void autonomousInit() {
-        m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+        m_robotContainer.autoInit();
 
+        m_autonomousCommand = m_robotContainer.getAutonomousCommand();
         // schedule the autonomous command (example)
+        
         if (m_autonomousCommand != null) {
             m_autonomousCommand.schedule();
             // PathPlannerAuto ppa = (PathPlannerAuto)m_autonomousCommand;
@@ -99,6 +99,7 @@ public class Robot extends TimedRobot {
         if (m_autonomousCommand != null) {
             m_autonomousCommand.cancel();
         }
+        m_robotContainer.telInit();
     }
 
     /** This function is called periodically during operator control. */

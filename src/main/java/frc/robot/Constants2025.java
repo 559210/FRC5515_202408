@@ -133,4 +133,6 @@ public final class Constants2025 {
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }
     }
+
+    public static String LIME_LIGHT_ARPIL_TAG_NAME = "limelight-one";
 }
