@@ -1,16 +1,21 @@
 package frc.robot.subsystems;
 import frc.robot.SwerveModule2025;
 import frc.robot.Constants2025;
+import frc.robot.LimelightHelpers;
+import frc.robot.StateController;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import com.ctre.phoenix6.configs.Pigeon2Configuration;
 import com.ctre.phoenix6.hardware.Pigeon2;
+
+import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.MutDistance;
 import edu.wpi.first.units.measure.MutLinearVelocity;
 import edu.wpi.first.units.measure.MutVoltage;
@@ -33,7 +38,9 @@ import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import static edu.wpi.first.units.Units.*;
 
 public class Swerve2025 extends SubsystemBase {
-    public SwerveDriveOdometry swerveOdometry;
+    private final String llName = Constants2025.LIME_LIGHT_ARPIL_TAG_NAME;
+    public SwerveDrivePoseEstimator swerveOdometry;
+    
     public SwerveModule2025[] mSwerveMods;
     public Pigeon2 gyro;
     public Translation2d currentVelTranslation2d = new Translation2d();
@@ -83,7 +90,7 @@ public class Swerve2025 extends SubsystemBase {
                                             m_appliedVoltage.mut_replace(
                                                     mod.getmDriveMotor().get() * RobotController.getBatteryVoltage(),
                                                     Volts))
-                                    .linearPosition(m_distance.mut_replace(swerveOdometry.getPoseMeters()
+                                    .linearPosition(m_distance.mut_replace(swerveOdometry.getEstimatedPosition()
                                             .getTranslation().getDistance(new Translation2d(0, 0)), Meters))
                                     .linearVelocity(
                                             m_velocity.mut_replace(mod.getState().speedMetersPerSecond,
@@ -136,7 +143,13 @@ public class Swerve2025 extends SubsystemBase {
                 new SwerveModule2025(3, Constants2025.Swerve.Mod3.constants)
         };
         reset_time.start();
-        swerveOdometry = new SwerveDriveOdometry(Constants2025.Swerve.swerveKinematics, getGyroYaw(), getModulePositions());
+        swerveOdometry = new SwerveDrivePoseEstimator(
+            Constants2025.Swerve.swerveKinematics, 
+            getGyroYaw(), 
+            getModulePositions(),
+            new Pose2d(),
+            VecBuilder.fill(0.05, 0.05, Units.degreesToRadians(5)),
+            VecBuilder.fill(0.5, 0.5, Units.degreesToRadians(30)));
     }
 
     int drivecount = 0;
@@ -187,7 +200,7 @@ public class Swerve2025 extends SubsystemBase {
     }
 
     public Pose2d getPose() {
-        return swerveOdometry.getPoseMeters();
+        return swerveOdometry.getEstimatedPosition();
     }
 
     int poseCount = 0;
@@ -239,6 +252,59 @@ public class Swerve2025 extends SubsystemBase {
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Velocity", mod.getState().speedMetersPerSecond);
         }
         SmartDashboard.putNumber("Gyro", getGyroYaw().getDegrees());
+
+        if (StateController.getInstance().useVisionOdometry) {
+            updateOdometryWithVision();
+        }
+    }
+
+    private void updateOdometryWithVision() {
+        boolean useMegaTag2 = true; // set to false to use MegaTag1
+        boolean doRejectUpdate = false;
+
+        int[] validIDs = {17};
+        LimelightHelpers.SetFiducialIDFiltersOverride(llName, validIDs);
+
+        if (useMegaTag2 == false) {
+            LimelightHelpers.PoseEstimate mt1 = LimelightHelpers.getBotPoseEstimate_wpiBlue(llName);
+
+            if (mt1.tagCount == 1 && mt1.rawFiducials.length == 1) {
+                if (mt1.rawFiducials[0].ambiguity > .7) {
+                    doRejectUpdate = true;
+                }
+                if (mt1.rawFiducials[0].distToCamera > 3) {
+                    doRejectUpdate = true;
+                }
+            }
+            if (mt1.tagCount == 0) {
+                doRejectUpdate = true;
+            }
+
+            if (!doRejectUpdate) {
+                swerveOdometry.setVisionMeasurementStdDevs(VecBuilder.fill(.5, .5, 9999999));
+                swerveOdometry.addVisionMeasurement(
+                        mt1.pose,
+                        mt1.timestampSeconds);
+            }
+        } else if (useMegaTag2 == true) {
+            LimelightHelpers.SetRobotOrientation(llName,
+                    swerveOdometry.getEstimatedPosition().getRotation().getDegrees(), 0, 0, 0, 0, 0);
+            LimelightHelpers.PoseEstimate mt2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(llName);
+            if (Math.abs(gyro.getAngularVelocityZWorld().getValueAsDouble()) > 720) // if our angular velocity is greater than 720 degrees per second,
+                                                  // ignore vision updates
+            {
+                doRejectUpdate = true;
+            }
+            if (mt2.tagCount == 0) {
+                doRejectUpdate = true;
+            }
+            if (!doRejectUpdate) {
+                swerveOdometry.setVisionMeasurementStdDevs(VecBuilder.fill(.7, .7, 9999999));
+                swerveOdometry.addVisionMeasurement(
+                        mt2.pose,
+                        mt2.timestampSeconds);
+            }
+        }
     }
 
     public ChassisSpeeds getRobotRelativeSpeeds() {
@@ -297,7 +363,7 @@ public class Swerve2025 extends SubsystemBase {
     // );
     // }
 
-    public Command followPathPlannerAuto(String autoName) {
+    public void configPathPlanner() {
         RobotConfig config = null;
         try {
             config = RobotConfig.fromGUISettings();
@@ -308,37 +374,39 @@ public class Swerve2025 extends SubsystemBase {
         // PathPlannerPath path = PathPlannerPath.fromPathFile(pathName);
         // SmartDashboard.putString("instance1: ", path.toString());
         if (config != null) {
-
             AutoBuilder.configure(
-                    this::getPose,
-                    this::setPose,
-                    this::getRobotRelativeSpeeds,
-                    this::driveRobotRelative,
-                    new PPHolonomicDriveController( // HolonomicPathFollowerConfig, this should likely live in your
-                            new PIDConstants(1.0, 0.0, 0.0), // Translation PID constants
-                            new PIDConstants(1.0, 0.0, 0.0) // Rotation PID constants
-                    ),
-                    config,
-                    () -> {
-                        // Boolean supplier that controls when the path will be mirrored for the red
-                        // alliance
-                        // This will flip the path being followed to the red side of the field.
-                        // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+                this::getPose,
+                this::setPose,
+                this::getRobotRelativeSpeeds,
+                this::driveRobotRelative,
+                new PPHolonomicDriveController( // HolonomicPathFollowerConfig, this should likely live in your
+                        new PIDConstants(1.0, 0.0, 0.0), // Translation PID constants
+                        new PIDConstants(1.0, 0.0, 0.0) // Rotation PID constants
+                ),
+                config,
+                () -> {
+                    // Boolean supplier that controls when the path will be mirrored for the red
+                    // alliance
+                    // This will flip the path being followed to the red side of the field.
+                    // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
 
-                        var alliance = DriverStation.getAlliance();
-                        if (alliance.isPresent()) {
-                            return alliance.get() == DriverStation.Alliance.Red;
-                        }
-                        return false;
+                    var alliance = DriverStation.getAlliance();
+                    if (alliance.isPresent()) {
+                        return alliance.get() == DriverStation.Alliance.Red;
+                    }
+                    return false;
 
-                        // return StateController.getInstance().myAlliance ==
-                        // DriverStation.Alliance.Red;
-                    },
-                    this // Reference to this subsystem to set requirements
+                    // return StateController.getInstance().myAlliance ==
+                    // DriverStation.Alliance.Red;
+                },
+                this // Reference to this subsystem to set requirements
             );
         }
+    }
 
+    public Command followPathPlannerAuto(String autoName) {
+       
+        this.configPathPlanner();
         return new PathPlannerAuto(autoName);
-        //
     }
 }

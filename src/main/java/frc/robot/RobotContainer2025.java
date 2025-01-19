@@ -3,6 +3,7 @@ package frc.robot;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
@@ -37,6 +38,7 @@ public class RobotContainer2025 implements RobotContainerInterface {
     private final int rotationAxis = 4;
 
     /* Driver Buttons */
+    private final JoystickButton aimBtn = new JoystickButton(driver, 1);
     private final JoystickButton zeroGyro = new JoystickButton(driver, 5);
     private final JoystickButton robotCentric = new JoystickButton(driver, 6);
     private final Swerve2025 s_Swerve = new Swerve2025();
@@ -53,8 +55,7 @@ public class RobotContainer2025 implements RobotContainerInterface {
                     () -> -driver.getRawAxis(strafeAxis), 
                     () -> -driver.getRawAxis(rotationAxis), 
                     () -> robotCentric.getAsBoolean()
-                ),
-                new Aim2025Cmd(s_aim2025, s_Swerve)
+                )
                 // ,new IntakeCmd(c_intake, ()->driver.getRawAxis(2), ()->driver.getRawAxis(3))
                 // ,new IntakeAimCmd(s_Swerve, c_intakeAim, c_intake, candle, ()->driver.getRawAxis(2), ()->driver.getRawAxis(3))
                 // ,new CandleCmd(candle)
@@ -68,6 +69,13 @@ public class RobotContainer2025 implements RobotContainerInterface {
         // LimelightHelpers.setLEDMode_PipelineControl("limelight-one");
     }
 
+    public void telInit() {
+        StateController.getInstance().useVisionOdometry = true;
+    }
+    public void autoInit() {
+        StateController.getInstance().useVisionOdometry = true;
+    }
+
     /**
      * Use this method to define your button->command mappings. Buttons can be created by
      * instantiating a {@link GenericHID} or one of its subclasses ({@link
@@ -77,6 +85,7 @@ public class RobotContainer2025 implements RobotContainerInterface {
     private void configureButtonBindings() {
         /* Driver Buttons */
         zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
+        aimBtn.whileTrue(new Aim2025Cmd(s_aim2025, s_Swerve));
     }
 
     /**
@@ -86,5 +95,10 @@ public class RobotContainer2025 implements RobotContainerInterface {
      */
     public Command getAutonomousCommand() {
         return s_Swerve.followPathPlannerAuto("test01");
+    }
+
+    public void print() {
+        Pose2d pos = s_Swerve.getPose();
+        System.out.println(String.format("pos2d: (%f, %f)", pos.getX(), pos.getY()));
     }
 }
