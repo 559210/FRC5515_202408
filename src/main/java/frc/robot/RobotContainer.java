@@ -175,4 +175,8 @@ public class RobotContainer implements RobotContainerInterface {
         return s_Swerve.followPathPlannerAuto("A3");
         // return new exampleAuto(s_Swerve);
     }
+
+    public void print() {
+        
+    }
 }

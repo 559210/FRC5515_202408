@@ -3,6 +3,7 @@ package frc.robot;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
@@ -83,5 +84,10 @@ public class RobotContainer2025 implements RobotContainerInterface {
      */
     public Command getAutonomousCommand() {
         return s_Swerve.followPathPlannerAuto("test01");
+    }
+
+    public void print() {
+        Pose2d pos = s_Swerve.getPose();
+        System.out.println(String.format("pos2d: (%f, %f)", pos.getX(), pos.getY()));
     }
 }
