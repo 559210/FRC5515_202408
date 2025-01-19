@@ -14,7 +14,7 @@ import frc.lib.util.SwerveModuleConstants;
 
 public final class Constants2025 {
     public static final double stickDeadband = 0.1;
-    public static final String canivore_name = "Canivore5515";
+    public static final String canivore_name = "rio";
     public static final CTREConfigs2025 ctreConfigs = new CTREConfigs2025();
 
     public static final class Swerve {
@@ -74,7 +74,7 @@ public final class Constants2025 {
         /* Angle Motor PID Values */
 
         /* Drive Motor PID Values */
-        public static final double driveKP = 1.1695;//TODO
+        public static final double driveKP = 0.2;//TODO
         public static final double driveKI = 0.0;
         public static final double driveKD = 0.0;
 
@@ -85,7 +85,7 @@ public final class Constants2025 {
 
         /* Swerve Profiling Values */
         /** Meters per Second */
-        public static final double maxSpeed = 2.0;
+        public static final double maxSpeed = 0.05;
         /** Radians per Second */
         public static final double maxAngularVelocity = maxSpeed/trackWidth*1.414; 
         /* Neutral Modes */
