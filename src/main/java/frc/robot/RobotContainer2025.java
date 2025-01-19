@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
+import frc.robot.subsystems.Aim2025.Aim2025;
 
 
 /**
@@ -41,26 +42,28 @@ public class RobotContainer2025 implements RobotContainerInterface {
     private final JoystickButton robotCentric = new JoystickButton(driver, 6);
     private final Swerve2025 s_Swerve = new Swerve2025();
 
+    Aim2025 s_aim2025 = new Aim2025();
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer2025() {
         s_Swerve.setDefaultCommand(
             new ParallelCommandGroup(
-            new TeleopSwerve2025(
-                s_Swerve, 
-                () -> -driver.getRawAxis(translationAxis), 
-                () -> -driver.getRawAxis(strafeAxis), 
-                () -> -driver.getRawAxis(rotationAxis), 
-                () -> robotCentric.getAsBoolean()
-            )
-            // ,new IntakeCmd(c_intake, ()->driver.getRawAxis(2), ()->driver.getRawAxis(3))
-            // ,new IntakeAimCmd(s_Swerve, c_intakeAim, c_intake, candle, ()->driver.getRawAxis(2), ()->driver.getRawAxis(3))
-            // ,new CandleCmd(candle)
+                new TeleopSwerve2025(
+                    s_Swerve, 
+                    () -> -driver.getRawAxis(translationAxis), 
+                    () -> -driver.getRawAxis(strafeAxis), 
+                    () -> -driver.getRawAxis(rotationAxis), 
+                    () -> robotCentric.getAsBoolean()
+                ),
+                new Aim2025Cmd(s_aim2025, s_Swerve)
+                // ,new IntakeCmd(c_intake, ()->driver.getRawAxis(2), ()->driver.getRawAxis(3))
+                // ,new IntakeAimCmd(s_Swerve, c_intakeAim, c_intake, candle, ()->driver.getRawAxis(2), ()->driver.getRawAxis(3))
+                // ,new CandleCmd(candle)
             )
         );
 
         // Configure the button bindings
-        // configureButtonBindings();
+        configureButtonBindings();
 
 
         // LimelightHelpers.setLEDMode_PipelineControl("limelight-one");
