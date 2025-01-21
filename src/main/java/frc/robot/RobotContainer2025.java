@@ -30,7 +30,7 @@ public class RobotContainer2025 implements RobotContainerInterface {
     /* Controllers */
     private final Joystick driver = new Joystick(0);
     private final Joystick driver2 = new Joystick(1);
-    // private final Joystick tester = new Joystick(2);
+    private final Joystick tester = new Joystick(2);
 
     // Drive Controls
     private final int translationAxis = 1;
@@ -86,6 +86,13 @@ public class RobotContainer2025 implements RobotContainerInterface {
         /* Driver Buttons */
         zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
         aimBtn.whileTrue(new Aim2025Cmd(s_aim2025, s_Swerve));
+
+
+        // SysId Buttons
+        new JoystickButton(tester, 1).whileTrue(s_Swerve.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
+        new JoystickButton(tester, 2).whileTrue(s_Swerve.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
+        new JoystickButton(tester, 3).whileTrue(s_Swerve.sysIdDynamic(SysIdRoutine.Direction.kForward));
+        new JoystickButton(tester, 4).whileTrue(s_Swerve.sysIdDynamic(SysIdRoutine.Direction.kReverse));
     }
 
     /**
