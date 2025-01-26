@@ -33,7 +33,7 @@ public class RobotContainer2025 implements RobotContainerInterface {
     /* Controllers */
     private final Joystick driver = new Joystick(0);
     private final Joystick driver2 = new Joystick(1);
-    // private final Joystick tester = new Joystick(2);
+    private final Joystick tester = new Joystick(2);
 
     // Drive Controls
     private final int translationAxis = 1;
