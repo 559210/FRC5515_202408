@@ -76,12 +76,12 @@ public class RobotContainer2025 implements RobotContainerInterface {
     }
 
     public void telInit() {
-        s_Swerve.zeroHeading();
+        // s_Swerve.zeroHeading();
         StateController.getInstance().useVisionOdometry = true;
     }
     public void autoInit() {
-        s_Swerve.zeroHeading();
-        StateController.getInstance().useVisionOdometry = false;
+        // s_Swerve.zeroHeading();
+        StateController.getInstance().useVisionOdometry = true;
     }
 
     /**
@@ -111,10 +111,20 @@ public class RobotContainer2025 implements RobotContainerInterface {
     }
 
     int count = 0;
-    public void print() {
+    public void update() {
         Pose2d pos = s_Swerve.getPose();
         count ++;
         if (count % 50 == 0)
             System.out.println(String.format("pos2d: (%f, %f)", pos.getX(), pos.getY()));
+
+        ControlPadHelper.publishRobotPos(pos);
+        ControlPadHelper.refreshControlPad();
+        ControlPadHelper.ControlPadInfo info = ControlPadHelper.getControlInfo();
+        if (info == null) {
+            SmartDashboard.putString("ControlPad info is", "NULL");
+        }
+        else {
+            SmartDashboard.putString("ControlPad info is", "OK");
+        }
     }
 }

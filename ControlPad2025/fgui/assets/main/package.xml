@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<packageDescription id="9knegrm2">
+  <resources>
+    <component id="spbn0" name="main.xml" path="/" exported="true"/>
+    <image id="j42b1" name="GridWhite.png" path="/" scale="9grid" scale9grid="2,2,28,28"/>
+    <component id="j42b2" name="field.xml" path="/"/>
+    <component id="j42b3" name="CoralBigArea.xml" path="/"/>
+    <component id="j42b4" name="CoralSmallArea.xml" path="/"/>
+    <component id="j42b6" name="AprilTagBtn.xml" path="/"/>
+    <component id="j42b7" name="AprilTagMenu.xml" path="/"/>
+    <component id="j42b8" name="AprilTagMenuBtn0.xml" path="/"/>
+    <component id="j42ba" name="StartArea.xml" path="/"/>
+    <component id="j42bb" name="algae.xml" path="/"/>
+    <component id="frd4c" name="commonBtn.xml" path="/"/>
+  </resources>
+  <publish name=""/>
+</packageDescription>

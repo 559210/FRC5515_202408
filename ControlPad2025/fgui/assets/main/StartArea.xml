@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="130,430">
+  <displayList>
+    <graph id="n0_j42b" name="n0" xy="65,215" pivot="0.5,0.5" anchor="true" size="130,430" type="rect" lineSize="2" lineColor="#ffffffff" fillColor="#00ffffff"/>
+    <graph id="n1_j42b" name="blue" xy="34,2" size="62,199" group="n11_j42b" type="rect" lineSize="2" lineColor="#ff0000ff" fillColor="#00ffffff"/>
+    <graph id="n7_j42b" name="r1" xy="55,31" size="20,20" group="n10_j42b" type="rect" lineColor="#ff0000ff" fillColor="#ff0000ff"/>
+    <graph id="n8_j42b" name="r2" xy="55,88" size="20,20" group="n10_j42b" type="rect" lineColor="#ff0000ff" fillColor="#ff0000ff"/>
+    <graph id="n9_j42b" name="r3" xy="55,145" size="20,20" group="n10_j42b" type="rect" lineColor="#ff0000ff" fillColor="#ff0000ff"/>
+    <group id="n10_j42b" name="bp" xy="55,31" size="20,134" group="n11_j42b"/>
+    <group id="n11_j42b" name="B" xy="34,2" size="62,199"/>
+    <graph id="n2_j42b" name="red" xy="34,229" size="62,199" group="n12_j42b" type="rect" lineSize="2" lineColor="#ffff0000" fillColor="#00ffffff"/>
+    <graph id="n3_j42b" name="r1" xy="55,265" size="20,20" group="n6_j42b" type="rect" lineColor="#ffff0000" fillColor="#ffff0000"/>
+    <graph id="n4_j42b" name="r2" xy="55,322" size="20,20" group="n6_j42b" type="rect" lineColor="#ffff0000" fillColor="#ffff0000"/>
+    <graph id="n5_j42b" name="r3" xy="55,379" size="20,20" group="n6_j42b" type="rect" lineColor="#ffff0000" fillColor="#ffff0000"/>
+    <group id="n6_j42b" name="rp" xy="55,265" size="20,134" group="n12_j42b"/>
+    <group id="n12_j42b" name="R" xy="34,229" size="62,199"/>
+  </displayList>
+</component>

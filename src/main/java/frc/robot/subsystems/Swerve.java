@@ -43,7 +43,7 @@ public class Swerve extends SubsystemBase {
     static final boolean useEstimatorOdo = true;
     private final String llName = Constants2025.LIME_LIGHT_ARPIL_TAG_NAME;
     private SwerveDrivePoseEstimator est_swerveOdometry;
-    public SwerveDriveOdometry swerveOdometry;
+    private SwerveDriveOdometry swerveOdometry;
     public SwerveModule[] mSwerveMods;
     public Pigeon2 gyro;
     public Translation2d currentVelTranslation2d = new Translation2d();
@@ -284,8 +284,6 @@ public class Swerve extends SubsystemBase {
 
     public void zeroHeading() {
         setHeading(new Rotation2d());
-        // swerveOdometry.resetPosition(getGyroYaw(), getModulePositions(),
-        //         new Pose2d(getPose().getTranslation(), new Rotation2d()));
     }
 
     public Rotation2d getGyroYaw() {

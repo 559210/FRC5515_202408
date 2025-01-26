@@ -2,6 +2,7 @@ package frc.robot.commands;
 
 import java.util.function.DoubleSupplier;
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.Timer;
@@ -28,6 +29,7 @@ public class Aim2025Cmd extends Command {
 
     @Override
     public void initialize() {
+        m_Aim.init();
     }
 
     @Override
@@ -41,10 +43,13 @@ public class Aim2025Cmd extends Command {
 
     @Override
     public void end(boolean interrupted) {
+        System.out.println("[[[[[[[[[[[[[[ END ]]]]]]]]]]]]]] :: " + interrupted);
         if (interrupted) {
             SmartDashboard.putString("Aim2025Cmd", "interrupted");
         }
         this.m_Aim.cancelAimMoveCmd();
+        Pose2d pos = s_Swerve.getPose();
+        System.out.println("end pos: " + pos.toString());
     }
 
     @Override
@@ -59,14 +64,17 @@ public class Aim2025Cmd extends Command {
                 SmartDashboard.putString("Aim2025Cmd", "AIM_MOVE_CMD_STATE_CANCELED");
                 return true;
             case AIM_MOVE_CMD_STATE_IDLE:
+                System.out.println("isfinish 3");
                 return false;
             case AIM_MOVE_CMD_STATE_RUNNING:
+            // System.out.println("isfinish 4");
                 return false;
             case AIM_MOVE_CMD_STATE_UNKOWN:
-                // System.out.println("isfinish 4");
+                // System.out.println("isfinish 5");
                 SmartDashboard.putString("Aim2025Cmd", "AIM_MOVE_CMD_STATE_UNKOWN");
                 return false;
         }
+        System.out.println("isfinish 6");
         return false;
     }
 }

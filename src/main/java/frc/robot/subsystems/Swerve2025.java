@@ -40,7 +40,7 @@ import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import static edu.wpi.first.units.Units.*;
 
 public class Swerve2025 extends SubsystemBase {
-    static final boolean useEstimatorOdo = false;
+    static final boolean useEstimatorOdo = true;
     private final String llName = Constants2025.LIME_LIGHT_ARPIL_TAG_NAME;
     private SwerveDrivePoseEstimator est_swerveOdometry;
     private SwerveDriveOdometry swerveOdometry;
@@ -242,9 +242,8 @@ public class Swerve2025 extends SubsystemBase {
     }
 
     public void zeroHeading() {
-        // swerveOdometry.resetPosition(getGyroYaw(), getModulePositions(),
-        //         new Pose2d(getPose().getTranslation(), new Rotation2d(Units.degreesToRadians(0))));
-        setHeading(new Rotation2d(Units.degreesToRadians(180)));
+        // setHeading(new Rotation2d(Units.degreesToRadians(180)));
+        setHeading(new Rotation2d());
     }
 
     public Rotation2d getGyroYaw() {

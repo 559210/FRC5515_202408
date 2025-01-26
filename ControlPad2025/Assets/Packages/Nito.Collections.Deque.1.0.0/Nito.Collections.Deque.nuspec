@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>Nito.Collections.Deque</id>
+    <version>1.0.0</version>
+    <authors>Stephen Cleary</authors>
+    <owners>Stephen Cleary</owners>
+    <licenseUrl>https://raw.githubusercontent.com/StephenCleary/Deque/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/StephenCleary/Deque</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>A double-ended queue.</description>
+    <tags>collection,deque,dequeue</tags>
+    <dependencies>
+      <group targetFramework=".NETPortable4.5-Profile259" />
+      <group targetFramework=".NETStandard1.0">
+        <dependency id="System.Collections" version="[4.0.11, )" />
+        <dependency id="System.Diagnostics.Debug" version="[4.0.11, )" />
+        <dependency id="System.Runtime" version="[4.1.0, )" />
+      </group>
+    </dependencies>
+  </metadata>
+</package>

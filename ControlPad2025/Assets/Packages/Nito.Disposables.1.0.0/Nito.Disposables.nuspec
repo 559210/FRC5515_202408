@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>Nito.Disposables</id>
+    <version>1.0.0</version>
+    <authors>Stephen Cleary</authors>
+    <owners>Stephen Cleary</owners>
+    <licenseUrl>https://raw.githubusercontent.com/StephenCleary/Disposables/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/StephenCleary/Disposables</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>IDisposable helper types.</description>
+    <tags>idisposable</tags>
+    <dependencies>
+      <group targetFramework=".NETPortable4.5-Profile259" />
+      <group targetFramework=".NETStandard1.0">
+        <dependency id="System.Threading" version="[4.0.11, )" />
+      </group>
+    </dependencies>
+  </metadata>
+</package>

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="937,430">
+  <displayList>
+    <graph id="n30_j42b" name="BG" xy="0,0" size="937,430" type="rect" fillColor="#ffcccccc">
+      <relation target="" sidePair="width-width,height-height"/>
+    </graph>
+    <graph id="n24_j42b" name="BG_B" xy="0,0" size="469,430" type="rect" lineSize="0" lineColor="#ffffffff" fillColor="#7f0066cc">
+      <relation target="" sidePair="width-width,height-height"/>
+    </graph>
+    <graph id="n29_j42b" name="BG_R" xy="469,0" size="469,430" type="rect" lineSize="0" lineColor="#ffffffff" fillColor="#7fcc0000">
+      <relation target="" sidePair="width-width,height-height"/>
+    </graph>
+    <graph id="n31_j42b" name="LBConner" xy="0,430" pivot="0,1" anchor="true" size="89,68" type="polygon" lineSize="2" lineColor="#ffffffff" fillColor="#7f000000" points="89,68,0,68,0,0">
+      <relation target="" sidePair="width-width,height-height"/>
+    </graph>
+    <graph id="n28_j42b" name="LTConner" xy="0,0" size="89,68" type="polygon" lineSize="2" lineColor="#ffffffff" fillColor="#7f000000" points="89,0,0,68,0,0">
+      <relation target="" sidePair="width-width,height-height"/>
+    </graph>
+    <graph id="n33_j42b" name="RBConner" xy="937,430" pivot="1,1" anchor="true" size="89,68" type="polygon" lineSize="2" lineColor="#ffffffff" fillColor="#7f000000" points="89,0,89,68,0,68">
+      <relation target="" sidePair="width-width,height-height"/>
+    </graph>
+    <graph id="n32_j42b" name="RTConner" xy="937,0" pivot="1,0" anchor="true" size="89,68" type="polygon" lineSize="2" lineColor="#ffffffff" fillColor="#7f000000" points="89,0,89,68,0,0">
+      <relation target="" sidePair="width-width,height-height"/>
+    </graph>
+    <component id="n3_j42b" name="BlueCoralArea" src="j42b3" fileName="CoralBigArea.xml" xy="240,214" pivot="0.5,0.5" anchor="true" size="127,127">
+      <relation target="" sidePair="width-width,height-height"/>
+    </component>
+    <component id="n5_j42b" name="AP17" src="j42b6" fileName="AprilTagBtn.xml" xy="200,235" group="n12_j42b">
+      <Button title="17"/>
+    </component>
+    <component id="n6_j42b" name="AP18" src="j42b6" fileName="AprilTagBtn.xml" xy="195,215" pivot="0.5,0.5" anchor="true" group="n12_j42b">
+      <Button title="18"/>
+    </component>
+    <component id="n7_j42b" name="AP19" src="j42b6" fileName="AprilTagBtn.xml" xy="218,177" pivot="0.5,0.5" anchor="true" group="n12_j42b">
+      <Button title="19"/>
+    </component>
+    <component id="n8_j42b" name="AP20" src="j42b6" fileName="AprilTagBtn.xml" xy="262,177" pivot="0.5,0.5" anchor="true" group="n12_j42b">
+      <Button title="20"/>
+    </component>
+    <component id="n9_j42b" name="AP21" src="j42b6" fileName="AprilTagBtn.xml" xy="284,215" pivot="0.5,0.5" anchor="true" group="n12_j42b">
+      <Button title="21"/>
+    </component>
+    <component id="n10_j42b" name="AP22" src="j42b6" fileName="AprilTagBtn.xml" xy="262,253" pivot="0.5,0.5" anchor="true" group="n12_j42b">
+      <Button title="22"/>
+    </component>
+    <group id="n12_j42b" name="BLUE_AP" xy="177,159" size="125,112"/>
+    <component id="n11_j42b" name="RedCoralArea" src="j42b3" fileName="CoralBigArea.xml" xy="697,214" pivot="0.5,0.5" anchor="true" size="127,127">
+      <relation target="" sidePair="width-width,height-height"/>
+    </component>
+    <component id="n13_j42b" name="AP11" src="j42b6" fileName="AprilTagBtn.xml" xy="658,235" group="n19_j42b">
+      <Button title="11"/>
+    </component>
+    <component id="n14_j42b" name="AP10" src="j42b6" fileName="AprilTagBtn.xml" xy="653,215" pivot="0.5,0.5" anchor="true" group="n19_j42b">
+      <Button title="10"/>
+    </component>
+    <component id="n15_j42b" name="AP9" src="j42b6" fileName="AprilTagBtn.xml" xy="676,177" pivot="0.5,0.5" anchor="true" group="n19_j42b">
+      <Button title="9"/>
+    </component>
+    <component id="n16_j42b" name="AP8" src="j42b6" fileName="AprilTagBtn.xml" xy="720,177" pivot="0.5,0.5" anchor="true" group="n19_j42b">
+      <Button title="8"/>
+    </component>
+    <component id="n17_j42b" name="AP7" src="j42b6" fileName="AprilTagBtn.xml" xy="742,215" pivot="0.5,0.5" anchor="true" group="n19_j42b">
+      <Button title="7"/>
+    </component>
+    <component id="n18_j42b" name="AP6" src="j42b6" fileName="AprilTagBtn.xml" xy="720,253" pivot="0.5,0.5" anchor="true" group="n19_j42b">
+      <Button title="6"/>
+    </component>
+    <group id="n19_j42b" name="RED_AP" xy="635,159" size="125,112"/>
+    <component id="n23_j42b" name="StartArea" src="j42ba" fileName="StartArea.xml" xy="403,0" size="130,430">
+      <relation target="" sidePair="width-width,height-height"/>
+    </component>
+    <component id="n34_j42b" name="blueAlgea1" src="j42bb" fileName="algae.xml" xy="65,117" pivot="0.5,0.5" anchor="true" size="24,24">
+      <relation target="" sidePair="width-width,height-height"/>
+    </component>
+    <component id="n35_j42b" name="blueAlgea2" src="j42bb" fileName="algae.xml" xy="65,215" pivot="0.5,0.5" anchor="true" size="24,24">
+      <relation target="" sidePair="width-width,height-height"/>
+    </component>
+    <component id="n36_j42b" name="blueAlgea3" src="j42bb" fileName="algae.xml" xy="65,313" pivot="0.5,0.5" anchor="true" size="24,24">
+      <relation target="" sidePair="width-width,height-height"/>
+    </component>
+    <component id="n37_j42b" name="redAlgea1" src="j42bb" fileName="algae.xml" xy="872,117" pivot="0.5,0.5" anchor="true" size="24,24">
+      <relation target="" sidePair="width-width,height-height"/>
+    </component>
+    <component id="n38_j42b" name="redAlgea2" src="j42bb" fileName="algae.xml" xy="872,215" pivot="0.5,0.5" anchor="true" size="24,24">
+      <relation target="" sidePair="width-width,height-height"/>
+    </component>
+    <component id="n39_j42b" name="redAlgea3" src="j42bb" fileName="algae.xml" xy="872,313" pivot="0.5,0.5" anchor="true" size="24,24">
+      <relation target="" sidePair="width-width,height-height"/>
+    </component>
+    <component id="n22_j42b" name="ApMenu" src="j42b7" fileName="AprilTagMenu.xml" xy="312,123" size="100,200">
+      <relation target="" sidePair="width-width,height-height"/>
+    </component>
+  </displayList>
+</component>

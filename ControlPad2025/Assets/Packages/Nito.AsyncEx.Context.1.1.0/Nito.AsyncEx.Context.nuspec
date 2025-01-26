@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>Nito.AsyncEx.Context</id>
+    <version>1.1.0</version>
+    <authors>Stephen Cleary</authors>
+    <owners>Stephen Cleary</owners>
+    <licenseUrl>https://raw.githubusercontent.com/StephenCleary/AsyncEx.Context/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/StephenCleary/AsyncEx.Context</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>A single-threaded async-compatible context.</description>
+    <tags>task,async,synchronizationcontext</tags>
+    <dependencies>
+      <group targetFramework=".NETFramework4.6">
+        <dependency id="Nito.AsyncEx.Tasks" version="[1.1.0, )" />
+      </group>
+      <group targetFramework=".NETStandard1.3">
+        <dependency id="System.Collections.Concurrent" version="[4.0.12, )" />
+        <dependency id="System.Diagnostics.Debug" version="[4.0.11, )" />
+        <dependency id="System.Threading" version="[4.0.11, )" />
+        <dependency id="Nito.AsyncEx.Tasks" version="[1.1.0, )" />
+      </group>
+    </dependencies>
+  </metadata>
+</package>

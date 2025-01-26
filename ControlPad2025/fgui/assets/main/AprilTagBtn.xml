@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="36,36" extention="Button">
+  <controller name="button" pages="0,up,1,down,2,over,3,selectedOver" selected="0"/>
+  <displayList>
+    <graph id="n4_j42b" name="n4" xy="18,18" pivot="0.5,0.5" anchor="true" size="36,36" type="eclipse" lineColor="#ff9900ff" fillColor="#7f9900ff"/>
+    <text id="n3_j42b" name="title" xy="18,18" pivot="0.5,0.5" anchor="true" size="32,34" fontSize="24" color="#00cc00" align="center" vAlign="middle" singleLine="true" text="XX">
+      <relation target="" sidePair="width-width,height-height"/>
+    </text>
+  </displayList>
+  <Button/>
+</component>

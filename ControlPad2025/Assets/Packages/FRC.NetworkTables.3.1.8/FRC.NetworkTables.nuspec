@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>FRC.NetworkTables</id>
+    <version>3.1.8</version>
+    <title>FRC NetworkTables</title>
+    <authors>RobotDotNet</authors>
+    <owners>RobotDotNet</owners>
+    <licenseUrl>https://github.com/robotdotnet/NetworkTables/blob/master/LICENSE.txt</licenseUrl>
+    <projectUrl>https://github.com/robotdotnet/NetworkTables</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>A Managed version of the NetworkTables3 Protocol.</description>
+    <summary>A Managed version of the NetworkTables3 Protocol.</summary>
+    <copyright>Copyright 2016 RobotDotNet</copyright>
+    <tags>WPILib,FRC,FIRST,RoboRio</tags>
+    <dependencies>
+      <group targetFramework=".NETFramework4.6">
+        <dependency id="Nito.AsyncEx.Context" version="[1.1.0, )" />
+        <dependency id="Nito.AsyncEx.Coordination" version="[1.0.2, )" />
+      </group>
+      <group targetFramework=".NETStandard1.3">
+        <dependency id="System.Collections" version="[4.0.11, )" />
+        <dependency id="System.Collections.Concurrent" version="[4.0.12, )" />
+        <dependency id="System.Console" version="[4.0.0, )" />
+        <dependency id="System.Linq" version="[4.1.0, )" />
+        <dependency id="System.Runtime" version="[4.1.0, )" />
+        <dependency id="System.Runtime.Extensions" version="[4.1.0, )" />
+        <dependency id="System.IO" version="[4.1.0, )" />
+        <dependency id="System.IO.FileSystem" version="[4.0.1, )" />
+        <dependency id="System.Threading" version="[4.0.11, )" />
+        <dependency id="System.Threading.Tasks" version="[4.0.11, )" />
+        <dependency id="System.Runtime.InteropServices" version="[4.1.0, )" />
+        <dependency id="System.Runtime.InteropServices.RuntimeInformation" version="[4.0.0, )" />
+        <dependency id="System.Net.Primitives" version="[4.0.11, )" />
+        <dependency id="System.Net.Sockets" version="[4.1.0, )" />
+        <dependency id="System.Net.NameResolution" version="[4.0.0, )" />
+        <dependency id="Nito.AsyncEx.Context" version="[1.1.0, )" />
+        <dependency id="Nito.AsyncEx.Coordination" version="[1.0.2, )" />
+      </group>
+    </dependencies>
+  </metadata>
+</package>

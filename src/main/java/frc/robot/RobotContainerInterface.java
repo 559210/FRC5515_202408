@@ -6,5 +6,5 @@ public interface RobotContainerInterface {
     public Command getAutonomousCommand();
     public void telInit();
     public void autoInit();
-    public void print();
+    public void update();
 }

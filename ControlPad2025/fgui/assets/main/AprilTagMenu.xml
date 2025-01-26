@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="100,200">
+  <displayList>
+    <component id="n0_j42b" name="btn0" src="j42b8" fileName="AprilTagMenuBtn0.xml" xy="30,163"/>
+    <component id="n1_j42b" name="btnL1" src="j42b8" fileName="AprilTagMenuBtn0.xml" xy="0,110">
+      <Button title="左1"/>
+    </component>
+    <component id="n2_j42b" name="btnR1" src="j42b8" fileName="AprilTagMenuBtn0.xml" xy="61,110">
+      <Button title="右1"/>
+    </component>
+    <component id="n3_j42b" name="btnL2" src="j42b8" fileName="AprilTagMenuBtn0.xml" xy="0,57">
+      <Button title="左2"/>
+    </component>
+    <component id="n4_j42b" name="btnR2" src="j42b8" fileName="AprilTagMenuBtn0.xml" xy="61,57">
+      <Button title="右2"/>
+    </component>
+    <component id="n5_j42b" name="btnL3" src="j42b8" fileName="AprilTagMenuBtn0.xml" xy="1,4">
+      <Button title="左3"/>
+    </component>
+    <component id="n6_j42b" name="btnR3" src="j42b8" fileName="AprilTagMenuBtn0.xml" xy="61,4">
+      <Button title="右3"/>
+    </component>
+  </displayList>
+</component>

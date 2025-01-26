@@ -6,6 +6,7 @@ import java.util.stream.IntStream;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.FollowPathCommand;
 import com.pathplanner.lib.path.GoalEndState;
+import com.pathplanner.lib.path.IdealStartingState;
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.path.Waypoint;
@@ -50,8 +51,9 @@ public class Aim2025  extends SubsystemBase {
     Swerve2025 s_Swerve;
     Command aimMoveCmd = null;
 
-    float waitForSeeAprilTagTime = 1; // seconds
+    float waitForSeeAprilTagTime = 5; // seconds
     boolean isTimeoutCancel = false;   // if not see any aprilTag in a while, cancel the aimMoveCmd
+    private boolean isDidScheduled = false;
 
     public Aim2025(Swerve2025 swerve) {
         s_Swerve = swerve;
@@ -67,6 +69,13 @@ public class Aim2025  extends SubsystemBase {
 
     private int outputCount = 0;
     public boolean test = false;
+
+    public void init() {
+        aimMoveCmd = null;
+        waitForSeeAprilTagTime = 5;
+        isTimeoutCancel = false;
+        isDidScheduled = false;
+    }
     public void update() {
         if (aimMoveCmd != null) {
             return;
@@ -77,29 +86,21 @@ public class Aim2025  extends SubsystemBase {
             // pos[4] < 0 robot should turn right, > 0 turn left
 
             Pose2d robotPos = s_Swerve.getPose();
-            SmartDashboard.putString("==========> robotPos", robotPos.toString());
-            if (!MiscUtils.isAllZero(pos)) {
-                Pose3d p3d = LimelightHelpers.toPose3D(pos);
-                SmartDashboard.putBoolean("========>1111", true);
-                // SmartDashboard.putNumberArray("========>1", pos);
-                // SmartDashboard.putString("--------->2", p3d.toString());
-                long fid = Math.round(LimelightHelpers.getFiducialID(llName));
-                // SmartDashboard.putNumber("fid value", fid);
-                
-                Pose2d posFromLL = new Pose2d(p3d.getX(), p3d.getZ(), new Rotation2d(p3d.getY())); // in target space
-                SmartDashboard.putString(String.format("==========> posFromLL id:%d", fid),  posFromLL.toString());
-                try {
-                    aimMoveCmd = createPathCmd(robotPos, new Pose2d(robotPos.getX()+posFromLL.getX(), robotPos.getY()+posFromLL.getY(), posFromLL.getRotation()));
-                    aimMoveCmd.schedule();
-                    StateController.getInstance().aimMoveCmdRunning = true;                    
-                }
-                catch (Exception e) {
-                    System.err.println(e.toString());
-                }
+
+            try {
+                aimMoveCmd = createPathCmd(robotPos, new Pose2d(3.56,2.5, Rotation2d.fromDegrees(60)));
+                aimMoveCmd.schedule();
+                StateController.getInstance().aimMoveCmdRunning = true;                    
             }
-            else {
-                SmartDashboard.putBoolean("========>1111", false);
-                outputCount = 0;
+            catch (Exception e) {
+                System.err.println(e.toString());
+            }
+        }
+        else {
+            // SmartDashboard.putBoolean("========>1111", false);
+            waitForSeeAprilTagTime -= 0.02; // 50Hz，a frame every 0.02s
+            if (waitForSeeAprilTagTime <= 0) {
+                isTimeoutCancel = true;
             }
 
             // Load the path we want to pathfind to and follow}
@@ -117,72 +118,76 @@ public class Aim2025  extends SubsystemBase {
         System.out.println("to: " + to.toString());
         List<Waypoint> waypoints = PathPlannerPath.waypointsFromPoses(from, to);
         PathConstraints constraints = new PathConstraints(
-            3.0, 3.0,
+            2.0, 2.0,
             Units.degreesToRadians(540), Units.degreesToRadians(720));
 
-        PathPlannerPath path = new PathPlannerPath(waypoints, constraints, null, new GoalEndState(0, Rotation2d.fromDegrees(90)));
+        PathPlannerPath path = new PathPlannerPath(waypoints, constraints, new IdealStartingState(0.05, Rotation2d.fromDegrees(60)), new GoalEndState(0.05, Rotation2d.fromDegrees(60)));
         path.preventFlipping = true;
         return AutoBuilder.followPath(path);
 
         // return null;
     }
 
-    public void update1() {
-        // LimelightResults res = LimelightHelpers.getLatestResults(llName);
-        if (aimMoveCmd != null) {
-            return;
-        }
-        else {
-            // double[] pos = LimelightHelpers.getBotPose_TargetSpace(llName);
-            // // pos[4] == 0 means ok.
-            // // pos[4] < 0 robot should turn right, > 0 turn left
-            if (isTargetValid()) {
-            // if (!MiscUtils.isAllZero(pos)) {
-                // Pose3d p3d = LimelightHelpers.toPose3D(pos);
-                // SmartDashboard.putBoolean("========>1111", true);
-                // SmartDashboard.putNumberArray("========>1", pos);
-                // SmartDashboard.putString("--------->2", p3d.toString());
+    // public void update() {
+    //     // LimelightResults res = LimelightHelpers.getLatestResults(llName);
+    //     if (aimMoveCmd != null) {
+    //         return;
+    //     }
+    //     else {
+    //         System.out.println("waitForSeeAprilTagTime: " + waitForSeeAprilTagTime);
+    //         // double[] pos = LimelightHelpers.getBotPose_TargetSpace(llName);
+    //         // // pos[4] == 0 means ok.
+    //         // // pos[4] < 0 robot should turn right, > 0 turn left
+    //         if (isTargetValid()) {
+    //         // if (!MiscUtils.isAllZero(pos)) {
+    //             // Pose3d p3d = LimelightHelpers.toPose3D(pos);
+    //             // SmartDashboard.putBoolean("========>1111", true);
+    //             // SmartDashboard.putNumberArray("========>1", pos);
+    //             // SmartDashboard.putString("--------->2", p3d.toString());
     
-                // Load the path we want to pathfind to and follow
-                try {
-                    // double _fid = LimelightHelpers.getFiducialID(llName);
-                    // // SmartDashboard.putNumber("fid value", fid);
-                    // System.out.println("---------------> 1");
+    //             // Load the path we want to pathfind to and follow
+    //             try {
+    //                 // double _fid = LimelightHelpers.getFiducialID(llName);
+    //                 // // SmartDashboard.putNumber("fid value", fid);
+    //                 // System.out.println("---------------> 1");
                     
-                    // int fid = (int)Math.round(_fid);
-                    int fid = 17;
-                    String pathName = String.format("ap%d_right", fid);
-                    PathPlannerPath path = GlobalConfig.getAimPath(pathName);
-                    System.out.println("---------------> 2");
-                    // Create the constraints to use while pathfinding. The constraints defined in the path will only be used for the path.
-                    PathConstraints constraints = new PathConstraints(
-                            3.0, 3.0,
-                            Units.degreesToRadians(540), Units.degreesToRadians(720));
+    //                 // int fid = (int)Math.round(_fid);
+    //                 int fid = 17;
+    //                 String pathName = String.format("ap%d_right", fid);
+    //                 PathPlannerPath path = GlobalConfig.getAimPath(pathName);
+    //                 System.out.println("---------------> 2");
+    //                 // Create the constraints to use while pathfinding. The constraints defined in the path will only be used for the path.
+    //                 PathConstraints constraints = new PathConstraints(
+    //                         3.0, 3.0,
+    //                         Units.degreesToRadians(540), Units.degreesToRadians(720));
         
-                            System.out.println("---------------> 3");
-                    // Since AutoBuilder is configured, we can use it to build pathfinding commands
-                    aimMoveCmd = AutoBuilder.pathfindThenFollowPath(
-                        path,
-                        constraints);
-                    System.out.println("---------------> 4");
-                    aimMoveCmd.schedule();
-                    System.out.println("---------------> 5");
-                    StateController.getInstance().aimMoveCmdRunning = true;
-                }
-                catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-            else {
-                // SmartDashboard.putBoolean("========>1111", false);
-                waitForSeeAprilTagTime -= 0.02; // 50Hz，a frame every 0.02s
-                if (waitForSeeAprilTagTime <= 0) {
-                    isTimeoutCancel = true;
-                }
-            }
-        } 
-    }
+    //                         System.out.println("---------------> 3");
+    //                 // Since AutoBuilder is configured, we can use it to build pathfinding commands
+    //                 aimMoveCmd = AutoBuilder.pathfindThenFollowPath(
+    //                     path,
+    //                     constraints);
+    //                 System.out.println("---------------> 4");
+    //                 // StateController.getInstance().useVisionOdometry = false;
+    //                 aimMoveCmd.schedule();
+    //                 isDidScheduled = false;
+    //                 System.out.println("---------------> 5");
+    //                 StateController.getInstance().aimMoveCmdRunning = true;
+    //             }
+    //             catch (Exception e) {
+    //                 e.printStackTrace();
+    //             }
+    //         }
+    //         else {
+    //             // SmartDashboard.putBoolean("========>1111", false);
+    //             waitForSeeAprilTagTime -= 0.02; // 50Hz，a frame every 0.02s
+    //             if (waitForSeeAprilTagTime <= 0) {
+    //                 isTimeoutCancel = true;
+    //             }
+    //         }
+    //     } 
+    // }
 
+    
     public AIM_MOVE_CMD_STATE getAimMoveCmdState() {
         if (isTimeoutCancel) {
             return AIM_MOVE_CMD_STATE.AIM_MOVE_CMD_STATE_CANCELED;
@@ -191,10 +196,13 @@ public class Aim2025  extends SubsystemBase {
             return AIM_MOVE_CMD_STATE.AIM_MOVE_CMD_STATE_IDLE;
         }
         if (aimMoveCmd.isScheduled()) {
-            if (aimMoveCmd.isFinished()) {
-                return AIM_MOVE_CMD_STATE.AIM_MOVE_CMD_STATE_FINISHED;
-            }
+            isDidScheduled = true;
+
             return AIM_MOVE_CMD_STATE.AIM_MOVE_CMD_STATE_RUNNING;
+        }
+
+        if (isDidScheduled && aimMoveCmd.isFinished()) {
+            return AIM_MOVE_CMD_STATE.AIM_MOVE_CMD_STATE_FINISHED;
         }
 
 
@@ -208,6 +216,7 @@ public class Aim2025  extends SubsystemBase {
             aimMoveCmd = null;
             StateController.getInstance().aimMoveCmdRunning = false;
         }
+        // StateController.getInstance().useVisionOdometry = true;
     }
 
     public boolean isTargetValid() {

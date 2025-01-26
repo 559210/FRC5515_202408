@@ -93,7 +93,7 @@ public class Robot extends TimedRobot {
     /** This function is called periodically during autonomous. */
     @Override
     public void autonomousPeriodic() {
-        m_robotContainer.print();
+        m_robotContainer.update();
     }
 
     @Override
@@ -111,7 +111,7 @@ public class Robot extends TimedRobot {
     /** This function is called periodically during operator control. */
     @Override
     public void teleopPeriodic() {
-        m_robotContainer.print();
+        m_robotContainer.update();
     }
 
     @Override

@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>Nito.AsyncEx.Coordination</id>
+    <version>1.0.2</version>
+    <authors>Stephen Cleary</authors>
+    <owners>Stephen Cleary</owners>
+    <licenseUrl>https://raw.githubusercontent.com/StephenCleary/AsyncEx.Coordination/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/StephenCleary/AsyncEx.Coordination</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Asynchronous coordination primitives.</description>
+    <tags>async,asynclock,asynclazy</tags>
+    <dependencies>
+      <group targetFramework=".NETFramework4.6">
+        <dependency id="Nito.Collections.Deque" version="[1.0.0, )" />
+        <dependency id="Nito.AsyncEx.Tasks" version="[1.0.1, )" />
+      </group>
+      <group targetFramework=".NETStandard1.3">
+        <dependency id="System.Runtime" version="[4.1.0, )" />
+        <dependency id="System.Threading" version="[4.0.11, )" />
+        <dependency id="System.Threading.Tasks" version="[4.0.11, )" />
+        <dependency id="Nito.Collections.Deque" version="[1.0.0, )" />
+        <dependency id="Nito.AsyncEx.Tasks" version="[1.0.1, )" />
+      </group>
+    </dependencies>
+  </metadata>
+</package>

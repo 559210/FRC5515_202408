@@ -195,7 +195,7 @@ public class RobotContainer implements RobotContainerInterface {
         // return new exampleAuto(s_Swerve);
     }
 
-    public void print() {
+    public void update() {
         
     }
 }

@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
+  <metadata>
+    <id>NetworkTablesSharp</id>
+    <version>1.0.2</version>
+    <title>NetworkTablesSharp</title>
+    <authors>nab138</authors>
+    <license type="expression">MIT</license>
+    <licenseUrl>https://licenses.nuget.org/MIT</licenseUrl>
+    <readme>README.md</readme>
+    <description>A C# Client for WPI's NetworkTables 4.0</description>
+    <tags>networktables frc robotics websockets</tags>
+    <repository type="git" url="https://github.com/nab138/networktablessharp" commit="48becc6b0038e54a67a1e5e08086869dc9f974e1" />
+    <dependencies>
+      <group targetFramework="net8.0">
+        <dependency id="MessagePack" version="3.1.0" exclude="Build,Analyzers" />
+        <dependency id="Newtonsoft.Json" version="13.0.3" exclude="Build,Analyzers" />
+        <dependency id="WebSocketSharp-netstandard" version="1.0.1" exclude="Build,Analyzers" />
+      </group>
+      <group targetFramework=".NETStandard2.1">
+        <dependency id="MessagePack" version="3.1.0" exclude="Build,Analyzers" />
+        <dependency id="Newtonsoft.Json" version="13.0.3" exclude="Build,Analyzers" />
+        <dependency id="WebSocketSharp-netstandard" version="1.0.1" exclude="Build,Analyzers" />
+      </group>
+    </dependencies>
+  </metadata>
+</package>
