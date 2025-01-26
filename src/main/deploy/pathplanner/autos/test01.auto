@@ -7,13 +7,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "ap17_right"
+            "pathName": "New Path"
           }
         }
       ]
     }
   },
-  "resetOdom": true,
+  "resetOdom": false,
   "folder": null,
   "choreoAuto": false
 }

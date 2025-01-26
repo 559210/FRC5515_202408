@@ -215,7 +215,7 @@ public final class Constants {
 
     public static final class Candle {
         public static final int candleID = 24;
-        public static final String candleBusName = "rio";
+        public static final String candleBusName = "Canivore5515";
     }
 
     public static String LIME_LIGHT_NOTE_NAME = "limelight-note";

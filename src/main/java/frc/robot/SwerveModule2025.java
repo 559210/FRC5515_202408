@@ -63,7 +63,7 @@ public class SwerveModule2025 {
 
     private void setSpeed(SwerveModuleState desiredState, boolean isOpenLoop){
         if(isOpenLoop){
-            driveDutyCycle.Output = desiredState.speedMetersPerSecond / Constants2025.Swerve.maxSpeed;
+            driveDutyCycle.Output = 0.1 * desiredState.speedMetersPerSecond / Constants2025.Swerve.maxSpeed;
             mDriveMotor.setControl(driveDutyCycle);
         }
         else {

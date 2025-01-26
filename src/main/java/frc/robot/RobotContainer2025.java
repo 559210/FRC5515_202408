@@ -1,12 +1,15 @@
 package frc.robot;
 
 import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.FollowPathCommand;
 import com.pathplanner.lib.commands.PathPlannerAuto;
+import com.pathplanner.lib.commands.PathfindingCommand;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
@@ -43,7 +46,7 @@ public class RobotContainer2025 implements RobotContainerInterface {
     private final JoystickButton robotCentric = new JoystickButton(driver, 6);
     private final Swerve2025 s_Swerve = new Swerve2025();
 
-    Aim2025 s_aim2025 = new Aim2025();
+    Aim2025 s_aim2025 = new Aim2025(s_Swerve);
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer2025() {
@@ -65,15 +68,20 @@ public class RobotContainer2025 implements RobotContainerInterface {
         // Configure the button bindings
         configureButtonBindings();
 
-
+        GlobalConfig.init();
+        s_Swerve.configPathPlanner();
+        // PathfindingCommand.warmupCommand().schedule();
+        FollowPathCommand.warmupCommand().schedule();
         // LimelightHelpers.setLEDMode_PipelineControl("limelight-one");
     }
 
     public void telInit() {
+        s_Swerve.zeroHeading();
         StateController.getInstance().useVisionOdometry = true;
     }
     public void autoInit() {
-        StateController.getInstance().useVisionOdometry = true;
+        s_Swerve.zeroHeading();
+        StateController.getInstance().useVisionOdometry = false;
     }
 
     /**
@@ -86,6 +94,11 @@ public class RobotContainer2025 implements RobotContainerInterface {
         /* Driver Buttons */
         zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
         aimBtn.whileTrue(new Aim2025Cmd(s_aim2025, s_Swerve));
+
+        // new JoystickButton(tester, 1).whileTrue(s_Swerve.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
+        // new JoystickButton(tester, 2).whileTrue(s_Swerve.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
+        // new JoystickButton(tester, 3).whileTrue(s_Swerve.sysIdDynamic(SysIdRoutine.Direction.kForward));
+        // new JoystickButton(tester, 4).whileTrue(s_Swerve.sysIdDynamic(SysIdRoutine.Direction.kReverse));
     }
 
     /**
@@ -97,8 +110,11 @@ public class RobotContainer2025 implements RobotContainerInterface {
         return s_Swerve.followPathPlannerAuto("test01");
     }
 
+    int count = 0;
     public void print() {
         Pose2d pos = s_Swerve.getPose();
-        System.out.println(String.format("pos2d: (%f, %f)", pos.getX(), pos.getY()));
+        count ++;
+        if (count % 50 == 0)
+            System.out.println(String.format("pos2d: (%f, %f)", pos.getX(), pos.getY()));
     }
 }

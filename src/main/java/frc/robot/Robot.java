@@ -33,7 +33,13 @@ public class Robot extends TimedRobot {
         // Instantiate our RobotContainer. This will perform all our button bindings,
         // and put our
         // autonomous chooser on the dashboard.
-        m_robotContainer = new RobotContainer2025();        // use RobotContainer for 2024
+        if (GlobalConfig.version == 2025) {
+            m_robotContainer = new RobotContainer2025();        // use RobotContainer for 2024
+        }
+        else if (GlobalConfig.version == 2024) {
+            m_robotContainer = new RobotContainer();
+        }
+       
     }
 
     /**
@@ -105,6 +111,7 @@ public class Robot extends TimedRobot {
     /** This function is called periodically during operator control. */
     @Override
     public void teleopPeriodic() {
+        m_robotContainer.print();
     }
 
     @Override

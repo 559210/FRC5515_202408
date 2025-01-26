@@ -1,10 +1,12 @@
 package frc.robot.subsystems;
 import frc.robot.SwerveModule2025;
+import frc.robot.Constants;
 import frc.robot.Constants2025;
 import frc.robot.LimelightHelpers;
 import frc.robot.StateController;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import com.ctre.phoenix6.configs.Pigeon2Configuration;
 import com.ctre.phoenix6.hardware.Pigeon2;
@@ -38,9 +40,10 @@ import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import static edu.wpi.first.units.Units.*;
 
 public class Swerve2025 extends SubsystemBase {
+    static final boolean useEstimatorOdo = false;
     private final String llName = Constants2025.LIME_LIGHT_ARPIL_TAG_NAME;
-    public SwerveDrivePoseEstimator swerveOdometry;
-    
+    private SwerveDrivePoseEstimator est_swerveOdometry;
+    private SwerveDriveOdometry swerveOdometry;
     public SwerveModule2025[] mSwerveMods;
     public Pigeon2 gyro;
     public Translation2d currentVelTranslation2d = new Translation2d();
@@ -90,7 +93,7 @@ public class Swerve2025 extends SubsystemBase {
                                             m_appliedVoltage.mut_replace(
                                                     mod.getmDriveMotor().get() * RobotController.getBatteryVoltage(),
                                                     Volts))
-                                    .linearPosition(m_distance.mut_replace(swerveOdometry.getEstimatedPosition()
+                                    .linearPosition(m_distance.mut_replace((useEstimatorOdo ? est_swerveOdometry.getEstimatedPosition() : swerveOdometry.getPoseMeters())
                                             .getTranslation().getDistance(new Translation2d(0, 0)), Meters))
                                     .linearVelocity(
                                             m_velocity.mut_replace(mod.getState().speedMetersPerSecond,
@@ -143,13 +146,18 @@ public class Swerve2025 extends SubsystemBase {
                 new SwerveModule2025(3, Constants2025.Swerve.Mod3.constants)
         };
         reset_time.start();
-        swerveOdometry = new SwerveDrivePoseEstimator(
-            Constants2025.Swerve.swerveKinematics, 
-            getGyroYaw(), 
-            getModulePositions(),
-            new Pose2d(),
-            VecBuilder.fill(0.05, 0.05, Units.degreesToRadians(5)),
-            VecBuilder.fill(0.5, 0.5, Units.degreesToRadians(30)));
+        if (useEstimatorOdo) {
+            est_swerveOdometry = new SwerveDrivePoseEstimator(
+                Constants2025.Swerve.swerveKinematics, 
+                getGyroYaw(), 
+                getModulePositions(),
+                new Pose2d(),
+                VecBuilder.fill(0.05, 0.05, Units.degreesToRadians(5)),
+                VecBuilder.fill(0.5, 0.5, Units.degreesToRadians(30)));
+        }
+        else {
+            swerveOdometry = new SwerveDriveOdometry(Constants.Swerve.swerveKinematics, getGyroYaw(), getModulePositions());
+        }
     }
 
     int drivecount = 0;
@@ -200,7 +208,7 @@ public class Swerve2025 extends SubsystemBase {
     }
 
     public Pose2d getPose() {
-        return swerveOdometry.getEstimatedPosition();
+        return useEstimatorOdo ? est_swerveOdometry.getEstimatedPosition() : swerveOdometry.getPoseMeters();
     }
 
     int poseCount = 0;
@@ -208,7 +216,13 @@ public class Swerve2025 extends SubsystemBase {
     public void setPose(Pose2d pose) {
         poseCount++;
         SmartDashboard.putNumber("setPose count", poseCount);
-        swerveOdometry.resetPosition(getGyroYaw(), getModulePositions(), pose);
+        if (useEstimatorOdo)
+        {
+            est_swerveOdometry.resetPosition(getGyroYaw(), getModulePositions(), pose);
+        }
+        else {
+            swerveOdometry.resetPosition(getGyroYaw(), getModulePositions(), pose);
+        }       
     }
 
     public Rotation2d getHeading() {
@@ -216,13 +230,21 @@ public class Swerve2025 extends SubsystemBase {
     }
 
     public void setHeading(Rotation2d heading) {
-        swerveOdometry.resetPosition(getGyroYaw(), getModulePositions(),
-                new Pose2d(getPose().getTranslation(), heading));
+        if (useEstimatorOdo) {
+            est_swerveOdometry.resetPosition(getGyroYaw(), getModulePositions(),
+            new Pose2d(getPose().getTranslation(), heading));
+        }
+        else {
+            swerveOdometry.resetPosition(getGyroYaw(), getModulePositions(),
+            new Pose2d(getPose().getTranslation(), heading));
+        }
+
     }
 
     public void zeroHeading() {
-        swerveOdometry.resetPosition(getGyroYaw(), getModulePositions(),
-                new Pose2d(getPose().getTranslation(), new Rotation2d()));
+        // swerveOdometry.resetPosition(getGyroYaw(), getModulePositions(),
+        //         new Pose2d(getPose().getTranslation(), new Rotation2d(Units.degreesToRadians(0))));
+        setHeading(new Rotation2d(Units.degreesToRadians(180)));
     }
 
     public Rotation2d getGyroYaw() {
@@ -239,7 +261,13 @@ public class Swerve2025 extends SubsystemBase {
 
     @Override
     public void periodic() {
-        swerveOdometry.update(getGyroYaw(), getModulePositions());
+        if (useEstimatorOdo) {
+            est_swerveOdometry.update(getGyroYaw(), getModulePositions());
+        }
+        else {
+            swerveOdometry.update(getGyroYaw(), getModulePositions());
+        }
+        
         if (this.currentVelTranslation2d.getNorm() < 0.01 && reset_time.hasElapsed(10)) {
             reset_time.reset();
             for (SwerveModule2025 mod : mSwerveMods) {
@@ -253,7 +281,7 @@ public class Swerve2025 extends SubsystemBase {
         }
         SmartDashboard.putNumber("Gyro", getGyroYaw().getDegrees());
 
-        if (StateController.getInstance().useVisionOdometry) {
+        if (StateController.getInstance().useVisionOdometry && useEstimatorOdo) {
             updateOdometryWithVision();
         }
     }
@@ -262,8 +290,8 @@ public class Swerve2025 extends SubsystemBase {
         boolean useMegaTag2 = true; // set to false to use MegaTag1
         boolean doRejectUpdate = false;
 
-        int[] validIDs = {17};
-        LimelightHelpers.SetFiducialIDFiltersOverride(llName, validIDs);
+        // int[] validIDs = {17};
+        // LimelightHelpers.SetFiducialIDFiltersOverride(llName, validIDs);
 
         if (useMegaTag2 == false) {
             LimelightHelpers.PoseEstimate mt1 = LimelightHelpers.getBotPoseEstimate_wpiBlue(llName);
@@ -281,29 +309,32 @@ public class Swerve2025 extends SubsystemBase {
             }
 
             if (!doRejectUpdate) {
-                swerveOdometry.setVisionMeasurementStdDevs(VecBuilder.fill(.5, .5, 9999999));
-                swerveOdometry.addVisionMeasurement(
+                est_swerveOdometry.setVisionMeasurementStdDevs(VecBuilder.fill(.5, .5, 9999999));
+                est_swerveOdometry.addVisionMeasurement(
                         mt1.pose,
                         mt1.timestampSeconds);
             }
         } else if (useMegaTag2 == true) {
             LimelightHelpers.SetRobotOrientation(llName,
-                    swerveOdometry.getEstimatedPosition().getRotation().getDegrees(), 0, 0, 0, 0, 0);
+                est_swerveOdometry.getEstimatedPosition().getRotation().getDegrees(), 0, 0, 0, 0, 0);
             LimelightHelpers.PoseEstimate mt2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(llName);
-            if (Math.abs(gyro.getAngularVelocityZWorld().getValueAsDouble()) > 720) // if our angular velocity is greater than 720 degrees per second,
-                                                  // ignore vision updates
-            {
-                doRejectUpdate = true;
+            if (mt2 != null) {
+                if (Math.abs(gyro.getAngularVelocityZWorld().getValueAsDouble()) > 720) // if our angular velocity is greater than 720 degrees per second,
+                                                    // ignore vision updates
+                {
+                    doRejectUpdate = true;
+                }
+                if (mt2.tagCount == 0) {
+                    doRejectUpdate = true;
+                }
+                if (!doRejectUpdate) {
+                    est_swerveOdometry.setVisionMeasurementStdDevs(VecBuilder.fill(.7, .7, 9999999));
+                    est_swerveOdometry.addVisionMeasurement(
+                            mt2.pose,
+                            mt2.timestampSeconds);
+                }                
             }
-            if (mt2.tagCount == 0) {
-                doRejectUpdate = true;
-            }
-            if (!doRejectUpdate) {
-                swerveOdometry.setVisionMeasurementStdDevs(VecBuilder.fill(.7, .7, 9999999));
-                swerveOdometry.addVisionMeasurement(
-                        mt2.pose,
-                        mt2.timestampSeconds);
-            }
+
         }
     }
 
@@ -406,7 +437,7 @@ public class Swerve2025 extends SubsystemBase {
 
     public Command followPathPlannerAuto(String autoName) {
        
-        this.configPathPlanner();
+        // this.configPathPlanner();
         return new PathPlannerAuto(autoName);
     }
 }

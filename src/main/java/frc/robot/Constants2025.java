@@ -85,7 +85,7 @@ public final class Constants2025 {
 
         /* Swerve Profiling Values */
         /** Meters per Second */
-        public static final double maxSpeed = 0.05;
+        public static final double maxSpeed = 2;
         /** Radians per Second */
         public static final double maxAngularVelocity = maxSpeed/trackWidth*1.414; 
         /* Neutral Modes */
