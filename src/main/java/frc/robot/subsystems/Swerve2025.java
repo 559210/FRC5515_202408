@@ -139,10 +139,10 @@ public class Swerve2025 extends SubsystemBase {
         gyro.setYaw(0);
 
         mSwerveMods = new SwerveModule2025[] {
-                new SwerveModule2025(0, Constants2025.Swerve.Mod0.constants, 0),
-                new SwerveModule2025(1, Constants2025.Swerve.Mod1.constants, 1),
-                new SwerveModule2025(2, Constants2025.Swerve.Mod2.constants, 0),
-                new SwerveModule2025(3, Constants2025.Swerve.Mod3.constants, 1)
+                new SwerveModule2025(0),
+                new SwerveModule2025(1),
+                new SwerveModule2025(2),
+                new SwerveModule2025(3)
         };
         reset_time.start();
         if (useEstimatorOdo) {

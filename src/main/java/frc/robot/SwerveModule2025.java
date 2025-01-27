@@ -34,36 +34,26 @@ public class SwerveModule2025 {
         return mDriveMotor;
     }
     
-    public SwerveModule2025(int moduleNumber, SwerveModuleConstants moduleConstants, int ctreConfignum){
-        this.moduleNumber = moduleNumber;
-        this.angleOffset = moduleConstants.angleOffset;
+    public SwerveModule2025(int modIndex){
+        Constants2025.Swerve.Mod mod = Constants2025.Swerve.modList[modIndex];
+        this.moduleNumber = mod.moduleNumber;
+        this.angleOffset = mod.angleOffset;
         
         /* Angle Encoder Config */
-        angleEncoder = new CANcoder(moduleConstants.cancoderID, Constants2025.canivore_name);
+        angleEncoder = new CANcoder(mod.canCoderID, Constants2025.canivore_name);
         // angleEncoder.getConfigurator().apply(Constants2025.ctreConfigs.swerveCANcoderConfig);
-        if(ctreConfignum==0){
-            angleEncoder.getConfigurator().apply(Constants2025.ctreConfigs.swerveCANcoderConfig);
-        }else{
-            angleEncoder.getConfigurator().apply(Constants2025.ctreConfigs2.swerveCANcoderConfig);
-        }
+        angleEncoder.getConfigurator().apply(mod.ctreConfigs.swerveCANcoderConfig);
+
         /* Angle Motor Config */
-        mAngleMotor = new TalonFX(moduleConstants.angleMotorID, Constants2025.canivore_name);
+        mAngleMotor = new TalonFX(mod.angleMotorID, Constants2025.canivore_name);
         // mAngleMotor.getConfigurator().apply(Constants2025.ctreConfigs.swerveAngleFXConfig);
-        if(ctreConfignum==0){
-            mAngleMotor.getConfigurator().apply(Constants2025.ctreConfigs.swerveAngleFXConfig);
-        }else{
-            mAngleMotor.getConfigurator().apply(Constants2025.ctreConfigs2.swerveAngleFXConfig);
-        }
+        mAngleMotor.getConfigurator().apply(mod.ctreConfigs.swerveAngleFXConfig);
         resetToAbsolute();
 
         /* Drive Motor Config */
-        mDriveMotor = new TalonFX(moduleConstants.driveMotorID, Constants2025.canivore_name);
+        mDriveMotor = new TalonFX(mod.driveMotorID, Constants2025.canivore_name);
         // mDriveMotor.getConfigurator().apply(Constants2025.ctreConfigs.swerveDriveFXConfig);
-        if(ctreConfignum==0){
-            mDriveMotor.getConfigurator().apply(Constants2025.ctreConfigs.swerveDriveFXConfig);
-        }else{
-            mDriveMotor.getConfigurator().apply(Constants2025.ctreConfigs2.swerveDriveFXConfig);
-        }
+        mDriveMotor.getConfigurator().apply(mod.ctreConfigs.swerveDriveFXConfig);
         mDriveMotor.getConfigurator().setPosition(0.0);
     }
 

@@ -15,8 +15,6 @@ import frc.lib.util.SwerveModuleConstants;
 public final class Constants2025 {
     public static final double stickDeadband = 0.1;
     public static final String canivore_name = "Canivore5515";
-    public static final CTREConfigs2025 ctreConfigs = new CTREConfigs2025(0);
-    public static final CTREConfigs2025 ctreConfigs2 = new CTREConfigs2025(1);
     public static final class Swerve {
         public static final int pigeonID = 0;
 
@@ -29,13 +27,6 @@ public final class Constants2025 {
         public static final double angleKP = 100.0;
         public static final double angleKI = 0.0;
         public static final double angleKD = 0.0;
-
-        public static final InvertedValue driveMotorInvert = InvertedValue.CounterClockwise_Positive;
-        public static final InvertedValue driveMotorInvert2 = InvertedValue.Clockwise_Positive;
-        public static final InvertedValue angleMotorInvert = InvertedValue.Clockwise_Positive;
-        public static final InvertedValue angleMotorInvert2 = InvertedValue.CounterClockwise_Positive;
-        public static final SensorDirectionValue cancoderInvert = SensorDirectionValue.CounterClockwise_Positive;
-        public static final SensorDirectionValue cancoderInvert2 = SensorDirectionValue.Clockwise_Positive;
 
         /* Drivetrain Constants */
         public static final double trackWidth = 0.55245; //0.52705;
@@ -95,44 +86,84 @@ public final class Constants2025 {
 
         /* Module Specific Constants */
         /* Front Left Module - Module 0 */
-        public static final class Mod0 {
+        private static final class Mod0 {
+            public static final int moduleNumber = 0;
+            public static final InvertedValue driveMotorInvert = InvertedValue.CounterClockwise_Positive;
+            public static final InvertedValue angleMotorInvert = InvertedValue.Clockwise_Positive;
+            public static final SensorDirectionValue cancoderInvert = SensorDirectionValue.CounterClockwise_Positive;
+
             public static final int driveMotorID = 1;
             public static final int angleMotorID = 2;
             public static final int canCoderID = 9;
             public static final Rotation2d angleOffset = Rotation2d.fromRotations(-0.003662);
-            public static final SwerveModuleConstants constants = 
-                new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }
 
         /* Front Right Module - Module 1 */
-        public static final class Mod1 {
+        private static final class Mod1 {
+            public static final int moduleNumber = 1;
+            public static final InvertedValue driveMotorInvert = InvertedValue.Clockwise_Positive;
+            public static final InvertedValue angleMotorInvert = InvertedValue.Clockwise_Positive;
+            public static final SensorDirectionValue cancoderInvert = SensorDirectionValue.CounterClockwise_Positive;
             public static final int driveMotorID = 3;
             public static final int angleMotorID = 4;
             public static final int canCoderID = 10;
             public static final Rotation2d angleOffset = Rotation2d.fromRotations(-0.351562);
-            public static final SwerveModuleConstants constants = 
-                new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }
         
         /* Back Left Module - Module 2 */
-        public static final class Mod2 {
+        private static final class Mod2 {
+            public static final int moduleNumber = 2;
+            public static final InvertedValue driveMotorInvert = InvertedValue.CounterClockwise_Positive;
+            public static final InvertedValue angleMotorInvert = InvertedValue.Clockwise_Positive;
+            public static final SensorDirectionValue cancoderInvert = SensorDirectionValue.CounterClockwise_Positive;
             public static final int driveMotorID = 5;
             public static final int angleMotorID = 6;
             public static final int canCoderID = 11;
             public static final Rotation2d angleOffset = Rotation2d.fromRotations(0.036865);
-            public static final SwerveModuleConstants constants = 
-                new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }
 
         /* Back Right Module - Module 3 */
-        public static final class Mod3 {
+        private static final class Mod3 {
+            public static final int moduleNumber = 3;
+            public static final InvertedValue driveMotorInvert = InvertedValue.Clockwise_Positive;
+            public static final InvertedValue angleMotorInvert = InvertedValue.Clockwise_Positive;
+            public static final SensorDirectionValue cancoderInvert = SensorDirectionValue.CounterClockwise_Positive;
             public static final int driveMotorID = 7;
             public static final int angleMotorID = 8;
             public static final int canCoderID = 12;
             public static final Rotation2d angleOffset = Rotation2d.fromRotations(-0.243164);
-            public static final SwerveModuleConstants constants = 
-                new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }
+
+        public static class Mod {
+            public Mod(int moduleNumber, InvertedValue driveMotorInvert, InvertedValue angleMotorInvert, SensorDirectionValue cancoderInvert, int driveMotorID, int angleMotorID, int canCoderID, Rotation2d angleOffset) {
+                this.moduleNumber = moduleNumber;
+                this.driveMotorInvert = driveMotorInvert;
+                this.angleMotorInvert = angleMotorInvert;
+                this.cancoderInvert = cancoderInvert;
+                this.driveMotorID = driveMotorID;
+                this.angleMotorID = angleMotorID;
+                this.canCoderID = canCoderID;
+                this.angleOffset = angleOffset;
+                this.constants = new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
+                this.ctreConfigs = new CTREConfigs2025(this);
+            }
+            public final int moduleNumber;
+            public final InvertedValue driveMotorInvert;
+            public final InvertedValue angleMotorInvert;
+            public final SensorDirectionValue cancoderInvert;
+            public final int driveMotorID;
+            public final int angleMotorID;
+            public final int canCoderID;
+            public final Rotation2d angleOffset;
+            public final SwerveModuleConstants constants;
+            public final CTREConfigs2025 ctreConfigs;
+        }
+        public static final Mod[] modList = new Mod[] {
+            new Mod(Mod0.moduleNumber, Mod0.driveMotorInvert, Mod0.angleMotorInvert, Mod0.cancoderInvert, Mod0.driveMotorID, Mod0.angleMotorID, Mod0.canCoderID, Mod0.angleOffset), 
+            new Mod(Mod1.moduleNumber, Mod1.driveMotorInvert, Mod1.angleMotorInvert, Mod1.cancoderInvert, Mod1.driveMotorID, Mod1.angleMotorID, Mod1.canCoderID, Mod1.angleOffset), 
+            new Mod(Mod2.moduleNumber, Mod2.driveMotorInvert, Mod2.angleMotorInvert, Mod2.cancoderInvert, Mod2.driveMotorID, Mod2.angleMotorID, Mod2.canCoderID, Mod2.angleOffset), 
+            new Mod(Mod3.moduleNumber, Mod3.driveMotorInvert, Mod3.angleMotorInvert, Mod3.cancoderInvert, Mod3.driveMotorID, Mod3.angleMotorID, Mod3.canCoderID, Mod3.angleOffset)
+        };
     }
 
     public static String LIME_LIGHT_ARPIL_TAG_NAME = "limelight-one";
