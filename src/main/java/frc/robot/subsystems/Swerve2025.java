@@ -1,6 +1,5 @@
 package frc.robot.subsystems;
 import frc.robot.SwerveModule2025;
-import frc.robot.Constants;
 import frc.robot.Constants2025;
 import frc.robot.LimelightHelpers;
 import frc.robot.StateController;
@@ -140,10 +139,10 @@ public class Swerve2025 extends SubsystemBase {
         gyro.setYaw(0);
 
         mSwerveMods = new SwerveModule2025[] {
-                new SwerveModule2025(0, Constants2025.Swerve.Mod0.constants),
-                new SwerveModule2025(1, Constants2025.Swerve.Mod1.constants),
-                new SwerveModule2025(2, Constants2025.Swerve.Mod2.constants),
-                new SwerveModule2025(3, Constants2025.Swerve.Mod3.constants)
+                new SwerveModule2025(0, Constants2025.Swerve.Mod0.constants, 0),
+                new SwerveModule2025(1, Constants2025.Swerve.Mod1.constants, 1),
+                new SwerveModule2025(2, Constants2025.Swerve.Mod2.constants, 0),
+                new SwerveModule2025(3, Constants2025.Swerve.Mod3.constants, 1)
         };
         reset_time.start();
         if (useEstimatorOdo) {
@@ -156,7 +155,7 @@ public class Swerve2025 extends SubsystemBase {
                 VecBuilder.fill(0.5, 0.5, Units.degreesToRadians(30)));
         }
         else {
-            swerveOdometry = new SwerveDriveOdometry(Constants.Swerve.swerveKinematics, getGyroYaw(), getModulePositions());
+            swerveOdometry = new SwerveDriveOdometry(Constants2025.Swerve.swerveKinematics, getGyroYaw(), getModulePositions());
         }
     }
 

@@ -4,9 +4,11 @@ import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.FollowPathCommand;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
@@ -196,6 +198,16 @@ public class RobotContainer implements RobotContainerInterface {
     }
 
     public void update() {
-        
+        Pose2d pos = s_Swerve.getPose();
+
+        ControlPadHelper.publishRobotPos(pos);
+        ControlPadHelper.refreshControlPad();
+        ControlPadHelper.ControlPadInfo info = ControlPadHelper.getControlInfo();
+        if (info == null) {
+            SmartDashboard.putString("ControlPad info is", "NULL");
+        }
+        else {
+            SmartDashboard.putString("ControlPad info is", "OK");
+        }
     }
 }

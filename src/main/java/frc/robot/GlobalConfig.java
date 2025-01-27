@@ -5,7 +5,7 @@ import java.util.HashMap;
 import com.pathplanner.lib.path.PathPlannerPath;
 
 public final class GlobalConfig {
-    public static final int version = 2024;
+    public static final int version = 2025;
 
     private static HashMap<String, PathPlannerPath> aimPathDic = new HashMap<String,PathPlannerPath>();
     private static final String[] aimPathNames = new String[] {

@@ -41,7 +41,10 @@ public class FieldMap : MonoBehaviour
     public Grid[][] grids;
 
     GComponent fieldRoot;
+    GComponent field;
     GComponent apMenu;
+
+    GComponent robot;
 
     public string[] aprilTagNames = new string[]
     {
@@ -100,7 +103,7 @@ public class FieldMap : MonoBehaviour
         fieldRoot = UIPackage.CreateObject("main", "main").asCom;
         GRoot.inst.AddChild(fieldRoot);
 
-        GComponent field = fieldRoot.GetChild("field").asCom;
+        field = fieldRoot.GetChild("field").asCom;
 
         roboPosBtn = fieldRoot.GetChild("RobPosBtn").asButton;
         roboPosBtn.onClick.Set(onRoboPosClick);
@@ -123,6 +126,9 @@ public class FieldMap : MonoBehaviour
             apMenuBtns[i].onClick.Set(onApMenuBtnClick);
             apMenuBtns[i].data = i;
         }
+
+        robot = field.GetChild("robot").asCom;
+
     }
 
     void onApBtnClick(EventContext context)
@@ -148,12 +154,22 @@ public class FieldMap : MonoBehaviour
 
     void onRoboPosClick()
     {
-        Main.inst.NT.getRobotPos();
+        NTManager.RobotPos pos = Main.inst.NT.getRobotPos();
+        Debug.LogErrorFormat("Got robot pos: x->{0}, y->{1}, degree->{2}", pos.x, pos.y, pos.degree);
     }
 
     // Update is called once per frame
     void Update()
     {
+        NTManager.RobotPos pos = Main.inst.NT.getRobotPos();
+        if (pos != null) {
+            robot.SetXY(meter2Pixel(pos.x), field.height - meter2Pixel(pos.y));
+            robot.rotation = 360 - pos.degree;
+        }
+    }
+
+    protected float meter2Pixel(float value) {
+        return value * field.width / 17.548f;
     }
 
     //void createMap(int w, int h)

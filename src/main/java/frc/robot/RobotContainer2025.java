@@ -77,7 +77,7 @@ public class RobotContainer2025 implements RobotContainerInterface {
 
     public void telInit() {
         // s_Swerve.zeroHeading();
-        StateController.getInstance().useVisionOdometry = true;
+        StateController.getInstance().useVisionOdometry = false;
     }
     public void autoInit() {
         // s_Swerve.zeroHeading();

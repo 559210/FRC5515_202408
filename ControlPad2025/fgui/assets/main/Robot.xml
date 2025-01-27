@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="50,50" pivot="0.5,0.5" anchor="true">
+  <displayList>
+    <graph id="n0_bpsn" name="n0" xy="25,25" pivot="0.5,0.5" anchor="true" size="20,20" type="eclipse" fillColor="#ffff0000"/>
+    <graph id="n1_bpsn" name="n1" xy="25,19" size="38,12" type="rect" fillColor="#ffff0000"/>
+  </displayList>
+</component>

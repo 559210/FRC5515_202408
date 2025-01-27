@@ -30,12 +30,17 @@ public class Main : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //_NT.init();
+        _NT.init();
     }
 
     // Update is called once per frame
     void Update()
     {
         
+    }
+
+    void OnApplicationQuit() {
+        Debug.LogError("OnApplicationQuit");
+        NT.stop();
     }
 }

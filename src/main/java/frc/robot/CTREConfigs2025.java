@@ -10,9 +10,14 @@ public final class CTREConfigs2025 {
     public TalonFXConfiguration swerveDriveFXConfig = new TalonFXConfiguration();
     public CANcoderConfiguration swerveCANcoderConfig = new CANcoderConfiguration();
 
-    public CTREConfigs2025(){
+    public CTREConfigs2025(int moduletype){
         /** Swerve CANCoder Configuration */
-        swerveCANcoderConfig.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
+        if (moduletype == 0) {
+            swerveCANcoderConfig.MagnetSensor.SensorDirection = Constants2025.Swerve.cancoderInvert;
+        }
+        else {
+            swerveCANcoderConfig.MagnetSensor.SensorDirection = Constants2025.Swerve.cancoderInvert;
+        }
 
         /** Swerve Angle Motor Configurations */
         /* Motor Inverts and Neutral Mode */
@@ -35,8 +40,14 @@ public final class CTREConfigs2025 {
 
         /** Swerve Drive Motor Configuration */
         /* Motor Inverts and Neutral Mode */
-        swerveDriveFXConfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
-        swerveAngleFXConfig.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
+        swerveDriveFXConfig.MotorOutput.Inverted = Constants2025.Swerve.driveMotorInvert;
+        if (moduletype==0){
+            swerveDriveFXConfig.MotorOutput.Inverted = Constants2025.Swerve.driveMotorInvert;
+            swerveAngleFXConfig.MotorOutput.Inverted = Constants2025.Swerve.angleMotorInvert;
+        }else{
+            swerveDriveFXConfig.MotorOutput.Inverted = Constants2025.Swerve.driveMotorInvert2;
+            swerveAngleFXConfig.MotorOutput.Inverted = Constants2025.Swerve.angleMotorInvert;
+        }
         swerveDriveFXConfig.MotorOutput.NeutralMode = Constants2025.Swerve.driveNeutralMode;
 
         /* Gear Ratio Config */

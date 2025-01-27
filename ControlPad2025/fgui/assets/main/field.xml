@@ -90,5 +90,6 @@
     <component id="n22_j42b" name="ApMenu" src="j42b7" fileName="AprilTagMenu.xml" xy="312,123" size="100,200">
       <relation target="" sidePair="width-width,height-height"/>
     </component>
+    <component id="n40_bpsn" name="robot" src="bpsnd" fileName="Robot.xml" xy="177,41"/>
   </displayList>
 </component>

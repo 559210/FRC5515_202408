@@ -34,24 +34,36 @@ public class SwerveModule2025 {
         return mDriveMotor;
     }
     
-    public SwerveModule2025(int moduleNumber, SwerveModuleConstants moduleConstants){
+    public SwerveModule2025(int moduleNumber, SwerveModuleConstants moduleConstants, int ctreConfignum){
         this.moduleNumber = moduleNumber;
         this.angleOffset = moduleConstants.angleOffset;
         
         /* Angle Encoder Config */
-        angleEncoder = new CANcoder(moduleConstants.cancoderID);
-        angleEncoder.getConfigurator().apply(Constants2025.ctreConfigs.swerveCANcoderConfig);
-
+        angleEncoder = new CANcoder(moduleConstants.cancoderID, Constants2025.canivore_name);
+        // angleEncoder.getConfigurator().apply(Constants2025.ctreConfigs.swerveCANcoderConfig);
+        if(ctreConfignum==0){
+            angleEncoder.getConfigurator().apply(Constants2025.ctreConfigs.swerveCANcoderConfig);
+        }else{
+            angleEncoder.getConfigurator().apply(Constants2025.ctreConfigs2.swerveCANcoderConfig);
+        }
         /* Angle Motor Config */
-        mAngleMotor = new TalonFX(moduleConstants.angleMotorID);
-        mAngleMotor.getConfigurator().apply(Constants2025.ctreConfigs.swerveAngleFXConfig);
-
+        mAngleMotor = new TalonFX(moduleConstants.angleMotorID, Constants2025.canivore_name);
+        // mAngleMotor.getConfigurator().apply(Constants2025.ctreConfigs.swerveAngleFXConfig);
+        if(ctreConfignum==0){
+            mAngleMotor.getConfigurator().apply(Constants2025.ctreConfigs.swerveAngleFXConfig);
+        }else{
+            mAngleMotor.getConfigurator().apply(Constants2025.ctreConfigs2.swerveAngleFXConfig);
+        }
         resetToAbsolute();
 
         /* Drive Motor Config */
-        mDriveMotor = new TalonFX(moduleConstants.driveMotorID);
-        mDriveMotor.getConfigurator().apply(Constants2025.ctreConfigs.swerveDriveFXConfig);
-
+        mDriveMotor = new TalonFX(moduleConstants.driveMotorID, Constants2025.canivore_name);
+        // mDriveMotor.getConfigurator().apply(Constants2025.ctreConfigs.swerveDriveFXConfig);
+        if(ctreConfignum==0){
+            mDriveMotor.getConfigurator().apply(Constants2025.ctreConfigs.swerveDriveFXConfig);
+        }else{
+            mDriveMotor.getConfigurator().apply(Constants2025.ctreConfigs2.swerveDriveFXConfig);
+        }
         mDriveMotor.getConfigurator().setPosition(0.0);
     }
 
@@ -64,7 +76,7 @@ public class SwerveModule2025 {
 
     private void setSpeed(SwerveModuleState desiredState, boolean isOpenLoop){
         if(isOpenLoop){
-            driveDutyCycle.Output = 0.1 * desiredState.speedMetersPerSecond / Constants2025.Swerve.maxSpeed;
+            driveDutyCycle.Output = desiredState.speedMetersPerSecond / Constants2025.Swerve.maxSpeed;
             mDriveMotor.setControl(driveDutyCycle);
         }
         else {
@@ -80,6 +92,7 @@ public class SwerveModule2025 {
 
     public void resetToAbsolute(){
         double absolutePosition = getCANcoder().getRotations() - angleOffset.getRotations();
+        // absolutePosition = angleOffset.getRotations();
         mAngleMotor.setPosition(absolutePosition);
     }
 

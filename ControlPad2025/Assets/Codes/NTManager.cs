@@ -28,18 +28,36 @@ using NetworkTablesSharp;
 
 public class NTManager
 {
+    public class RobotPos {
+        public float x;
+        public float y;
+        public float degree;
+    }
     readonly string TOPIC_NAME = "5515ControlPad";
     readonly string ROBOT_POS_ENTRY_NAME = "RobotPos";
     readonly string CONTROL_PAD_INFO_ENTERY_NAME = "ControlPadInfo";
 
+    RobotPos robotPos = new();
     Nt4Source nt = null;
     public bool init()
     {
-        nt = new("10.55.15.2", TOPIC_NAME, true, 5810);
+        nt = new("10.55.15.2", TOPIC_NAME, false, 5810);
         // Not needed if you leave connectAutomatically as true
         nt.Connect();
 
-        return check();
+        
+        if (check()) {
+            nt.Subscribe(ROBOT_POS_ENTRY_NAME);
+            nt.PublishTopic(CONTROL_PAD_INFO_ENTERY_NAME, "int[]");   
+            Debug.LogError("NT connected");
+            return true;
+        }
+
+        return false;
+    }
+
+    public void stop() {
+        nt.Disconnect();
     }
 
     private bool check()
@@ -53,27 +71,36 @@ public class NTManager
         Debug.LogErrorFormat("publish control pad info===> aprilTagId: {0}, level: {1}, branch: {2} ", aprilTagId, level, branch);
         if (!check())
         {
+            Debug.LogError("publishControlPadInfo check fail");
             return false;
         }
 
-        nt.PublishTopic(CONTROL_PAD_INFO_ENTERY_NAME, "int[]");
+        
         nt.PublishValue(CONTROL_PAD_INFO_ENTERY_NAME, new long[] {aprilTagId, level, branch});
         return true;
     }
 
-    public void getRobotPos()
+    public RobotPos getRobotPos()
     {
-        Debug.LogError("getRobotPos");
+        // Debug.LogError("getRobotPos");
         if(!check()) 
         { 
-            return; 
+            Debug.LogError("getRobotPos check fail");
+            return null; 
         }
-        nt.Subscribe(ROBOT_POS_ENTRY_NAME);
+        
         double[] posList = nt.GetValue<double[]>(ROBOT_POS_ENTRY_NAME);
+        if (posList == null) {
+            return null;
+        }
         double x = posList[0];
         double y = posList[1];
         double degree = posList[2];
-        Debug.LogErrorFormat("Got robot pos: x->{0}, y->{1}, degree->{2}", x, y, degree);
-        return;
+        
+
+        robotPos.x = (float)x;
+        robotPos.y = (float)y;
+        robotPos.degree = (float)degree;
+        return robotPos;
     }
 }

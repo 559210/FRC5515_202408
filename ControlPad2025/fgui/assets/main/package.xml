@@ -12,6 +12,7 @@
     <component id="j42ba" name="StartArea.xml" path="/"/>
     <component id="j42bb" name="algae.xml" path="/"/>
     <component id="frd4c" name="commonBtn.xml" path="/"/>
+    <component id="bpsnd" name="Robot.xml" path="/"/>
   </resources>
   <publish name=""/>
 </packageDescription>
