@@ -1,32 +1,209 @@
 package frc.robot;
 
+import java.util.EnumSet;
+
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.networktables.DoubleArrayEntry;
 import edu.wpi.first.networktables.DoubleArrayPublisher;
 import edu.wpi.first.networktables.DoubleArrayTopic;
+import edu.wpi.first.networktables.DoubleEntry;
+import edu.wpi.first.networktables.DoublePublisher;
+import edu.wpi.first.networktables.DoubleTopic;
 import edu.wpi.first.networktables.IntegerArrayEntry;
+import edu.wpi.first.networktables.IntegerArrayPublisher;
 import edu.wpi.first.networktables.IntegerArrayTopic;
 import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableEvent;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.PubSubOption;
-import edu.wpi.first.networktables.Topic;
+import edu.wpi.first.wpilibj.event.EventLoop;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.ControlPadHelper.TopicWrap.TopicType;
+import frc.robot.utils.MiscUtils;
 
 public class ControlPadHelper {
     public static class ControlPadInfo {
-        public long aprilTagId = -1;
-        public long level = 0;
-        public long branch = -1;
+        public static class ControlPadInfoData {
+            public long aprilTagId = -1;
+            public long level = 0;
+            public long branch = -1;
+        }
+        public ControlPadInfoData data = new ControlPadInfoData();
+        ControlPadInfoData backupData = new ControlPadInfoData();
+
+        public boolean isChanged = false;
+
+        public void compareOld() {
+            isChanged = false;
+            if (data.aprilTagId != backupData.aprilTagId || data.level != backupData.level || data.branch != backupData.branch) {
+                isChanged = true;
+            }
+        }
+
+        public void backup() {
+            backupData.aprilTagId = data.aprilTagId;
+            backupData.level = data.level;
+            backupData.branch = data.branch;
+        }
     }
-    private static final String name = "5515ControlPad";
-    private static final long[] nullLongArray = new long[0];
+    public static class VirtualControl {
+        public double x = 0.0;
+        public double y = 0.0;
+        public boolean isTap = false;
+    }
+
+    public static class GoTarget {
+        public boolean isGo = false;
+        public long frameCount = 0; // no use, just a timestamp like frame count
+    }
+
+    protected static class TopicWrap {
+        public enum ActionType {
+            SUB,    // Subscribe
+            PUB,    // Publish
+        }
+        public enum TopicType {
+            INT_ARRAY,
+            DOUBLE_ARRAY,
+            DOUBLE,
+        }
+
+        private static final long[] nullLongArray = new long[0];
+        private static final double[] nullDoubleArray = new double[0];
+        
+        private IntegerArrayTopic intArrayTopic = null;
+        private IntegerArrayEntry intArrayEntry = null;
+        private IntegerArrayPublisher intArrayPublisher = null;
+        private DoubleArrayTopic doubleArrayTopic = null;
+        private DoubleArrayEntry doubleArrayEntry = null;
+        private DoubleArrayPublisher doubleArrayPublisher = null;
+        private DoubleTopic doubleTopic = null;
+        private DoubleEntry doubleEntry = null;
+        private DoublePublisher doublePublisher = null;
+        private TopicType topicType;
+        private ActionType actionType;
+        private String entryName;
+
+
+        int topicListenerHandle = -1;
+
+
+        public TopicWrap(TopicType type, String entryName, ActionType actionType) {
+            topicType = type;
+            this.actionType = actionType;
+            this.entryName = entryName;
+
+            switch (topicType) {
+                case INT_ARRAY:
+                    {
+                        intArrayTopic = getNTTable().getIntegerArrayTopic(this.entryName);
+                        if (actionType == ActionType.SUB) {
+                            intArrayEntry = intArrayTopic.getEntry(nullLongArray);
+                        }
+                        else if (actionType == ActionType.PUB) {
+                            intArrayPublisher = intArrayTopic.publish(PubSubOption.keepDuplicates(true));
+                        }
+
+                        // topicListenerHandle = getNTInst().addListener(
+                        //     intArrayEntry,
+                        //     EnumSet.of(NetworkTableEvent.Kind.kValueAll),
+                        //     event -> {
+                        //         isUpdated = true;
+                        //     });
+                    }
+                    break;
+                case DOUBLE_ARRAY:
+                    {
+                        doubleArrayTopic = getNTTable().getDoubleArrayTopic(this.entryName);
+                        if (actionType == ActionType.SUB) {
+                            doubleArrayEntry = doubleArrayTopic.getEntry(nullDoubleArray);
+                        }
+                        else if (actionType == ActionType.PUB) {
+                            doubleArrayPublisher = doubleArrayTopic.publish(PubSubOption.keepDuplicates(true));
+                        }
+                    }
+                    break;
+                case DOUBLE:
+                    {
+                        doubleTopic = getNTTable().getDoubleTopic(this.entryName);
+                        if (actionType == ActionType.SUB) {
+                            doubleEntry = doubleTopic.getEntry(0.0);
+                        }
+                        else if (actionType == ActionType.PUB) {
+                            doublePublisher = doubleTopic.publish(PubSubOption.keepDuplicates(true));
+                        }
+                    }
+                default:
+                    break;
+            }
+        }
+
+
+        public double[] getDoubleArrayValue() {
+            if (doubleArrayEntry != null) {
+                // doubleArrayEntry.
+                return doubleArrayEntry.get();
+            }
+            return null;
+        }
+
+        public void publishDoubleArray(double[] datas) {
+            if (doubleArrayPublisher != null) {
+                doubleArrayPublisher.set(datas);
+                Flush();
+            }
+        }
+
+        public long[] getIntArrayValue() {
+            if (intArrayEntry != null) {
+                return intArrayEntry.get();
+            }
+            return null;
+        }
+
+        public void publishIntArray(long[] datas) {
+            if (intArrayPublisher != null) {
+                intArrayPublisher.set(datas);
+                Flush();
+            }
+        }
+
+        public double getDoubleValue() {
+            if (doubleEntry != null) {
+                return doubleEntry.get();
+            }
+            // throw new RuntimeException("DoubleEntry is null");
+            return 0.0;
+        }
+
+        public void publishDouble(double data) {
+            if (doublePublisher != null) {
+                doublePublisher.set(data);
+                Flush();
+            }
+        }
+    }
+    private static final String tableName = "5515ControlPad";
+
     private static ControlPadInfo controlPadInfo = new ControlPadInfo();
+    private static VirtualControl virtualControl = new VirtualControl();
+    private static GoTarget goTarget = new GoTarget();
+
+    private static EventLoop eventLoop = new EventLoop();
+    public static Trigger tapTrigger = new Trigger(eventLoop, () -> tapTriggerSupplier());
+    public static Trigger goTargetTrigger = new Trigger(eventLoop, () -> goTargetSupplier());
 
     private static NetworkTableInstance ntInst = null;
     private static NetworkTable ntTable = null;
-    private static DoubleArrayPublisher robotPosePublisher = null;
-    private static IntegerArrayTopic controlPadInfoTopic = null;
-    private static IntegerArrayEntry controlPadInfoEntry = null;
+    private static TopicWrap controlPadInfoTopic = new TopicWrap(TopicType.INT_ARRAY, "ControlPadInfo", TopicWrap.ActionType.SUB);
+    private static TopicWrap virtualControlTopic = new TopicWrap(TopicType.DOUBLE_ARRAY, "VirtualControl", TopicWrap.ActionType.SUB);
+    private static TopicWrap goTargetTopic = new TopicWrap(TopicType.INT_ARRAY, "GoTarget", TopicWrap.ActionType.SUB);
+    private static TopicWrap robotPosTopic = new TopicWrap(TopicType.DOUBLE_ARRAY, "RobotPos", TopicWrap.ActionType.PUB);
+    private static TopicWrap controlPadInfoRecallTopic = new TopicWrap(TopicType.INT_ARRAY, "ControlPadInfoRecall", TopicWrap.ActionType.PUB);
+    // private static TopicWrap controlPadInfoRecallTopic = new TopicWrap(TopicType.INT_ARRAY, "aaa", TopicWrap.ActionType.PUB);
+
+
     private static NetworkTableInstance getNTInst() {
         if (ntInst != null) {
             return ntInst;
@@ -39,7 +216,7 @@ public class ControlPadHelper {
         if (ntTable != null) {
             return ntTable;
         }
-        ntTable = getNTInst().getTable(name);
+        ntTable = getNTInst().getTable(tableName);
         return ntTable;
     }
 
@@ -47,65 +224,87 @@ public class ControlPadHelper {
         getNTInst().flush();
     }
 
-    // private static NetworkTableEntry getNTTableEntry(String entryName) {
-    //     getNTTable().getTo
-    //     return getNTTable().getEntry(entryName);
-    // }
-
-    private static DoubleArrayPublisher getRobotPosPublisher() {
-        if (robotPosePublisher != null) {
-            return robotPosePublisher;
-        }
-        String entryName = "RobotPos";
-        DoubleArrayTopic daTopic = getNTInst().getDoubleArrayTopic(entryName);
-        robotPosePublisher = daTopic.publish(PubSubOption.keepDuplicates(true));
-        return robotPosePublisher;
-    }
-
     public static void publishRobotPos(Pose2d pos) {
-        getRobotPosPublisher().set(new double[]{pos.getTranslation().getX(), pos.getTranslation().getY(), pos.getRotation().getDegrees()});
-        // getNTTableEntry(entryName).setDoubleArray(new double[]{pos.getTranslation().getX(), pos.getTranslation().getY(), pos.getRotation().getDegrees()});
-        Flush();
+        robotPosTopic.publishDoubleArray(new double[]{pos.getTranslation().getX(), pos.getTranslation().getY(), pos.getRotation().getDegrees()});
     }
 
-    private static IntegerArrayTopic getControlPadInfoTopic() {
-        if (controlPadInfoTopic != null) {
-            return controlPadInfoTopic;
+    private static void publishControlPadInfoRecall() {
+        if (controlPadInfo.data.aprilTagId == -1) {
+            return;
         }
-        String entryName = "ControlPadInfo";
-        controlPadInfoTopic = getNTTable().getIntegerArrayTopic(entryName);
-        return controlPadInfoTopic;
+        long[] datas = new long[]{controlPadInfo.data.aprilTagId, controlPadInfo.data.level, controlPadInfo.data.branch};
+        controlPadInfoRecallTopic.publishIntArray(datas);
     }
 
-    private static IntegerArrayEntry getControlPadInfoEntry() {
-        if (controlPadInfoEntry != null) {
-            return controlPadInfoEntry;
-        }
-        controlPadInfoEntry = getControlPadInfoTopic().getEntry(nullLongArray);
-        return controlPadInfoEntry;
-    }
-    public static void refreshControlPad() {
-        long[] datas = getControlPadInfoEntry().get();
+    private static void refreshControlPad() {
+        long[] datas = controlPadInfoTopic.getIntArrayValue();
         // datas[0] is apriltag id
         // datas[1] is level of branch. 0 is bottom, 1 is 1st level, 2 is 2nd level, 3 is 3rd level
         // datas[2] is the left or right branch. -1 is left, 1 is right, 0 means level is bottom
         if (datas.length == 0) {
             return;
         }
-        controlPadInfo.aprilTagId = datas[0];
-        controlPadInfo.level = datas[1];
-        controlPadInfo.branch = datas[2];
+        controlPadInfo.backup();
+        controlPadInfo.data.aprilTagId = datas[0];
+        controlPadInfo.data.level = datas[1];
+        controlPadInfo.data.branch = datas[2];
+        controlPadInfo.compareOld();
 
-        SmartDashboard.putNumber("ControlPad aprilTagId", controlPadInfo.aprilTagId);
-        SmartDashboard.putNumber("ControlPad level", controlPadInfo.level);
-        SmartDashboard.putNumber("ControlPad branch", controlPadInfo.branch);
+        SmartDashboard.putNumber("ControlPad aprilTagId", controlPadInfo.data.aprilTagId);
+        SmartDashboard.putNumber("ControlPad level", controlPadInfo.data.level);
+        SmartDashboard.putNumber("ControlPad branch", controlPadInfo.data.branch);
     }
 
-    public static ControlPadInfo getControlInfo() {
-        if (controlPadInfo.aprilTagId == -1) {
+    private static void refreshVirtualControl() {
+        double[] datas = virtualControlTopic.getDoubleArrayValue();
+        if (datas.length == 0) {
+            return;
+        }
+        virtualControl.isTap = MiscUtils.compareDouble(datas[0], 1.0);
+        virtualControl.x = datas[1];
+        virtualControl.y = datas[2];
+    }
+
+    private static void refreshGoTarget() {
+        long[] datas = goTargetTopic.getIntArrayValue();
+        if (datas.length == 0) {
+            return;
+        }
+        goTarget.isGo = datas[0] == 1;
+        goTarget.frameCount = datas[1];
+    }
+
+    public static ControlPadInfo.ControlPadInfoData getControlPadInfo() {
+        if (controlPadInfo.data.aprilTagId == -1) {
             return null;
         }
-        return controlPadInfo;
+        return controlPadInfo.data;
     }
 
+    public static VirtualControl getVirtualControl() {
+        return virtualControl;
+    }
+
+    private static boolean tapTriggerSupplier() {
+        return virtualControl.isTap;
+    }
+
+    private static boolean goTargetSupplier() {
+        return goTarget.isGo;
+    }
+
+    public static void init() {
+        // getNTTable().addListener(EnumSet.of(NetworkTableEvent.Kind.kTopic), (nt, s, event) -> {
+        //     System.out.println("------------------------> EVENT");
+        // });
+
+    }
+
+    public static void update() {
+        refreshControlPad();
+        refreshVirtualControl();
+        publishControlPadInfoRecall();
+        refreshGoTarget();
+        eventLoop.poll();
+    }
 }

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="400,563" opaque="false">
+  <controller name="SIDE" pages="0,BLUE,1,RED" selected="0"/>
+  <controller name="NET" pages="0,ON,1,OFF" selected="0"/>
+  <controller name="HIDE" pages="0,SHOW,1,HIDE" selected="1"/>
+  <displayList>
+    <graph id="n21_l60g" name="BG" xy="0,31" size="400,500" group="n22_l60g" type="rect" lineSize="2" lineColor="#ffffffff" fillColor="#ffffcc99" corner="10">
+      <relation target="" sidePair="width-width,center-center,top-top"/>
+    </graph>
+    <group id="n12_l60g" name="NetInfo" xy="11,34" size="378,82" group="n22_l60g"/>
+    <text id="n10_l60g" name="netInfo" xy="22,70" size="357,39" group="n12_l60g" fontSize="28" color="#00cc00" align="center" autoSize="none" text="CONNECTED">
+      <gearColor controller="NET" pages="1" values="#ff0000,#000000" default="#00cc00,#000000"/>
+      <gearText controller="NET" pages="1" values="CONNECTING..." default="CONNECTED"/>
+      <relation target="" sidePair="width-width,center-center,top-top"/>
+    </text>
+    <text id="n1_l60g" name="n1" xy="24,41" size="352,24" group="n12_l60g" fontSize="16" align="center" autoSize="shrink" text="Net status:">
+      <relation target="" sidePair="width-width,center-center,top-top"/>
+    </text>
+    <graph id="n11_l60g" name="n11" xy="11,34" size="378,82" group="n12_l60g" type="rect" lineSize="2" lineColor="#ffffffff" fillColor="#00ffffff" corner="10">
+      <relation target="" sidePair="width-width,center-center,top-top"/>
+    </graph>
+    <group id="n9_l60g" name="AprilTagTarget" xy="11,237" size="378,114" group="n22_l60g"/>
+    <component id="n8_l60g" name="goTargetBtn" src="frd4c" fileName="commonBtn.xml" xy="147,320" size="100,23" group="n9_l60g">
+      <relation target="" sidePair="width-width,center-center,top-top"/>
+      <Button title="GO"/>
+    </component>
+    <text id="n6_l60g" name="ArpilTagSelectedInfo" xy="18,276" size="357,39" group="n9_l60g" fontSize="28" color="#0000ff" align="center" autoSize="none" text="AprilTag 17, LEFT, 3">
+      <relation target="" sidePair="width-width,center-center,top-top"/>
+    </text>
+    <text id="n5_l60g" name="n5" xy="24,247" size="351,24" group="n9_l60g" fontSize="16" align="center" autoSize="shrink" text="Selected AprilTag:">
+      <relation target="" sidePair="width-width,center-center,top-top"/>
+    </text>
+    <graph id="n7_l60g" name="n7" xy="11,237" size="378,114" group="n9_l60g" type="rect" lineSize="2" lineColor="#ffffffff" fillColor="#00ffffff" corner="10">
+      <relation target="" sidePair="width-width,center-center,top-top"/>
+    </graph>
+    <graph id="n13_l60g" name="n13" xy="11,136" size="378,81" group="n15_l60g" type="rect" lineSize="2" lineColor="#ffffffff" fillColor="#00ffffff" corner="10">
+      <relation target="" sidePair="width-width,center-center,top-top"/>
+    </graph>
+    <text id="n4_l60g" name="n4" xy="27,143" size="346,24" group="n15_l60g" fontSize="16" align="center" autoSize="shrink" text="Robot pos:">
+      <relation target="" sidePair="width-width,center-center,top-top"/>
+    </text>
+    <text id="n14_l60g" name="RobotPos" xy="21,173" size="357,39" group="n15_l60g" fontSize="28" align="center" autoSize="shrink" text="X: 10.562  Y: 7.552 Degree: 45°">
+      <relation target="" sidePair="width-width,center-center,top-top"/>
+    </text>
+    <group id="n15_l60g" name="RobotPos" xy="11,136" size="378,81" group="n22_l60g"/>
+    <group id="n22_l60g" name="Panels" xy="0,31" size="400,500" advanced="true">
+      <gearDisplay controller="HIDE" pages="0"/>
+      <relation target="" sidePair="width-width,center-center,middle-middle"/>
+    </group>
+    <component id="n16_l60g" name="toRedBtn" src="frd4c" fileName="commonBtn.xml" xy="11,505" size="71,20">
+      <gearDisplay controller="SIDE" pages="0"/>
+      <gearDisplay2 controller="HIDE" pages="0" condition="0"/>
+      <relation target="n22_l60g" sidePair="left-left,bottom-bottom"/>
+      <Button title="RED SIDE"/>
+    </component>
+    <component id="n17_l60g" name="toBlueBtn" src="frd4c" fileName="commonBtn.xml" xy="318,505" size="71,20">
+      <gearDisplay controller="SIDE" pages="1"/>
+      <gearDisplay2 controller="HIDE" pages="0" condition="0"/>
+      <relation target="n22_l60g" sidePair="right-right,bottom-bottom"/>
+      <Button title="BLUE SIDE"/>
+    </component>
+    <component id="n18_l60g" name="toHideBtn" src="frd4c" fileName="commonBtn.xml" xy="164,505" size="71,20">
+      <gearDisplay controller="HIDE" pages="0"/>
+      <relation target="n22_l60g" sidePair="center-center,bottom-bottom"/>
+      <Button title="HIDE"/>
+    </component>
+    <component id="n24_l60g" name="toShowBtn" src="frd4c" fileName="commonBtn.xml" xy="164,0" size="71,20">
+      <gearDisplay controller="HIDE" pages="1"/>
+      <relation target="" sidePair="center-center,top-top"/>
+      <Button title="SHOW"/>
+    </component>
+  </displayList>
+</component>

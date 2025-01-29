@@ -1,15 +1,16 @@
 package frc.robot;
 
+import java.util.HashMap;
+
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
-import frc.lib.util.COTSTalonFXSwerveConstants;
 import frc.lib.util.SwerveModuleConstants;
 
 public final class Constants2025 {
@@ -167,4 +168,20 @@ public final class Constants2025 {
     }
 
     public static String LIME_LIGHT_ARPIL_TAG_NAME = "limelight-one";
+
+    public static HashMap<Long, Pose2d> aimPoses = new HashMap<Long, Pose2d>() {{
+        put(17l, new Pose2d(3.651, 2.552, Rotation2d.fromDegrees(60)));
+        put(18l, new Pose2d(2.78, 4.025, Rotation2d.fromDegrees(0)));
+        put(19l, new Pose2d(3.696, 5.482, Rotation2d.fromDegrees(-60)));
+        put(20l, new Pose2d(5.364, 5.482, Rotation2d.fromDegrees(-120)));
+        put(21l, new Pose2d(6.191, 4.010, Rotation2d.fromDegrees(180)));
+        put(22l, new Pose2d(5.319, 2.552, Rotation2d.fromDegrees(120)));
+
+        put(6l, new Pose2d(13.932, 2.579, Rotation2d.fromDegrees(120)));
+        put(7l, new Pose2d(14.755, 4.010, Rotation2d.fromDegrees(180)));
+        put(8l, new Pose2d(13.944, 5.437, Rotation2d.fromDegrees(-120)));
+        put(9l, new Pose2d(12.246, 5.513, Rotation2d.fromDegrees(-60)));
+        put(10l, new Pose2d(11.389, 4.040, Rotation2d.fromDegrees(0)));
+        put(11l, new Pose2d(12.261,2.552, Rotation2d.fromDegrees(60)));
+    }};
 }

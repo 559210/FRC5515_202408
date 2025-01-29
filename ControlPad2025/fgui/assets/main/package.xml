@@ -13,6 +13,7 @@
     <component id="j42bb" name="algae.xml" path="/"/>
     <component id="frd4c" name="commonBtn.xml" path="/"/>
     <component id="bpsnd" name="Robot.xml" path="/"/>
+    <component id="l60ge" name="InfoPanel.xml" path="/"/>
   </resources>
   <publish name=""/>
 </packageDescription>

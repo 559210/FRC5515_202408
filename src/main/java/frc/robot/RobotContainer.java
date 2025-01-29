@@ -201,8 +201,8 @@ public class RobotContainer implements RobotContainerInterface {
         Pose2d pos = s_Swerve.getPose();
 
         ControlPadHelper.publishRobotPos(pos);
-        ControlPadHelper.refreshControlPad();
-        ControlPadHelper.ControlPadInfo info = ControlPadHelper.getControlInfo();
+        ControlPadHelper.update();
+        ControlPadHelper.ControlPadInfo.ControlPadInfoData info = ControlPadHelper.getControlPadInfo();
         if (info == null) {
             SmartDashboard.putString("ControlPad info is", "NULL");
         }

@@ -1,12 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <component size="1000,563">
   <displayList>
+    <graph id="n23_sikm" name="bg" xy="0,0" size="1000,563" type="rect" lineSize="0" fillColor="#ff666666">
+      <relation target="" sidePair="width-width,height-height%,center-center,middle-middle"/>
+    </graph>
     <component id="n21_j42b" name="field" src="j42b2" fileName="field.xml" xy="499,281" pivot="0.5,0.5" anchor="true" aspect="true">
       <relation target="" sidePair="center-center,middle-middle"/>
     </component>
-    <component id="n22_frd4" name="RobPosBtn" src="frd4c" fileName="commonBtn.xml" xy="32,36">
-      <relation target="" sidePair="width-width,height-height%,left-left,top-top"/>
-      <Button title="RobPos"/>
+    <component id="n24_l60g" name="infoPanel" src="l60ge" fileName="InfoPanel.xml" xy="0,0" size="400,563">
+      <relation target="" sidePair="middle-middle"/>
+    </component>
+    <component id="n25_l60g" name="testBtn" src="frd4c" fileName="commonBtn.xml" xy="449,37">
+      <Button title="test"/>
     </component>
   </displayList>
 </component>

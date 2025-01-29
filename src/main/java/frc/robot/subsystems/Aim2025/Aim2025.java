@@ -1,5 +1,7 @@
 package frc.robot.subsystems.Aim2025;
 
+import java.util.Dictionary;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.IntStream;
 
@@ -42,6 +44,22 @@ public class Aim2025  extends SubsystemBase {
         AIM_MOVE_CMD_STATE_FINISHED,
         AIM_MOVE_CMD_STATE_CANCELED,
     }
+
+    HashMap<Integer, Pose2d> aimPoses = new HashMap<Integer, Pose2d>() {{
+        put(17, new Pose2d(3.651, 2.552, Rotation2d.fromDegrees(60)));
+        put(18, new Pose2d(2.78, 4.025, Rotation2d.fromDegrees(0)));
+        put(19, new Pose2d(3.696, 5.482, Rotation2d.fromDegrees(-60)));
+        put(20, new Pose2d(5.364, 5.482, Rotation2d.fromDegrees(-120)));
+        put(21, new Pose2d(6.191, 4.010, Rotation2d.fromDegrees(180)));
+        put(22, new Pose2d(5.319, 2.552, Rotation2d.fromDegrees(120)));
+
+        put(6, new Pose2d(13.932, 2.579, Rotation2d.fromDegrees(120)));
+        put(7, new Pose2d(14.755, 4.010, Rotation2d.fromDegrees(180)));
+        put(8, new Pose2d(13.944, 5.437, Rotation2d.fromDegrees(-120)));
+        put(9, new Pose2d(12.246, 5.513, Rotation2d.fromDegrees(-60)));
+        put(10, new Pose2d(11.389, 4.040, Rotation2d.fromDegrees(0)));
+        put(11, new Pose2d(12.261,2.552, Rotation2d.fromDegrees(60)));
+    }};
 
     PIDController pidRot = new PIDController(0.015, 0.01, 0.0015);
     PIDController pidTrans = new PIDController(0.06, 0, .01);

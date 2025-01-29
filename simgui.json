@@ -7,15 +7,36 @@
   },
   "NetworkTables": {
     "transitory": {
+      "5515ControlPad": {
+        "int[]##v_/5515ControlPad/ControlPadInfoRecall": {
+          "open": true
+        },
+        "open": true
+      },
       "FMSInfo": {
         "open": true
       },
       "LiveWindow": {
         "open": true
+      },
+      "SmartDashboard": {
+        "open": true
+      },
+      "int[]##v_ControlPadInfo1": {
+        "open": true
       }
     }
   },
   "NetworkTables Info": {
+    "5515ControlPad@1": {
+      "Publishers": {
+        "open": true
+      },
+      "Subscribers": {
+        "open": true
+      },
+      "open": true
+    },
     "Clients": {
       "open": true
     },
