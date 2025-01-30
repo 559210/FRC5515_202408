@@ -2,8 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using NetworkTablesSharp;
-using System.Threading;
-using static NTManager;
+
 
 // Default values shown here
 //Nt4Source Source = new Nt4Source("10.55.15.2", "5515ControlPad", true, 5810);
@@ -51,7 +50,7 @@ public class NTManager
 
     RobotPos robotPos = new();
     AprilTagTargetInfo aprilTagTargetInfo = new();
-    Nt4Source nt = null;
+    NetworkTablesSharpEx.Nt4Source nt = null;
 
     bool isFirstConnect = true;
 
@@ -93,16 +92,16 @@ public class NTManager
             }
 
             if (!isFirstConnect)
-                Debug.LogError("¶ÏÏß £¬¿ªÊ¼ÖØÁ¬");
+                Debug.LogError("ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½");
             yield return new WaitForEndOfFrame();
             ConnectNT();
             if (nt.Connected())
             {
-                Debug.LogError("Á¬½Ó³É¹¦");
+                Debug.LogError("ï¿½ï¿½ï¿½Ó³É¹ï¿½");
             }
             else
             {
-                Debug.LogError("Á¬½ÓÊ§°Ü,ÖØÊÔ...");
+                Debug.LogError("ï¿½ï¿½ï¿½ï¿½Ê§ï¿½ï¿½,ï¿½ï¿½ï¿½ï¿½...");
             }
             yield return new WaitForSeconds(1);
         }

@@ -201,7 +201,6 @@ public class ControlPadHelper {
     private static TopicWrap goTargetTopic = new TopicWrap(TopicType.INT_ARRAY, "GoTarget", TopicWrap.ActionType.SUB);
     private static TopicWrap robotPosTopic = new TopicWrap(TopicType.DOUBLE_ARRAY, "RobotPos", TopicWrap.ActionType.PUB);
     private static TopicWrap controlPadInfoRecallTopic = new TopicWrap(TopicType.INT_ARRAY, "ControlPadInfoRecall", TopicWrap.ActionType.PUB);
-    // private static TopicWrap controlPadInfoRecallTopic = new TopicWrap(TopicType.INT_ARRAY, "aaa", TopicWrap.ActionType.PUB);
 
 
     private static NetworkTableInstance getNTInst() {

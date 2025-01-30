@@ -8,6 +8,12 @@
   "NetworkTables": {
     "transitory": {
       "5515ControlPad": {
+        "double[]##v_/5515ControlPad/RobotPos": {
+          "open": true
+        },
+        "double[]##v_/5515ControlPad/VirtualControl": {
+          "open": true
+        },
         "int[]##v_/5515ControlPad/ControlPadInfoRecall": {
           "open": true
         },
