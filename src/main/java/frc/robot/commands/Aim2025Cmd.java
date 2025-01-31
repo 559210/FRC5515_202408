@@ -43,10 +43,15 @@ public class Aim2025Cmd extends Command {
             return;
         }
         Pose2d targetPos = Constants2025.aimPoses.get(info.aprilTagId);
+
         if (targetPos == null) {
             System.out.println("Aim2025Cmd init targetPos is null");
             return;
         }
+        SmartDashboard.putNumber("Aim2025Cmd", info.aprilTagId);
+        SmartDashboard.putString("Aim2025Cmd target", targetPos.toString());
+
+        // StateController.getInstance().useVisionOdometry = false;
         m_moveToSubSys.init(targetPos);
 
         isInitOk = true;
@@ -58,6 +63,7 @@ public class Aim2025Cmd extends Command {
 
     @Override
     public void end(boolean interrupted) {
+        // StateController.getInstance().useVisionOdometry = true;
         System.out.println("[[[[[[[[[[[[[[ END ]]]]]]]]]]]]]] :: " + interrupted);
         if (interrupted) {
             SmartDashboard.putString("Aim2025Cmd", "interrupted");

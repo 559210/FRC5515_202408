@@ -6,6 +6,7 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.commands.PathfindingCommand;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
@@ -13,12 +14,14 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 
 
 import frc.robot.commands.*;
+import frc.robot.commands.SlightlyMoveCmd2025.DIR;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.Aim2025.Aim2025;
 import frc.robot.subsystems.MoveTo.MoveTo2025;
@@ -45,6 +48,11 @@ public class RobotContainer2025 implements RobotContainerInterface {
     private final JoystickButton aimBtn = new JoystickButton(driver, 1);
     private final JoystickButton zeroGyro = new JoystickButton(driver, 5);
     private final JoystickButton robotCentric = new JoystickButton(driver, 6);
+    private final POVButton downButton = new POVButton(driver, 180);
+    private final POVButton rightButton = new POVButton(driver, 90);
+    private final POVButton upButton = new POVButton(driver, 0);
+    private final POVButton leftButton = new POVButton(driver, 270);
+
     private final Swerve2025 s_Swerve = new Swerve2025();
 
     // Aim2025 s_aim2025 = new Aim2025(s_Swerve);
@@ -73,7 +81,7 @@ public class RobotContainer2025 implements RobotContainerInterface {
         GlobalConfig.init();
         ControlPadHelper.init();
         s_Swerve.configPathPlanner();
-        // PathfindingCommand.warmupCommand().schedule();
+        PathfindingCommand.warmupCommand().schedule();
         FollowPathCommand.warmupCommand().schedule();
         // LimelightHelpers.setLEDMode_PipelineControl("limelight-one");
     }
@@ -95,12 +103,17 @@ public class RobotContainer2025 implements RobotContainerInterface {
      */
     private void configureButtonBindings() {
         /* Driver Buttons */
-        
+
+        rightButton.whileTrue(new SlightlyMoveCmd2025(s_Swerve, DIR.RIGHT));
+        leftButton.whileTrue(new SlightlyMoveCmd2025(s_Swerve, DIR.LEFT));
+        upButton.whileTrue(new SlightlyMoveCmd2025(s_Swerve, DIR.UP));
+        downButton.whileTrue(new SlightlyMoveCmd2025(s_Swerve, DIR.DOWN));
+
         zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
         aimBtn.whileTrue(new Aim2025Cmd(m_moveToSubSys, s_Swerve));
 
         ControlPadHelper.goTargetTrigger.whileTrue(new Aim2025Cmd(m_moveToSubSys, s_Swerve));
-        ControlPadHelper.tapTrigger.whileTrue(new Aim2025Cmd(m_moveToSubSys, s_Swerve));
+        ControlPadHelper.tapTrigger.whileTrue(new MoveTo2025Cmd(m_moveToSubSys, s_Swerve));
 
 
 

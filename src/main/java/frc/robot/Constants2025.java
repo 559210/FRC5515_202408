@@ -14,6 +14,7 @@ import edu.wpi.first.math.util.Units;
 import frc.lib.util.SwerveModuleConstants;
 
 public final class Constants2025 {
+    public static double TeleSpeedScale = 0.4;
     public static final double stickDeadband = 0.1;
     public static final String canivore_name = "Canivore5515";
     public static final class Swerve {
@@ -22,8 +23,8 @@ public final class Constants2025 {
 
         public static final double wheelDiameter = Units.inchesToMeters(4.0);
         public static final double wheelCircumference = wheelDiameter * Math.PI;        
-        /** (150 / 7) : 1 */
-        public static final double angleGearRatio = ((150.0 / 7.0) / 1.0);
+
+        public static final double angleGearRatio = (18.75 / 1.0);
 
         public static final double angleKP = 100.0;
         public static final double angleKI = 0.0;
@@ -42,7 +43,7 @@ public final class Constants2025 {
             new Translation2d(-wheelBase / 2.0, -trackWidth / 2.0));
 
         /* Module Gear Ratios */
-        public static final double driveGearRatio = 6.12;
+        public static final double driveGearRatio = 5.36;
 
         /* Motor Inverts */
 
@@ -78,7 +79,7 @@ public final class Constants2025 {
 
         /* Swerve Profiling Values */
         /** Meters per Second */
-        public static final double maxSpeed = 2;
+        public static final double maxSpeed = 3;
         /** Radians per Second */
         public static final double maxAngularVelocity = maxSpeed/trackWidth*1.414; 
         /* Neutral Modes */
