@@ -185,4 +185,43 @@ public final class Constants2025 {
         put(10l, new Pose2d(11.389, 4.040, Rotation2d.fromDegrees(0)));
         put(11l, new Pose2d(12.261,2.552, Rotation2d.fromDegrees(60)));
     }};
+
+    public static final class TurningArm {
+        public static final int motorID = 13;
+        public static final int canCoderID = 14;
+        public static final String canBusName = "rio";
+        public static final double KP = 0.1;
+        public static final double KI = 0.0;
+        public static final double KD = 0.0;
+        public static final double KV = 0.1;
+        public static final double KS = 0.05;
+        public static final double KA = 0.07;
+        public static final double Velocity = 50; // 100.0;
+        public static final double Acceleration = 300; // 600.0;
+        public static final double Jerk = 0.0;
+        // public static final double Top = 0; //TODO
+        // public static final double Bottom = -195; //TODO
+        public static final double zeroPos = -1.998535;
+        public static final double basePos = -1.460693;
+    }
+
+    public static final class Elevator {
+        public static final int motorID1 = 15;
+        public static final int motorID2 = 16;
+        public static final int canCoderID = 17;
+        public static final String canBusName = "rio";
+        public static final double KP = 0.1;
+        public static final double KI = 0.0;
+        public static final double KD = 0.0;
+        public static final double KV = 0.1;
+        public static final double KS = 0.05;
+        public static final double KA = 0.07;
+        public static final double Velocity = 10; // 100.0;
+        public static final double Acceleration = 100; // 600.0;
+        public static final double Jerk = 0.0;
+        // public static final double Top = 0; //TODO
+        // public static final double Bottom = -195; //TODO
+        public static final double zeroPos = -0.098145;
+        public static final double basePos = -0.319580;
+    }
 }

@@ -80,7 +80,6 @@ public class Shooter extends SubsystemBase {
 
     flywheelUpMotor.getConfigurator().apply(flywheelUpconfig);
 
-
     /* Motor Inverts and Neutral Mode */
     flywheelDownconfig.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
     flywheelDownconfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;

@@ -27,7 +27,9 @@ import frc.robot.commands.*;
 import frc.robot.commands.SlightlyMoveCmd2025.DIR;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.Aim2025.Aim2025;
+import frc.robot.subsystems.Elevator2025.Elevator2025;
 import frc.robot.subsystems.MoveTo.MoveTo2025;
+import frc.robot.subsystems.TurningArm2025.TurningArm2025;
 
 
 /**
@@ -56,10 +58,15 @@ public class RobotContainer2025 implements RobotContainerInterface {
     private final POVButton upButton = new POVButton(driver, 0);
     private final POVButton leftButton = new POVButton(driver, 270);
 
+    private final JoystickButton turningArmBtn = new JoystickButton(driver,2);
+    private final JoystickButton zeroStateBtn = new JoystickButton(driver, 3);
+
     private final Swerve2025 s_Swerve = new Swerve2025();
 
     // Aim2025 s_aim2025 = new Aim2025(s_Swerve);
     MoveTo2025 m_moveToSubSys = new MoveTo2025(s_Swerve);
+    TurningArm2025 m_turningArm = new TurningArm2025();
+    Elevator2025 m_elevator = new Elevator2025();
 
     private final StructArrayPublisher<SwerveModuleState> swerveStatePublisher;
 
@@ -74,6 +81,7 @@ public class RobotContainer2025 implements RobotContainerInterface {
                     () -> -driver.getRawAxis(rotationAxis), 
                     () -> robotCentric.getAsBoolean()
                 )
+                , new UpperSystem2025Cmd(m_turningArm, m_elevator, turningArmBtn, zeroStateBtn)
                 // ,new IntakeCmd(c_intake, ()->driver.getRawAxis(2), ()->driver.getRawAxis(3))
                 // ,new IntakeAimCmd(s_Swerve, c_intakeAim, c_intake, candle, ()->driver.getRawAxis(2), ()->driver.getRawAxis(3))
                 // ,new CandleCmd(candle)

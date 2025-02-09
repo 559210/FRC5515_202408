@@ -71,7 +71,7 @@ public class Elevator extends SubsystemBase {
   public void elevatorDown() {
     dC++;
     SmartDashboard.putNumber("EDown", dC);
-    motionMagicVoltage.Position = Constants.Elevator.Bottom;
+    // motionMagicVoltage.Position = Constants.Elevator.Bottom;
     Elevator.setControl(motionMagicVoltage.withPosition(Constants.Elevator.Bottom));
   }
   
