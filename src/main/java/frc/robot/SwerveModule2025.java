@@ -57,10 +57,12 @@ public class SwerveModule2025 {
         mDriveMotor.getConfigurator().setPosition(0.0);
     }
 
-    public void setDesiredState(SwerveModuleState desiredState, boolean isOpenLoop){
-        desiredState.optimize(getState().angle);
+    public void setDesiredState(SwerveModuleState desiredState, boolean isOpenLoop) {
+        Rotation2d currentAngle = getState().angle;
+        desiredState.optimize(currentAngle);
         // desiredState = SwerveModuleState.optimize(desiredState, getState().angle); 
         mAngleMotor.setControl(anglePosition.withPosition(desiredState.angle.getRotations()));
+        desiredState.speedMetersPerSecond *= desiredState.angle.minus(currentAngle).getCos();   // Cosine compensation, added by majun 
         setSpeed(desiredState, isOpenLoop);
     }
 

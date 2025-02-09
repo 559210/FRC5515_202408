@@ -6,6 +6,9 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.commands.PathfindingCommand;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.StructArrayPublisher;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
@@ -50,6 +53,8 @@ public class RobotContainer2025 implements RobotContainerInterface {
     // Aim2025 s_aim2025 = new Aim2025(s_Swerve);
     MoveTo2025 m_moveToSubSys = new MoveTo2025(s_Swerve);
 
+    private final StructArrayPublisher<SwerveModuleState> swerveStatePublisher;
+
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer2025() {
         s_Swerve.setDefaultCommand(
@@ -76,6 +81,8 @@ public class RobotContainer2025 implements RobotContainerInterface {
         // PathfindingCommand.warmupCommand().schedule();
         FollowPathCommand.warmupCommand().schedule();
         // LimelightHelpers.setLEDMode_PipelineControl("limelight-one");
+        swerveStatePublisher = NetworkTableInstance.getDefault()
+            .getStructArrayTopic("/SwerveStates", SwerveModuleState.struct).publish();
     }
 
     public void telInit() {
@@ -135,5 +142,8 @@ public class RobotContainer2025 implements RobotContainerInterface {
         else {
             SmartDashboard.putString("ControlPad info is", "OK");
         }
+
+
+        swerveStatePublisher.set(s_Swerve.getModuleStates());
     }
 }
