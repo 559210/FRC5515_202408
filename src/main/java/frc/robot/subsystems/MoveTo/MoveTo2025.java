@@ -3,6 +3,7 @@ package frc.robot.subsystems.MoveTo;
 import java.util.List;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.commands.PathfindThenFollowPath;
 import com.pathplanner.lib.path.GoalEndState;
 import com.pathplanner.lib.path.IdealStartingState;
 import com.pathplanner.lib.path.PathConstraints;
@@ -14,6 +15,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.GlobalConfig;
 import frc.robot.StateController;
 import frc.robot.subsystems.Swerve2025;
 
@@ -37,7 +39,7 @@ public class MoveTo2025 extends SubsystemBase{
         isDidScheduled = false;
 
         Pose2d robotPos = s_Swerve.getPose();
-        moveCmd = createPathCmd(robotPos, new Pose2d(3.56,2.5, Rotation2d.fromDegrees(60)));
+        moveCmd = createPathCmd(robotPos, targetPose);
         moveCmd.schedule();
     }
 
@@ -48,14 +50,32 @@ public class MoveTo2025 extends SubsystemBase{
         // System.out.println("==============================");
         // System.out.println("from: " + from.toString());
         // System.out.println("to: " + to.toString());
-        List<Waypoint> waypoints = PathPlannerPath.waypointsFromPoses(from, to);
-        PathConstraints constraints = new PathConstraints(
-            2.0, 2.0,
-            Units.degreesToRadians(540), Units.degreesToRadians(720));
 
-        PathPlannerPath path = new PathPlannerPath(waypoints, constraints, new IdealStartingState(0.05, from.getRotation()), new GoalEndState(0.05, to.getRotation()));
-        path.preventFlipping = true;
-        return AutoBuilder.followPath(path);
+        int fid = 17;
+        String pathName = String.format("ap%d_right", fid);
+        PathPlannerPath path = GlobalConfig.getAimPath(pathName);
+        System.out.println("---------------> 2");
+        // Create the constraints to use while pathfinding. The constraints defined in the path will only be used for the path.
+        PathConstraints constraints = new PathConstraints(
+                3.0, 3.0,
+                Units.degreesToRadians(540), Units.degreesToRadians(720));
+
+                System.out.println("---------------> 3");
+        // Since AutoBuilder is configured, we can use it to build pathfinding commands
+        // return AutoBuilder.pathfindToPose(to, constraints, 0);
+        return AutoBuilder.pathfindThenFollowPath(
+            path,
+            constraints);
+
+        // List<Waypoint> waypoints = PathPlannerPath.waypointsFromPoses(from, to);
+        // PathConstraints constraints = new PathConstraints(
+        //     1.0, 2.0,
+        //     Units.degreesToRadians(540), Units.degreesToRadians(720));
+
+        // PathPlannerPath path = new PathPlannerPath(waypoints, constraints, new IdealStartingState(0.05, from.getRotation()), new GoalEndState(0.05, to.getRotation()));
+        // path.preventFlipping = true;
+    
+        // return AutoBuilder.followPath(path);
     }
 
     public MOVE_TO_CMD_STATE getAimMoveCmdState() {
@@ -78,7 +98,6 @@ public class MoveTo2025 extends SubsystemBase{
             moveCmd = null;
             StateController.getInstance().aimMoveCmdRunning = false;
         }
-        // StateController.getInstance().useVisionOdometry = true;
     }
 
     @Override
