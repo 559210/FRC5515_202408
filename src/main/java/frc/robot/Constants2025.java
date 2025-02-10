@@ -206,8 +206,8 @@ public final class Constants2025 {
     }
 
     public static final class Elevator {
-        public static final int motorID1 = 15;
-        public static final int motorID2 = 16;
+        public static final int primaryMotorID = 15;
+        public static final int followerMotorID = 16;
         public static final int canCoderID = 17;
         public static final String canBusName = "rio";
         public static final double KP = 0.1;
