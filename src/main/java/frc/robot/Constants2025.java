@@ -187,6 +187,9 @@ public final class Constants2025 {
     }};
 
     public static final class TurningArm {
+        // -1          待机
+        // -0.723145   等待接球
+        // 0.027100    不影响升降
         public static final int motorID = 13;
         public static final int canCoderID = 14;
         public static final String canBusName = "rio";
@@ -210,18 +213,21 @@ public final class Constants2025 {
         public static final int followerMotorID = 16;
         public static final int canCoderID = 17;
         public static final String canBusName = "rio";
-        public static final double KP = 0.1;
-        public static final double KI = 0.0;
-        public static final double KD = 0.0;
-        public static final double KV = 0.1;
+        public static final double KP = 20.0;// 0.1;
+        public static final double KI = 3.2;
+        public static final double KD = 0.2;
+        public static final double KV = 1;//0.1;
         public static final double KS = 0.05;
         public static final double KA = 0.07;
-        public static final double Velocity = 10; // 100.0;
-        public static final double Acceleration = 100; // 600.0;
+        public static final double Velocity = 50; // 100.0;
+        public static final double Acceleration = 10; // 600.0;
         public static final double Jerk = 0.0;
         // public static final double Top = 0; //TODO
         // public static final double Bottom = -195; //TODO
-        public static final double zeroPos = -0.098145;
-        public static final double basePos = -0.319580;
+        // public static final double zeroPos = -0.149902;
+        // public static final double basePos = -6.605957;
+
+        public static final double zeroPos = 0;
+        public static final double basePos = -5;
     }
 }

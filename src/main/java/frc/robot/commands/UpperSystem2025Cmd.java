@@ -36,12 +36,16 @@ public class UpperSystem2025Cmd extends Command {
     private JoystickButton armBtn;
     private JoystickButton zeroBtn;
 
+    int cmdInitCount = 0;
     public UpperSystem2025Cmd(TurningArm2025 turningArm, Elevator2025 elev, JoystickButton arm, JoystickButton zero) {
         armBtn = arm;
         zeroBtn = zero;
         this.m_turningArm = turningArm;
-        this.m_elevator = elev;
         addRequirements(m_turningArm);
+
+        this.m_elevator = elev;
+        
+        addRequirements(m_elevator);
         schedule();
 
         armBtn.onTrue(new InstantCommand(() -> {
@@ -50,12 +54,18 @@ public class UpperSystem2025Cmd extends Command {
         zeroBtn.onTrue(new InstantCommand(() -> {
             m_elevator.setState(EV_STATE.ZERO);
         }));
+
+        cmdInitCount++;
+        SmartDashboard.putNumber("cmd init count", cmdInitCount);
+
+        // init全局只能做一次，所以不能在下面的initialize函数中调用。
+        // m_turningArm.init();
+        m_elevator.init();
     }
 
     @Override
     public void initialize() {
-        m_turningArm.init();
-        m_elevator.init();
+
     }
 
     @Override

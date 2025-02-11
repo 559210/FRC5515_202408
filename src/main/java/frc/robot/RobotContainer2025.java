@@ -119,16 +119,16 @@ public class RobotContainer2025 implements RobotContainerInterface {
     private void configureButtonBindings() {
         /* Driver Buttons */
 
-        rightButton.whileTrue(new SlightlyMoveCmd2025(s_Swerve, DIR.RIGHT));
-        leftButton.whileTrue(new SlightlyMoveCmd2025(s_Swerve, DIR.LEFT));
-        upButton.whileTrue(new SlightlyMoveCmd2025(s_Swerve, DIR.UP));
-        downButton.whileTrue(new SlightlyMoveCmd2025(s_Swerve, DIR.DOWN));
+        // rightButton.whileTrue(new SlightlyMoveCmd2025(s_Swerve, DIR.RIGHT));
+        // leftButton.whileTrue(new SlightlyMoveCmd2025(s_Swerve, DIR.LEFT));
+        // upButton.whileTrue(new SlightlyMoveCmd2025(s_Swerve, DIR.UP));
+        // downButton.whileTrue(new SlightlyMoveCmd2025(s_Swerve, DIR.DOWN));
 
-        zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
-        aimBtn.whileTrue(new Aim2025Cmd(m_moveToSubSys, s_Swerve));
+        // zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
+        // aimBtn.whileTrue(new Aim2025Cmd(m_moveToSubSys, s_Swerve));
 
-        ControlPadHelper.goTargetTrigger.whileTrue(new Aim2025Cmd(m_moveToSubSys, s_Swerve));
-        ControlPadHelper.tapTrigger.whileTrue(new MoveTo2025Cmd(m_moveToSubSys, s_Swerve));
+        // ControlPadHelper.goTargetTrigger.whileTrue(new Aim2025Cmd(m_moveToSubSys, s_Swerve));
+        // ControlPadHelper.tapTrigger.whileTrue(new MoveTo2025Cmd(m_moveToSubSys, s_Swerve));
 
 
 
@@ -149,22 +149,22 @@ public class RobotContainer2025 implements RobotContainerInterface {
 
     int count = 0;
     public void update() {
-        Pose2d pos = s_Swerve.getPose();
-        count ++;
-        if (count % 50 == 0)
-            System.out.println(String.format("pos2d: (%f, %f)", pos.getX(), pos.getY()));
+        // Pose2d pos = s_Swerve.getPose();
+        // count ++;
+        // if (count % 50 == 0)
+        //     System.out.println(String.format("pos2d: (%f, %f)", pos.getX(), pos.getY()));
 
-        ControlPadHelper.publishRobotPos(pos);
-        ControlPadHelper.update();
-        ControlPadHelper.ControlPadInfo.ControlPadInfoData info = ControlPadHelper.getControlPadInfo();
-        if (info == null) {
-            SmartDashboard.putString("ControlPad info is", "NULL");
-        }
-        else {
-            SmartDashboard.putString("ControlPad info is", "OK");
-        }
+        // ControlPadHelper.publishRobotPos(pos);
+        // ControlPadHelper.update();
+        // ControlPadHelper.ControlPadInfo.ControlPadInfoData info = ControlPadHelper.getControlPadInfo();
+        // if (info == null) {
+        //     SmartDashboard.putString("ControlPad info is", "NULL");
+        // }
+        // else {
+        //     SmartDashboard.putString("ControlPad info is", "OK");
+        // }
 
 
-        swerveStatePublisher.set(s_Swerve.getModuleStates());
+        // swerveStatePublisher.set(s_Swerve.getModuleStates());
     }
 }

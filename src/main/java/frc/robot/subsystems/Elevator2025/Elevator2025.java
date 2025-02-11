@@ -24,7 +24,6 @@ public class Elevator2025 extends SubsystemBase {
         NONE,
         ZERO,
         BASE,
-
     }
 
     EV_STATE curState = EV_STATE.NONE;
@@ -36,7 +35,7 @@ public class Elevator2025 extends SubsystemBase {
     public static final TalonFX m_followerMotor = new TalonFX(Constants2025.Elevator.followerMotorID, Constants2025.Elevator.canBusName);
     public static final CANcoder m_canCoder = new CANcoder(Constants2025.Elevator.canCoderID, Constants2025.Elevator.canBusName);
     public MotionMagicVoltage motionMagicVoltage1 = new MotionMagicVoltage(0);
-    public MotionMagicVoltage motionMagicVoltage2 = new MotionMagicVoltage(1);
+    // public MotionMagicVoltage motionMagicVoltage2 = new MotionMagicVoltage(1);
 
     int runingCount = 0;
     @Override
@@ -58,7 +57,7 @@ public class Elevator2025 extends SubsystemBase {
 
         // 一正一反？
         // 问题： CanCoder到底是哪个Motor的读数？
-        elevatorConfiguration.MotorOutput.Inverted = isPrimary ? InvertedValue.Clockwise_Positive : InvertedValue.CounterClockwise_Positive;
+        elevatorConfiguration.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
         elevatorConfiguration.MotorOutput.NeutralMode = NeutralModeValue.Brake;
         // elevatorConfiguration.SoftwareLimitSwitch.ForwardSoftLimitThreshold = 0;
         // elevatorConfiguration.SoftwareLimitSwitch.ReverseSoftLimitThreshold = -200;
@@ -76,40 +75,44 @@ public class Elevator2025 extends SubsystemBase {
         elevatorConfiguration.MotionMagic.MotionMagicAcceleration = Constants2025.Elevator.Acceleration;
         elevatorConfiguration.MotionMagic.MotionMagicJerk = Constants2025.Elevator.Jerk;
         
-        elevatorConfiguration.Feedback.SensorToMechanismRatio = 8.8; // 8.8 到底是 SensorToMechanismRatio 还是 RotorToSensorRatio？
-        if (isPrimary) {
+        elevatorConfiguration.Feedback.SensorToMechanismRatio = 1; // 8.8 到底是 SensorToMechanismRatio 还是 RotorToSensorRatio？
+        // if (isPrimary) {
             elevatorConfiguration.Feedback.FeedbackRemoteSensorID = Constants2025.Elevator.canCoderID;
             elevatorConfiguration.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RemoteCANcoder;
-        }
+        // }
 
         // 似乎只有 FeedbackSensorSourceValue.FusedCANcoder 模式下才需要下面两个
         // elevatorConfiguration.Feedback.SensorToMechanismRatio = 1.0;
-        // elevatorConfiguration.Feedback.RotorToSensorRatio = 12.8;
+        elevatorConfiguration.Feedback.RotorToSensorRatio = 11.33;
         return elevatorConfiguration;
     }
 
-    private CANcoderConfiguration getCCConfig() {
-        CANcoderConfiguration cc_cfg = new CANcoderConfiguration();
-        // cc_cfg.MagnetSensor.AbsoluteSensorRange = AbsoluteSensorRangeValue.Signed_PlusMinusHalf;
-        cc_cfg.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
-        cc_cfg.MagnetSensor.MagnetOffset = 0;
+    // private CANcoderConfiguration getCCConfig() {
+    //     CANcoderConfiguration cc_cfg = new CANcoderConfiguration();
+    //     // cc_cfg.MagnetSensor.AbsoluteSensorRange = AbsoluteSensorRangeValue.Signed_PlusMinusHalf;
+    //     cc_cfg.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
+    //     cc_cfg.MagnetSensor.MagnetOffset = 0;
 
-        return cc_cfg;
-    }
+    //     return cc_cfg;
+    // }
 
+    int initCount = 0;
     public void init() {
+        initCount++;
+        m_canCoder.setPosition(0);
         SmartDashboard.putNumber("ccc init", m_canCoder.getPosition().getValueAsDouble());
+        SmartDashboard.putNumber("ccc init count", initCount);
         // Elevator.getConfigurator().apply(new TalonFXConfiguration());
         m_primaryMotor.getConfigurator().apply(getMotorConfiguration(true));
         m_followerMotor.getConfigurator().apply(getMotorConfiguration(false));
 
-        m_followerMotor.setControl(new Follower(m_primaryMotor.getDeviceID(), true));
+        m_followerMotor.setControl(new Follower(m_primaryMotor.getDeviceID(), false));
         // m_primaryMotor.setSafetyEnabled(true);      // 例子代码，不知道有什么用，不明白safetyEnabled是什么
-        m_canCoder.getConfigurator().apply(getCCConfig());
+        // m_canCode=gurator().apply(getCCConfig());
 
     
-        motionMagicVoltage1 = new MotionMagicVoltage(m_canCoder.getPosition().getValueAsDouble());
-        motionMagicVoltage2 = new MotionMagicVoltage(m_canCoder.getPosition().getValueAsDouble());
+        motionMagicVoltage1 = new MotionMagicVoltage(0);
+        // motionMagicVoltage2 = new MotionMagicVoltage(m_canCoder.getPosition().getValueAsDouble());
         setState(EV_STATE.ZERO);
     }
 
@@ -119,7 +122,8 @@ public class Elevator2025 extends SubsystemBase {
 
     protected void updateState() {
         SmartDashboard.putNumber("ccc1", m_canCoder.getPosition().getValueAsDouble());
-        SmartDashboard.putNumber("ccc2", m_canCoder.getAbsolutePosition().getValueAsDouble());
+        SmartDashboard.putNumber("ccc2", m_primaryMotor.getPosition().getValueAsDouble());
+        
         double pos = Constants2025.Elevator.basePos;
         switch (curState) {
             case ZERO:
@@ -133,12 +137,11 @@ public class Elevator2025 extends SubsystemBase {
             default:
                 break;
         }
-        // m_canCoder.getAbsolutePosition()
-        // m_canCoder.setPosition(pos);
-        // m_canCoder.setControl(motionMagicVoltage.withPosition(pos));
+        SmartDashboard.putNumber("ccc targetPos", pos);
+
         m_primaryMotor.setControl(motionMagicVoltage1.withPosition(pos).withSlot(0));
-        // m_followerMotor.setControl(motionMagicVoltage2.withPosition(pos));
     }
+    
 
     // int upC = 0;
     // int dC = 0;
