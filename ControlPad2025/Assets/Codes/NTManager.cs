@@ -40,6 +40,19 @@ public class NTManager
         public long level;
         public long branch;
     }
+
+    public enum DebugPanelInfo
+    {
+        NONE = 0,
+        ZERO,
+        READY_FOR_LOAD_CORAL,
+        READY_FOR_LOAD_BALL,
+        L1,
+        L2,
+        L3,
+        L4,
+        BALL1,
+    }
     readonly static string ID_NAME = "5515ControlPad"; 
     readonly string ROBOT_POS_ENTRY_NAME = $"/{ID_NAME}/RobotPos";
     readonly string CONTROL_PAD_INFO_ENTRY_NAME = $"/{ID_NAME}/ControlPadInfo";
@@ -47,6 +60,7 @@ public class NTManager
     //readonly string CONTROL_PAD_INFO_RECALL_ENTRY_NAME = $"/{ID_NAME}/aaa";
     readonly string VIRTUAL_CONTROL_ENTRY_NAME = $"/{ID_NAME}/VirtualControl";
     readonly string GO_TARGET_ENTRY_NAME = $"/{ID_NAME}/GoTarget";
+    readonly string DEBUG_PANEL_ENTRY_NAME = $"/{ID_NAME}/Debug";
 
     RobotPos robotPos = new();
     AprilTagTargetInfo aprilTagTargetInfo = new();
@@ -90,19 +104,8 @@ public class NTManager
                 yield return new WaitForSeconds(0.2f);
                 continue;
             }
-
-            if (!isFirstConnect)
-                Debug.LogError("���� ����ʼ����");
             yield return new WaitForEndOfFrame();
             ConnectNT();
-            if (nt.Connected())
-            {
-                Debug.LogError("���ӳɹ�");
-            }
-            else
-            {
-                Debug.LogError("����ʧ��,����...");
-            }
             yield return new WaitForSeconds(1);
         }
     }
@@ -124,6 +127,7 @@ public class NTManager
             nt.PublishTopic(CONTROL_PAD_INFO_ENTRY_NAME, "int[]");
             nt.PublishTopic(VIRTUAL_CONTROL_ENTRY_NAME, "double[]");
             nt.PublishTopic(GO_TARGET_ENTRY_NAME, "int[]");
+            nt.PublishTopic(DEBUG_PANEL_ENTRY_NAME, "int[]");
 
             Main.inst.StartCoroutine(arrangeRefreshAprilTagTargetInfoRecall());
 
@@ -231,4 +235,16 @@ public class NTManager
     {
         return aprilTagTargetInfo;
     }
+
+    public bool publishDebugPanelInfo(int debugBtnVal, bool isLoadCoral, bool isLoadBall)
+    {
+        if (!check())
+        {
+            Debug.LogError("publishGoTarget check fail");
+            return false;
+        }
+        nt.PublishValue(DEBUG_PANEL_ENTRY_NAME, new long[] { debugBtnVal, isLoadCoral ? 1 : 0, isLoadBall ? 1 : 0, Time.frameCount });
+        return true;
+    }
+
 }

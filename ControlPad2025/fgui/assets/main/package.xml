@@ -14,6 +14,7 @@
     <component id="frd4c" name="commonBtn.xml" path="/"/>
     <component id="bpsnd" name="Robot.xml" path="/"/>
     <component id="l60ge" name="InfoPanel.xml" path="/"/>
+    <component id="gh6ef" name="DebugMenu.xml" path="/"/>
   </resources>
   <publish name=""/>
 </packageDescription>

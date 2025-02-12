@@ -15,3 +15,13 @@ PID调发：
 1. 先逐步增加P，让稳态误差足够小
 2. 增加I，让后段速度增加，消除稳态误差
 3. 一旦出现震荡，增加一点D，注意D太大会增加震荡调整的时间
+
+需要研究下Robot.java的disabledInit函数时候，能不能拿到电机的当前Position，如果可以，这个时候写个文件存盘，下次恢复时候可以用，不用手动复位了
+
+
+状态机：
+10. 初始状态，Elevator最低，手臂缩回 （zero状态）
+20. Enable-> Elevator不动，手臂去到准备接珊瑚位置（base状态）
+30. 如果检测到持有珊瑚，且ControlPad设定过目标（ControlPadHelper.ControlPadInfo有内容)，则等待按键触发抬手臂动作（根据ControlPadInfo的内容，Elevator和Arm同时进入L1,L2,L3,L4，4个状态之一）。此过程和重复，也就是说如果ControlPadInfo改变了，再次按键，会进入新的高度。
+40. 无论何时检测到失去珊瑚（无论是主动发射的，还是其他原因）则回到20状态）
+

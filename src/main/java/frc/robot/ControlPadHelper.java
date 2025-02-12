@@ -23,6 +23,34 @@ import frc.robot.ControlPadHelper.TopicWrap.TopicType;
 import frc.robot.utils.MiscUtils;
 
 public class ControlPadHelper {
+    public static class DebugCtrl {
+        // the code below is from ControlPad Unity project.
+        // public enum DebugPanelInfo
+        // {
+        //     NONE = 0,
+        //     ZERO,
+        //     READY_FOR_LOAD_CORAL,
+        //     READY_FOR_LOAD_BALL,
+        //     L1,
+        //     L2,
+        //     L3,
+        //     L4,
+        //     BALL1,
+        // }
+        static public long val = -1;
+        static public boolean isLoadCoral = false;
+        static public boolean isLoadBall = false;
+        static public Trigger onZero = new Trigger(eventLoop, () -> val == 1);
+        static public Trigger onReadyForloadCoral = new Trigger(eventLoop, () -> val == 2);
+        static public Trigger onReadyForloadBall = new Trigger(eventLoop, () -> val == 3);
+        static public Trigger onL1 = new Trigger(eventLoop, () -> val == 4);
+        static public Trigger onL2 = new Trigger(eventLoop, () -> val == 5);
+        static public Trigger onL3 = new Trigger(eventLoop, () -> val == 6);
+        static public Trigger onL4 = new Trigger(eventLoop, () -> val == 7);
+        static public Trigger onBall1 = new Trigger(eventLoop, () -> val == 8);
+        static public Trigger onLoadCoral = new Trigger(eventLoop, () -> isLoadCoral);
+        static public Trigger onLoadBall = new Trigger(eventLoop, () -> isLoadBall);
+    }
     public static class ControlPadInfo {
         public static class ControlPadInfoData {
             public long aprilTagId = -1;
@@ -202,6 +230,7 @@ public class ControlPadHelper {
     private static TopicWrap robotPosTopic = new TopicWrap(TopicType.DOUBLE_ARRAY, "RobotPos", TopicWrap.ActionType.PUB);
     private static TopicWrap controlPadInfoRecallTopic = new TopicWrap(TopicType.INT_ARRAY, "ControlPadInfoRecall", TopicWrap.ActionType.PUB);
 
+    private static TopicWrap debugCtrlTopic = new TopicWrap(TopicType.INT_ARRAY, "Debug", TopicWrap.ActionType.SUB);
 
     private static NetworkTableInstance getNTInst() {
         if (ntInst != null) {
@@ -292,6 +321,20 @@ public class ControlPadHelper {
         return goTarget.isGo;
     }
 
+    private static void refreshDebugCtrl() {
+        long[] datas = debugCtrlTopic.getIntArrayValue();
+        if (datas.length == 0) {
+            return;
+        }
+
+        if (DebugCtrl.val != datas[0]) {
+            System.out.println("========================> DebugCtrl: " + datas[0]);
+        }
+        DebugCtrl.val = datas[0];
+        DebugCtrl.isLoadCoral = datas[1] == 1;
+        DebugCtrl.isLoadBall = datas[2] == 1;
+    }
+
     public static void init() {
         // getNTTable().addListener(EnumSet.of(NetworkTableEvent.Kind.kTopic), (nt, s, event) -> {
         //     System.out.println("------------------------> EVENT");
@@ -304,6 +347,7 @@ public class ControlPadHelper {
         refreshVirtualControl();
         publishControlPadInfoRecall();
         refreshGoTarget();
+        refreshDebugCtrl();
         eventLoop.poll();
     }
 }

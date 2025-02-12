@@ -60,7 +60,8 @@ public class RobotContainer2025 implements RobotContainerInterface {
 
     private final JoystickButton turningArmBtn = new JoystickButton(driver,2);
     private final JoystickButton zeroStateBtn = new JoystickButton(driver, 3);
-
+    private final JoystickButton resetUpperBtn = new JoystickButton(driver, 4);
+    private final JoystickButton switchCoralnBallBtn = null; // new JoystickButton(driver, 5);
     private final Swerve2025 s_Swerve = new Swerve2025();
 
     // Aim2025 s_aim2025 = new Aim2025(s_Swerve);
@@ -81,7 +82,11 @@ public class RobotContainer2025 implements RobotContainerInterface {
                     () -> -driver.getRawAxis(rotationAxis), 
                     () -> robotCentric.getAsBoolean()
                 )
-                , new UpperSystem2025Cmd(m_turningArm, m_elevator, turningArmBtn, zeroStateBtn)
+                , new UpperSystem2025Cmd(
+                    m_turningArm, m_elevator, 
+                    resetUpperBtn, switchCoralnBallBtn, aimBtn,
+                    turningArmBtn, zeroStateBtn
+                )
                 // ,new IntakeCmd(c_intake, ()->driver.getRawAxis(2), ()->driver.getRawAxis(3))
                 // ,new IntakeAimCmd(s_Swerve, c_intakeAim, c_intake, candle, ()->driver.getRawAxis(2), ()->driver.getRawAxis(3))
                 // ,new CandleCmd(candle)
@@ -102,11 +107,9 @@ public class RobotContainer2025 implements RobotContainerInterface {
     }
 
     public void telInit() {
-        // s_Swerve.zeroHeading();
         StateController.getInstance().useVisionOdometry = true;
     }
     public void autoInit() {
-        // s_Swerve.zeroHeading();
         StateController.getInstance().useVisionOdometry = true;
     }
 
@@ -130,7 +133,9 @@ public class RobotContainer2025 implements RobotContainerInterface {
         // ControlPadHelper.goTargetTrigger.whileTrue(new Aim2025Cmd(m_moveToSubSys, s_Swerve));
         // ControlPadHelper.tapTrigger.whileTrue(new MoveTo2025Cmd(m_moveToSubSys, s_Swerve));
 
-
+        // ControlPadHelper.goTargetTrigger.onTrue(new InstantCommand(()-> {
+        //     System.out.println("abc");
+        // }));
 
         // new JoystickButton(tester, 1).whileTrue(s_Swerve.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
         // new JoystickButton(tester, 2).whileTrue(s_Swerve.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
@@ -155,7 +160,7 @@ public class RobotContainer2025 implements RobotContainerInterface {
         //     System.out.println(String.format("pos2d: (%f, %f)", pos.getX(), pos.getY()));
 
         // ControlPadHelper.publishRobotPos(pos);
-        // ControlPadHelper.update();
+        ControlPadHelper.update();
         // ControlPadHelper.ControlPadInfo.ControlPadInfoData info = ControlPadHelper.getControlPadInfo();
         // if (info == null) {
         //     SmartDashboard.putString("ControlPad info is", "NULL");

@@ -43,4 +43,18 @@ public class Main : MonoBehaviour
         Debug.LogError("OnApplicationQuit");
         NT.stop();
     }
+
+    public void callCBLater(System.Action cb, float delay) {
+        StartCoroutine(callCBLaterCoroutine(cb, delay));
+    }
+
+    private IEnumerator callCBLaterCoroutine(System.Action cb, float delay) {
+        if (delay <= 0) {
+            yield return null; // Wait for the next frame
+            cb();
+            yield break;
+        }
+        yield return new WaitForSeconds(delay);
+        cb();
+    }
 }
