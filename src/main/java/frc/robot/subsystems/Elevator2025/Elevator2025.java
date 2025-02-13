@@ -87,12 +87,16 @@ public class Elevator2025 extends SubsystemBase {
         // elevatorConfiguration.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
         // elevatorConfiguration.SoftwareLimitSwitch.ReverseSoftLimitEnable = true;
 
-        elevatorConfiguration.Slot0.kP = Constants2025.Elevator.KP;
-        elevatorConfiguration.Slot0.kI = Constants2025.Elevator.KI;
-        elevatorConfiguration.Slot0.kD = Constants2025.Elevator.KD;
+        elevatorConfiguration.Slot0.kP = Constants2025.Elevator.Up.KP;
+        elevatorConfiguration.Slot0.kI = Constants2025.Elevator.Up.KI;
+        elevatorConfiguration.Slot0.kD = Constants2025.Elevator.Up.KD;
         elevatorConfiguration.Slot0.kS = Constants2025.Elevator.KS;
         elevatorConfiguration.Slot0.kV = Constants2025.Elevator.KV;
         elevatorConfiguration.Slot0.kA = Constants2025.Elevator.KA;
+
+        elevatorConfiguration.Slot1.kP = Constants2025.Elevator.Down.KP;
+        elevatorConfiguration.Slot1.kI = Constants2025.Elevator.Down.KI;
+        elevatorConfiguration.Slot1.kD = Constants2025.Elevator.Down.KD;
 
         elevatorConfiguration.MotionMagic.MotionMagicCruiseVelocity = Constants2025.Elevator.Velocity;
         elevatorConfiguration.MotionMagic.MotionMagicAcceleration = Constants2025.Elevator.Acceleration;
@@ -160,9 +164,18 @@ public class Elevator2025 extends SubsystemBase {
         SmartDashboard.putNumber("ELEVATOR ccc2", m_primaryMotor.getPosition().getValueAsDouble());
         
         double pos = Constants2025.Elevator.basePos;
+        int pidSlot = 0;
         switch (curState) {
+            case ZERO:
+                pos = Constants2025.Elevator.zeroPos;
+                pidSlot = 1;
+                if (isDone(pos)) {
+                    curRunningState = RUNNING_STATE.DONE;
+                }
+                break;
             case BASE:
                 pos = Constants2025.Elevator.basePos;
+                pidSlot = 1;
                 if (isDone(pos)) {
                     curRunningState = RUNNING_STATE.DONE;
                 }
@@ -198,8 +211,9 @@ public class Elevator2025 extends SubsystemBase {
         }
         SmartDashboard.putNumber("ELEVATOR ccc targetPos", pos);
         SmartDashboard.putString("ELEVATOR ccc curState", curState.name());
+        SmartDashboard.putString("ELEVATOR ccc curRuningState", curRunningState.name());
 
-        m_primaryMotor.setControl(motionMagicVoltage1.withPosition(pos).withSlot(0));
+        m_primaryMotor.setControl(motionMagicVoltage1.withPosition(pos).withSlot(pidSlot));
     }
     
 

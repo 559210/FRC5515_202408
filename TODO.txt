@@ -25,3 +25,14 @@ PID调发：
 30. 如果检测到持有珊瑚，且ControlPad设定过目标（ControlPadHelper.ControlPadInfo有内容)，则等待按键触发抬手臂动作（根据ControlPadInfo的内容，Elevator和Arm同时进入L1,L2,L3,L4，4个状态之一）。此过程和重复，也就是说如果ControlPadInfo改变了，再次按键，会进入新的高度。
 40. 无论何时检测到失去珊瑚（无论是主动发射的，还是其他原因）则回到20状态）
 
+
+
+按键规划：
+A（1） 自动瞄准，同时上层升起
+B (2) Intake,启动，再按释放
+X (3) null
+Y (4) null
+LeftBumper（5） zeroGyro
+RightBumper(6)  长按，机器按照相对自身位置前后移动
+SELECT(7) 机器上层归位，关机前记住要归位
+OK(8) 上层CanCode归零，手掰过motor以后，要记得归零

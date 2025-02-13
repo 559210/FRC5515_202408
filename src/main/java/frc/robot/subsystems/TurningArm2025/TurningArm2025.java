@@ -201,6 +201,7 @@ public class TurningArm2025 extends SubsystemBase {
         try {
             File file = new File(getFilePath());
             if (!file.exists()) {
+                System.out.println("Turning arm saved canCode position file not found!");
                 return false;
             }
             FileReader fileReader = new FileReader(file);
