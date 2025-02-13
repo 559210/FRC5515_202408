@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.8,
-        "y": 4.25
+        "x": 5.54406887755102,
+        "y": 2.763966836734694
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.8000000000000003,
-        "y": 4.25
+        "x": 6.179644427540105,
+        "y": 3.062497108759697
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "AP22R"
     },
     {
       "anchor": {
-        "x": 2.8,
-        "y": 4.25
+        "x": 3.0,
+        "y": 1.5
       },
       "prevControl": {
-        "x": 1.7999999999999998,
-        "y": 4.25
+        "x": 2.6124005974300735,
+        "y": 1.3266787082112468
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "BStation1Back"
     }
   ],
   "rotationTargets": [],
@@ -41,14 +41,14 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 0,
-    "rotation": 0.0
+    "velocity": 1.0,
+    "rotation": 90.0
   },
   "reversed": false,
-  "folder": "BlueCoralAP",
+  "folder": "BAuto1",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 119.99999999999999
   },
   "useDefaultConstraints": true
 }

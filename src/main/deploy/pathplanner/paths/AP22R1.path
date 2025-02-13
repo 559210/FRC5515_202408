@@ -1,0 +1,54 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 3.0,
+        "y": 1.5
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 3.229789511241422,
+        "y": 1.7577889650467056
+      },
+      "isLocked": false,
+      "linkedName": "BStation1Go"
+    },
+    {
+      "anchor": {
+        "x": 5.55,
+        "y": 2.75
+      },
+      "prevControl": {
+        "x": 5.370667384495844,
+        "y": 2.575816725784481
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 119.99999999999999
+  },
+  "reversed": false,
+  "folder": "BlueCoralAP",
+  "idealStartingState": {
+    "velocity": 1.0,
+    "rotation": 59.99999999999999
+  },
+  "useDefaultConstraints": true
+}

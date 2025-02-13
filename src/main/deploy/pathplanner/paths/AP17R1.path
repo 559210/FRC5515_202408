@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.270681818181819,
-        "y": 1.88609375
+        "x": 3.0,
+        "y": 1.5
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.3956818181818194,
-        "y": 2.1026001009461095
+        "x": 3.1250000000000004,
+        "y": 1.7165063509461096
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "BStation1Go"
     },
     {
       "anchor": {
@@ -54,7 +54,7 @@
   "reversed": false,
   "folder": "BlueCoralAP",
   "idealStartingState": {
-    "velocity": 1.5,
+    "velocity": 1.0,
     "rotation": 59.99999999999999
   },
   "useDefaultConstraints": true

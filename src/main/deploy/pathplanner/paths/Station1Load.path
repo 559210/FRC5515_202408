@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 6.05,
-        "y": 1.85
+        "x": 3.0,
+        "y": 1.5
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.55,
-        "y": 2.716025403784438
+        "x": 2.653950867072619,
+        "y": 1.2257115795138065
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "BStation1Back"
     },
     {
       "anchor": {
-        "x": 5.55,
-        "y": 2.75
+        "x": 1.6788903061224492,
+        "y": 0.607525510204082
       },
       "prevControl": {
-        "x": 6.049999999999999,
-        "y": 1.8839745962155616
+        "x": 1.4651809582026956,
+        "y": 0.47780151623336836
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "BStation1Load"
     }
   ],
   "rotationTargets": [],
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 119.99999999999999
+    "rotation": 52.37376636133027
   },
   "reversed": false,
-  "folder": "BlueCoralAP",
+  "folder": "BAuto",
   "idealStartingState": {
-    "velocity": 0,
-    "rotation": 119.99999999999999
+    "velocity": 1.0,
+    "rotation": 90.0
   },
   "useDefaultConstraints": true
 }
