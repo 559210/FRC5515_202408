@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 14.1,
-        "y": 1.6
+        "x": 1.6788903061224492,
+        "y": 0.607525510204082
       },
       "prevControl": null,
       "nextControl": {
-        "x": 13.6,
-        "y": 2.466025403784439
+        "x": 2.2215033896066654,
+        "y": 0.8887777342678311
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "BStation1Load"
     },
     {
       "anchor": {
-        "x": 13.6,
+        "x": 5.1,
         "y": 2.5
       },
       "prevControl": {
-        "x": 14.1,
-        "y": 1.6339745962155616
+        "x": 4.19057925763126,
+        "y": 1.9551500110598834
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "AP22L"
     }
   ],
   "rotationTargets": [],
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -59.99999999999999
+    "rotation": 119.99999999999999
   },
   "reversed": false,
-  "folder": "ManualCoralR",
+  "folder": "BAuto",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -59.99999999999999
+    "rotation": 52.37376636133027
   },
   "useDefaultConstraints": true
 }

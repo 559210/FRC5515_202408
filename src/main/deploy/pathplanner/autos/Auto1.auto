@@ -13,25 +13,25 @@
         {
           "type": "path",
           "data": {
-            "pathName": "AP22RB"
+            "pathName": "test1-1"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Station1Load"
+            "pathName": "test1-2"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Station1Go"
+            "pathName": "test1-3"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "AP22L1"
+            "pathName": "test1-4"
           }
         }
       ]

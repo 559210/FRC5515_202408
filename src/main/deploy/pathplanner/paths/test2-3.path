@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.752742346938775,
-        "y": 3.316135204081632
+        "x": 3.460142045454545,
+        "y": 2.7336789772727275
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.752742346938803,
-        "y": 3.316135204081632
+        "x": 3.706545781779632,
+        "y": 2.691427365172867
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "AP17L"
     },
     {
       "anchor": {
-        "x": 6.827487244897959,
-        "y": 3.316135204081632
+        "x": 1.6788903061224492,
+        "y": 0.607525510204082
       },
       "prevControl": {
-        "x": 7.827487244897959,
-        "y": 3.316135204081632
+        "x": 1.4897559261591575,
+        "y": 0.4440379378448924
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "BStation1Load"
     }
   ],
   "rotationTargets": [],
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 52.37376636133027
   },
   "reversed": false,
-  "folder": "BlueStart",
+  "folder": "BAuto",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 59.99999999999999
   },
   "useDefaultConstraints": true
 }

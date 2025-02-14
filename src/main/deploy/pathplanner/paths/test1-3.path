@@ -8,24 +8,24 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.529346305613874,
-        "y": 2.668873125853883
+        "x": 5.740505221331622,
+        "y": 2.7919938266314612
       },
       "isLocked": false,
       "linkedName": "AP22L"
     },
     {
       "anchor": {
-        "x": 3.0,
-        "y": 1.5
+        "x": 1.6788903061224492,
+        "y": 0.607525510204082
       },
       "prevControl": {
-        "x": 2.7711593241622103,
-        "y": 1.3993424365380143
+        "x": 1.3341888567503863,
+        "y": 0.43072737827174734
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "BStation1Back"
+      "linkedName": "BStation1Load"
     }
   ],
   "rotationTargets": [],
@@ -41,13 +41,13 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 1.0,
-    "rotation": 90.0
+    "velocity": 0,
+    "rotation": 52.37376636133027
   },
   "reversed": false,
-  "folder": "BlueCoralAP",
+  "folder": "BAuto",
   "idealStartingState": {
-    "velocity": 0.0,
+    "velocity": 0,
     "rotation": 119.99999999999999
   },
   "useDefaultConstraints": true

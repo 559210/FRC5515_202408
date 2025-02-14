@@ -8,24 +8,24 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.18393980896455,
-        "y": 0.9229895956199956
+        "x": 1.8811003840262432,
+        "y": 0.46051842059905135
       },
       "isLocked": false,
       "linkedName": "BStation1Load"
     },
     {
       "anchor": {
-        "x": 3.0,
-        "y": 1.5
+        "x": 3.460142045454545,
+        "y": 2.7336789772727275
       },
       "prevControl": {
-        "x": 2.6154615056368336,
-        "y": 1.2483245412147839
+        "x": 3.253959454805929,
+        "y": 2.5922974391801414
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "BStation1Go"
+      "linkedName": "AP17L"
     }
   ],
   "rotationTargets": [],
@@ -41,7 +41,7 @@
     "unlimited": false
   },
   "goalEndState": {
-    "velocity": 1.0,
+    "velocity": 0,
     "rotation": 59.99999999999999
   },
   "reversed": false,

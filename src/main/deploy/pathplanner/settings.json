@@ -3,11 +3,9 @@
   "robotLength": 0.857,
   "holonomicMode": true,
   "pathFolders": [
-    "BAuto1",
-    "BlueCoralAP",
-    "BlueStart",
-    "BAuto",
-    "RedCoralAP"
+    "ManualCoralR",
+    "ManualCoralB",
+    "BAuto"
   ],
   "autoFolders": [
     "Blue Auto"
@@ -28,13 +26,19 @@
   "wheelCOF": 1.2,
   "flModuleX": 0.273,
   "flModuleY": 0.273,
-  "frModuleX": 0.273,
-  "frModuleY": -0.273,
-  "blModuleX": -0.273,
-  "blModuleY": 0.273,
-  "brModuleX": -0.273,
-  "brModuleY": -0.273,
+  "frModuleX": 0.276,
+  "frModuleY": -0.276,
+  "blModuleX": -0.276,
+  "blModuleY": 0.276,
+  "brModuleX": -0.276,
+  "brModuleY": -0.276,
   "bumperOffsetX": 0.0,
   "bumperOffsetY": 0.0,
-  "robotFeatures": []
+  "robotFeatures": [
+    "{\"name\":\"1-1\",\"type\":\"line\",\"data\":{\"start\":{\"x\":0.1,\"y\":0.2},\"end\":{\"x\":0.2,\"y\":0.2},\"strokeWidth\":0.01}}",
+    "{\"name\":\"1-2\",\"type\":\"line\",\"data\":{\"start\":{\"x\":0.2,\"y\":0.2},\"end\":{\"x\":0.2,\"y\":0.1},\"strokeWidth\":0.01}}",
+    "{\"name\":\"1-3\",\"type\":\"line\",\"data\":{\"start\":{\"x\":0.1,\"y\":0.2},\"end\":{\"x\":0.1,\"y\":0.1},\"strokeWidth\":0.01}}",
+    "{\"name\":\"1-4\",\"type\":\"line\",\"data\":{\"start\":{\"x\":0.1,\"y\":0.1},\"end\":{\"x\":0.01,\"y\":0.1},\"strokeWidth\":0.01}}",
+    "{\"name\":\"1-5\",\"type\":\"line\",\"data\":{\"start\":{\"x\":0.01,\"y\":0.1},\"end\":{\"x\":0.01,\"y\":0.21},\"strokeWidth\":0.01}}"
+  ]
 }

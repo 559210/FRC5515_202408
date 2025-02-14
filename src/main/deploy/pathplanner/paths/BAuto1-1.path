@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.745280612244897,
-        "y": 3.3758290816326535
+        "x": 7.120065789473683,
+        "y": 3.2841282894736845
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.924422294001463,
-        "y": 2.8933189344982537
+        "x": 5.614511667911857,
+        "y": 2.7425513222046605
       },
       "isLocked": false,
       "linkedName": null
@@ -20,8 +20,8 @@
         "y": 2.763966836734694
       },
       "prevControl": {
-        "x": 6.215625,
-        "y": 2.9728954081632653
+        "x": 7.126436678360212,
+        "y": 3.425432182786439
       },
       "nextControl": null,
       "isLocked": false,
@@ -45,7 +45,7 @@
     "rotation": 119.99999999999999
   },
   "reversed": false,
-  "folder": "BAuto1",
+  "folder": "BAuto",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 180.0
