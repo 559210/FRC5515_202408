@@ -210,4 +210,7 @@ public class RobotContainer implements RobotContainerInterface {
             SmartDashboard.putString("ControlPad info is", "OK");
         }
     }
+
+    public void updateAlways() {
+    }
 }

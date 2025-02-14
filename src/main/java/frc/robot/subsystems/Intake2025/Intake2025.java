@@ -34,6 +34,11 @@ public class Intake2025 extends SubsystemBase {
     private VelocityVoltage intakeVelDutycycle = new VelocityVoltage(0);
 
     private DigitalInput intakeCoralSensor = new DigitalInput(0);
+    private boolean isIntakeCoralSensorOn = false;
+    private int intakeCoralSensorOnTickCount = -1;
+    private int intakeCoralSensorOffTickCount = -1;
+    private final int intakeCoralSensorOnTickCountThreshold = 50;       // a tick is about 1/50 second(50Hz)
+    private final int intakeCoralSensorOffTickCountThreshold = 50;      // a tick is about 1/50 second(50Hz)
 
     public enum STATE {
         READY,
@@ -86,6 +91,11 @@ public class Intake2025 extends SubsystemBase {
         if (this.curState == STATE.READY) {
             setState(STATE.CORAL_IN);
         }
+
+        if (this.curState == STATE.CORAL_IN) {
+            setState(STATE.READY);
+        }
+
         if (this.curState == STATE.CARRYING_CORAL) {
             setState(STATE.CORAL_OUT);
         }
@@ -94,6 +104,10 @@ public class Intake2025 extends SubsystemBase {
     public void toggleBallIntake() {
         if (this.curState == STATE.READY) {
             setState(STATE.BALL_IN);
+        }
+
+        if (this.curState == STATE.BALL_IN) {
+            setState(STATE.READY);
         }
         if (this.curState == STATE.CARRYING_BALL) {
             setState(STATE.BALL_OUT);
@@ -105,7 +119,35 @@ public class Intake2025 extends SubsystemBase {
     }
 
     private boolean getIsCarryingCarol() {
-        return !intakeCoralSensor.get();
+        return isIntakeCoralSensorOn;
+    }
+
+    private void updateIsCarryingCarol() {
+        boolean isCarrying = !intakeCoralSensor.get();
+        if (isCarrying) {
+            intakeCoralSensorOffTickCount = -1;
+            if (intakeCoralSensorOnTickCount == -1) {
+                intakeCoralSensorOnTickCount = 0;
+            }
+            else {
+                intakeCoralSensorOnTickCount++;
+            }
+            if (intakeCoralSensorOnTickCount > intakeCoralSensorOnTickCountThreshold) {
+                isIntakeCoralSensorOn = true;
+            }
+        }
+        else {
+            intakeCoralSensorOnTickCount = -1;
+            if (intakeCoralSensorOffTickCount == -1) {
+                intakeCoralSensorOffTickCount = 0;
+            }
+            else {
+                intakeCoralSensorOffTickCount++;
+            }
+            if (intakeCoralSensorOffTickCount > intakeCoralSensorOffTickCountThreshold) {
+                isIntakeCoralSensorOn = false;
+            }
+        }
     };
 
     private void updateState() {
@@ -153,6 +195,7 @@ public class Intake2025 extends SubsystemBase {
 
     @Override
     public void periodic() {
+        updateIsCarryingCarol();
         updateState();
     }
 }

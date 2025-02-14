@@ -31,6 +31,7 @@ import frc.robot.subsystems.Elevator2025.Elevator2025;
 import frc.robot.subsystems.Intake2025.Intake2025;
 import frc.robot.subsystems.MoveTo.MoveTo2025;
 import frc.robot.subsystems.TurningArm2025.TurningArm2025;
+import frc.robot.utils.JoystickButtonEx;
 
 
 /**
@@ -62,7 +63,7 @@ public class RobotContainer2025 implements RobotContainerInterface {
     private final JoystickButton turningArmBtn = null; //new JoystickButton(driver,2);
     private final JoystickButton intakeBtn = new JoystickButton(driver,2);
     private final JoystickButton zeroStateBtn = null; //new JoystickButton(driver, 3);
-    private final JoystickButton resetUpperCanCodePositionBtn = new JoystickButton(driver, 8);
+    private final JoystickButtonEx resetUpperCanCodePositionBtn = new JoystickButton(driver, 8);
     private final JoystickButton zeroUpperPosBtn = new JoystickButton(driver, 7);
     private final JoystickButton switchCoralnBallBtn = null; // new JoystickButton(driver, 5);
     private final Swerve2025 s_Swerve = new Swerve2025();
@@ -91,9 +92,6 @@ public class RobotContainer2025 implements RobotContainerInterface {
                     resetUpperCanCodePositionBtn, zeroUpperPosBtn, switchCoralnBallBtn, aimBtn, intakeBtn,
                     turningArmBtn, zeroStateBtn
                 )
-                // ,new IntakeCmd(c_intake, ()->driver.getRawAxis(2), ()->driver.getRawAxis(3))
-                // ,new IntakeAimCmd(s_Swerve, c_intakeAim, c_intake, candle, ()->driver.getRawAxis(2), ()->driver.getRawAxis(3))
-                // ,new CandleCmd(candle)
             )
         );
 
@@ -156,7 +154,6 @@ public class RobotContainer2025 implements RobotContainerInterface {
         return s_Swerve.followPathPlannerAuto("test01");
     }
 
-    int count = 0;
     public void update() {
         // Pose2d pos = s_Swerve.getPose();
         // count ++;
@@ -164,7 +161,7 @@ public class RobotContainer2025 implements RobotContainerInterface {
         //     System.out.println(String.format("pos2d: (%f, %f)", pos.getX(), pos.getY()));
 
         // ControlPadHelper.publishRobotPos(pos);
-        ControlPadHelper.update();
+        
         // ControlPadHelper.ControlPadInfo.ControlPadInfoData info = ControlPadHelper.getControlPadInfo();
         // if (info == null) {
         //     SmartDashboard.putString("ControlPad info is", "NULL");
@@ -175,5 +172,10 @@ public class RobotContainer2025 implements RobotContainerInterface {
 
 
         // swerveStatePublisher.set(s_Swerve.getModuleStates());
+    }
+
+    public void updateAlways() {
+        ControlPadHelper.update();
+        JoystickButtonEx.update();
     }
 }

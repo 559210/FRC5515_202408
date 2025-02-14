@@ -6,5 +6,6 @@ public interface RobotContainerInterface {
     public Command getAutonomousCommand();
     public void telInit();
     public void autoInit();
-    public void update();
+    public void update();           // only update when enabled
+    public void updateAlways();     // update when enabled or disabled
 }
