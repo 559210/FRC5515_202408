@@ -3,41 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.4857670454545455,
-        "y": 3.1724289772727268
+        "x": 10.5,
+        "y": 4.3
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.113977272727273,
-        "y": 2.6738494318181822
+        "x": 11.5,
+        "y": 4.3
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 3.0413352272727274,
-        "y": 1.9758380681818175
+        "x": 11.5,
+        "y": 4.3
       },
       "prevControl": {
-        "x": 2.0413352272727274,
-        "y": 1.9758380681818177
-      },
-      "nextControl": {
-        "x": 4.041335227272727,
-        "y": 1.9758380681818175
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 5.3746875,
-        "y": 2.5342471590909086
-      },
-      "prevControl": {
-        "x": 4.227954545454546,
-        "y": 1.6068892045454548
+        "x": 10.5,
+        "y": 4.3
       },
       "nextControl": null,
       "isLocked": false,
@@ -58,10 +42,10 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 119.99999999999999
+    "rotation": 0.0
   },
   "reversed": false,
-  "folder": null,
+  "folder": "ManualCoralR",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 0.0

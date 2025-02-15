@@ -3,45 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.4857670454545455,
-        "y": 3.1724289772727268
+        "x": 7.120065789473683,
+        "y": 3.2841282894736845
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.113977272727273,
-        "y": 2.6738494318181822
+        "x": 5.614511667911857,
+        "y": 2.7425513222046605
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 3.0413352272727274,
-        "y": 1.9758380681818175
+        "x": 5.54406887755102,
+        "y": 2.763966836734694
       },
       "prevControl": {
-        "x": 2.0413352272727274,
-        "y": 1.9758380681818177
-      },
-      "nextControl": {
-        "x": 4.041335227272727,
-        "y": 1.9758380681818175
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 5.3746875,
-        "y": 2.5342471590909086
-      },
-      "prevControl": {
-        "x": 4.227954545454546,
-        "y": 1.6068892045454548
+        "x": 7.126436678360212,
+        "y": 3.425432182786439
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "AP22R"
     }
   ],
   "rotationTargets": [],
@@ -61,10 +45,10 @@
     "rotation": 119.99999999999999
   },
   "reversed": false,
-  "folder": null,
+  "folder": "BAuto",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 180.0
   },
   "useDefaultConstraints": true
 }

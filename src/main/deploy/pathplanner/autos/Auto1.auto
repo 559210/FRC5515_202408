@@ -1,0 +1,43 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "BAuto1-1"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "test1-1"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "test1-2"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "test1-3"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "test1-4"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "Blue Auto",
+  "choreoAuto": false
+}
