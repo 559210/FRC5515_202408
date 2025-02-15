@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using NetworkTablesSharp;
+using System.Text.RegularExpressions;
+using System;
+using UnityEngine.Windows;
 
 
 // Default values shown here
@@ -61,6 +64,8 @@ public class NTManager
     readonly string VIRTUAL_CONTROL_ENTRY_NAME = $"/{ID_NAME}/VirtualControl";
     readonly string GO_TARGET_ENTRY_NAME = $"/{ID_NAME}/GoTarget";
     readonly string DEBUG_PANEL_ENTRY_NAME = $"/{ID_NAME}/Debug";
+    readonly string UPPER_SYSTEM_STATE = "/SmartDashboard/US2025Cmd_State";
+    readonly string UPPER_SYSTEM_CARRYING_STATE = "/SmartDashboard/US2025Cmd_CarryingState";
 
     RobotPos robotPos = new();
     AprilTagTargetInfo aprilTagTargetInfo = new();
@@ -82,7 +87,7 @@ public class NTManager
     }
     public bool init()
     {
-        //nt = new("10.55.15.2", TOPIC_NAME, false, 5810);
+        //nt = new("10.55.15.2", ID_NAME, false, 5810);
         nt = new("127.0.0.1", ID_NAME, false, 5810);
 
         startGuard();
@@ -124,6 +129,8 @@ public class NTManager
         if (nt.Connected()) {
             nt.Subscribe(ROBOT_POS_ENTRY_NAME);
             nt.Subscribe(CONTROL_PAD_INFO_RECALL_ENTRY_NAME);
+            nt.Subscribe(UPPER_SYSTEM_STATE);
+            nt.Subscribe(UPPER_SYSTEM_CARRYING_STATE);
             nt.PublishTopic(CONTROL_PAD_INFO_ENTRY_NAME, "int[]");
             nt.PublishTopic(VIRTUAL_CONTROL_ENTRY_NAME, "double[]");
             nt.PublishTopic(GO_TARGET_ENTRY_NAME, "int[]");
@@ -229,6 +236,56 @@ public class NTManager
         aprilTagTargetInfo.level = rawData[1];
         aprilTagTargetInfo.branch = rawData[2];
         return aprilTagTargetInfo;
+    }
+
+    public class UpperSystemState
+    {
+        public string state = "UNKOWN";
+        public string runningState = "UNKOWN";
+        public string isCarryingCoral = "UNKOWN";
+        public string isCarryingBall = "UNKOWN";
+    }
+
+    UpperSystemState upperSystemState = new();
+    public UpperSystemState getUpperSystemStates()
+    {
+        if (!check())
+        {
+            return null;
+        }
+
+        string stateStr = nt.GetValue<string>(UPPER_SYSTEM_STATE);
+        // state: ZERO running state: DONE
+        if (stateStr == null)
+        {
+            return null;
+        }
+
+        string pattern1 = @"state:\s+(\w+)\s+running state:\s+(\w+)";
+
+        Match match1 = Regex.Match(stateStr, pattern1);
+        if (match1.Success)
+        {
+            upperSystemState.state = match1.Groups[1].Value; // ��ȡZERO
+            upperSystemState.runningState = match1.Groups[2].Value; // ��ȡDONE
+        }
+
+        string carryingStateStr = nt.GetValue<string>(UPPER_SYSTEM_CARRYING_STATE);
+        // isCarryingCoral: false isCarryingBall: false
+        if (carryingStateStr == null)
+        {
+            return null;
+        }
+
+        string pattern2 = @"isCarryingCoral:\s+(\w+)\s+isCarryingBall:\s+(\w+)";
+        Match match2 = Regex.Match(carryingStateStr, pattern2);
+        if (match2.Success)
+        {
+            upperSystemState.isCarryingCoral = match2.Groups[1].Value; // ��ȡZERO
+            upperSystemState.isCarryingBall = match2.Groups[2].Value; // ��ȡDONE
+        }
+
+        return upperSystemState;
     }
 
     public AprilTagTargetInfo getAprilTagTargetInfo()

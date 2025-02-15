@@ -9,6 +9,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -19,11 +20,13 @@ import frc.robot.Constants;
 import frc.robot.Constants2025;
 import frc.robot.ControlPadHelper;
 import frc.robot.GlobalConfig;
+import frc.robot.Robot;
 import frc.robot.ControlPadHelper.ControlPadInfo;
 import frc.robot.StateController;
 import frc.robot.subsystems.Swerve2025;
 import frc.robot.subsystems.Aim2025.Aim2025;
 import frc.robot.subsystems.Candle.Candle;
+import frc.robot.subsystems.Candle2025.Candle2025;
 import frc.robot.subsystems.Elevator2025.Elevator2025;
 import frc.robot.subsystems.Elevator2025.Elevator2025.EV_STATE;
 import frc.robot.subsystems.Intake2025.Intake2025;
@@ -76,6 +79,7 @@ public class UpperSystem2025Cmd extends Command {
     private TurningArm2025 m_turningArm;
     private Elevator2025 m_elevator;
     private Intake2025 m_intake;
+    private Candle2025 m_candle;
     // TODO: additional subsystems: sensor for checking if we are carrying Coral;
     // outtake coral; intake coral, intake ball, outtake ball
 
@@ -94,7 +98,7 @@ public class UpperSystem2025Cmd extends Command {
     private boolean isCarryingBallFromDebug = false;
 
     public UpperSystem2025Cmd(
-            TurningArm2025 turningArm, Elevator2025 elev, Intake2025 intake,
+            TurningArm2025 turningArm, Elevator2025 elev, Intake2025 intake, Candle2025 candle,
             Trigger resetCanCodePositionBtn, Trigger resetToZeroPosBtn, Trigger switchCnB, Trigger aimCoral, Trigger intakeTrigger,
             Trigger test_arm, Trigger test_zero) {
 
@@ -116,6 +120,10 @@ public class UpperSystem2025Cmd extends Command {
 
         this.m_intake = intake;
         addRequirements(m_intake);
+
+        this.m_candle = candle;
+        addRequirements(m_candle);
+
         schedule();
 
         if (test_arm != null) {
@@ -137,7 +145,7 @@ public class UpperSystem2025Cmd extends Command {
         if (resetCanCodePositionBtn != null) {
             this.resetCanCodePositionBtn = resetCanCodePositionBtn;
             this.resetCanCodePositionBtn.onTrue(new InstantCommand(() -> {
-                if (GlobalConfig.isTuningMode) {
+                if (Robot.inst.isTestEnabled()) {
                     System.out.println("reset elevator and turning arm's cancoder position to 0");
                     m_elevator.resetCancodePosition();
                     m_turningArm.resetCancodePosition();
@@ -246,7 +254,8 @@ public class UpperSystem2025Cmd extends Command {
         m_elevator.init();
         m_turningArm.init(); 
         m_intake.init();
-        if (!GlobalConfig.isTuningMode)
+        m_candle.init();
+        if (Robot.inst.isTeleopEnabled() || Robot.inst.isAutonomousEnabled())
         {
             setState(STATE.READY_FOR_LOAD_CORAL);
         }
@@ -256,6 +265,7 @@ public class UpperSystem2025Cmd extends Command {
     public void execute() {
         runState();
         updateState();
+        updateLeds();
         telemetry();
     }
 
@@ -264,6 +274,7 @@ public class UpperSystem2025Cmd extends Command {
         System.out.println("UpperSystem2025Cmd end");
         m_elevator.onDisable();
         m_turningArm.onDisable();
+        m_candle.onDisable();
     }
 
     @Override
@@ -285,6 +296,10 @@ public class UpperSystem2025Cmd extends Command {
     }
 
     private boolean getIsCarryingCoral() {
+        if (m_intake.getIsCarryingCarol()) {
+            return true;
+        }
+
         if (isDebugEnabled) {
             return isCarryingCoralFromDebug;
         }
@@ -635,9 +650,51 @@ public class UpperSystem2025Cmd extends Command {
         }
     }
 
+    private void updateLeds() {
+        if (getIsCarryingCoral()) {
+            this.m_candle.showCarryingCoral();
+        }
+        else {
+            this.m_candle.showIdle();
+        }
+
+        ControlPadInfo.ControlPadInfoData info = ControlPadHelper.getControlPadInfo();
+        if (info == null) {
+            this.m_candle.clearLn();
+        }
+        else {
+            if (info.level == 0) {
+                this.m_candle.showL1();
+            }
+            else {
+                boolean isLeft = info.branch == -1;
+                switch ((int)info.level) {
+                    case 1:
+                        m_candle.showL2(isLeft);
+                        break;
+                    case 2:
+                        m_candle.showL3(isLeft);
+                        break;
+                    case 3:
+                        m_candle.showL4(isLeft);
+                        break;
+                }
+            }
+            
+        }
+
+    }
+
     protected void telemetry() {
-        SmartDashboard.putString("US2025Cmd_1", "state: " + curState + " running state: " + curRunningState);
-        SmartDashboard.putString("US2025Cmd_2",
+
+        // DON'T DELETE BELOW SmartDashboard push, cause ControlPad is using them!!!
+        // DON'T DELETE BELOW SmartDashboard push, cause ControlPad is using them!!!
+        // DON'T DELETE BELOW SmartDashboard push, cause ControlPad is using them!!!
+        SmartDashboard.putString("US2025Cmd_State", "state: " + curState + " running state: " + curRunningState);
+        SmartDashboard.putString("US2025Cmd_CarryingState",
                 "isCarryingCoral: " + getIsCarryingCoral() + " isCarryingBall: " + getIsCarryingBall());
+        // DON'T DELETE UP CODES
+        // DON'T DELETE UP CODES
+        // DON'T DELETE UP CODES
     }
 }

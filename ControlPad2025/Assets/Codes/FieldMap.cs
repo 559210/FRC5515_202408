@@ -57,6 +57,12 @@ public class InfoPanel
 
     GTextField aprilTagSelectedInfoLbl;
     GTextField robotPosLbl;
+
+    GTextField upsState;
+    GTextField upsRunningState;
+    GTextField upsCarryingCoral;
+    GTextField upsCarryingBall;
+
     public InfoPanel(GComponent comp)
     {
         root = comp;
@@ -80,6 +86,37 @@ public class InfoPanel
 
         aprilTagSelectedInfoLbl = root.GetChild("ArpilTagSelectedInfo").asTextField;
         robotPosLbl = root.GetChild("RobotPos").asTextField;
+
+        upsState = root.GetChild("state").asTextField;
+        upsRunningState = root.GetChild("runningState").asTextField;
+        upsCarryingCoral = root.GetChild("coral").asTextField;
+        upsCarryingBall = root.GetChild("ball").asTextField;
+        showUpperSystemState(null);
+    }
+
+    public void showUpperSystemState(NTManager.UpperSystemState upperSystemState)
+    {
+        if (upperSystemState == null)
+        {
+            upsState.text = "NO DATA";
+            upsState.color = Color.red;
+            upsRunningState.text = "NO DATA";
+            upsRunningState.color = Color.red;
+            upsCarryingCoral.text = "NO DATA";
+            upsCarryingCoral.color = Color.red;
+            upsCarryingBall.text = "NO DATA";
+            upsCarryingBall.color = Color.red;
+            return;
+        }
+
+        upsState.text = upperSystemState.state;
+        upsState.color = Color.green;
+        upsRunningState.text = upperSystemState.runningState;
+        upsRunningState.color = Color.green;
+        upsCarryingCoral.text = upperSystemState.isCarryingCoral.ToUpper();
+        upsCarryingCoral.color = bool.Parse(upperSystemState.isCarryingCoral) ? Color.green : Color.red;
+        upsCarryingBall.text = upperSystemState.isCarryingBall.ToUpper();
+        upsCarryingBall.color = bool.Parse(upperSystemState.isCarryingBall) ? Color.green : Color.red;
     }
 
     public void showNetInfo(bool isConnected)
@@ -284,6 +321,14 @@ public class DebugPanel
             }, 1);
         }
     }
+
+    public void setCoralLoadState(bool isCarryingLoadFromRobot)
+    {
+        if (isCarryingLoadFromRobot != isLoadCoral)
+        {
+            onLoadCoralBtnClick();
+        }
+    }
 }
 public class FieldMap : MonoBehaviour
 {
@@ -430,6 +475,13 @@ public class FieldMap : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        var usState = Main.inst.NT.getUpperSystemStates();
+        if (usState != null )
+        {
+            debugPanel
+        }
+        infoPanel.showUpperSystemState(usState);
+
         NTManager.RobotPos pos = Main.inst.NT.getRobotPos();
         if (pos != null) {
             robot.SetXY(meter2Pixel(pos.x), field.height - meter2Pixel(pos.y));

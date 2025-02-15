@@ -19,9 +19,15 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
  */
 public class Robot extends TimedRobot {
 
+    public static Robot inst = null;
+
     private Command m_autonomousCommand;
 
     private RobotContainerInterface m_robotContainer;
+
+    public Robot() {
+        inst = this;
+    }
 
     /**
      * This function is run when the robot is first started up and should be used
@@ -78,7 +84,6 @@ public class Robot extends TimedRobot {
 
     @Override
     public void autonomousInit() {
-        GlobalConfig.isTuningMode = false;
         m_robotContainer.autoInit();
 
         m_autonomousCommand = m_robotContainer.getAutonomousCommand();
@@ -104,7 +109,6 @@ public class Robot extends TimedRobot {
         // teleop starts running. If you want the autonomous to
         // continue until interrupted by another command, remove
         // this line or comment it out.
-        GlobalConfig.isTuningMode = false;
         if (m_autonomousCommand != null) {
             m_autonomousCommand.cancel();
         }
@@ -120,7 +124,6 @@ public class Robot extends TimedRobot {
     @Override
     public void testInit() {
         // Cancels all running commands at the start of test mode.
-        GlobalConfig.isTuningMode = true;
         CommandScheduler.getInstance().cancelAll();
         
     }

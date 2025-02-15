@@ -38,5 +38,51 @@ SELECT(7) 机器上层归位，关机前记住要归位
 OK(8) 上层CanCode归零，手掰过motor以后，要记得归零
 
 2/14 TODO:
-1. 验证光学传感器的延时功能有效
-2. 验证JoyStickButtonEx在Disable状态下有效
+1. 验证光学传感器的延时功能有效 （有效）
+2. 验证JoyStickButtonEx在Disable状态下有效(已验证，无效)
+
+////////////////////////////////////////////
+LED:
+25lights 8-32
+Status Lights: 
+IDLE #0f4ff2(15, 79, 242)
+WithCoral #0ff2ee(15, 242, 238)
+
+Coral Lights:
+L0 #ffffff(255, 255, 255)
+L1 #eb1010(235, 16, 16)
+L2 #0af712(10, 247, 18)
+L3 #a807de(168, 7, 222)
+
+Parts:
+P1: 12, P2: 13
+No Selection:
+P1+P2: Status Lights
+WithSelection:
+If select Right side corals:
+P1: Status Lights P2: Coral Lights
+If select Left side corals:
+P1: Coral Lights P2: Status Lights
+
+Example:
+Right L2:
+Status x12 #0af712 x13
+
+Left L3:
+#a807de x12 Status x13
+
+IDLE:
+#0f4ff2 x25
+
+////////////////////////////////////////////
+
+2/15 TODO:
+去掉一切试图在Disable状态下的外部输入操作，基本不可行 (待真机测试)
+Elvator上下时候加一个障碍点，在通过障碍点的时候调整手臂姿态，避免碰到，同时也避免等Elevator到达目的地后再调整手臂姿态，导致的延时
+CANdle代码 (待真机测试)
+Disable后，UpperSystem状态重置，避免下次Enable后莫名移动
+ControlPad加入机器UpperSystem的状态同步
+ControlPad加入虚拟上下左右按钮，用于微调机器，用于人工瞄准
+恢复底盘代码
+Test调试模式，支持Elevator解锁，支持重置UpperSystem状态
+CurrentLimit

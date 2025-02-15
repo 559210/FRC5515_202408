@@ -24,38 +24,38 @@ public class TeleopSwerve2025 extends Command {
         this.s_Swerve = s_Swerve;
         addRequirements(s_Swerve);
 
-        // this.translationSup = translationSup;
-        // this.strafeSup = strafeSup;
-        // this.rotationSup = rotationSup;
-        // this.robotCentricSup = robotCentricSup;
+        this.translationSup = translationSup;
+        this.strafeSup = strafeSup;
+        this.rotationSup = rotationSup;
+        this.robotCentricSup = robotCentricSup;
     }
     
     int cout = 0;
     @Override
     public void execute() {
-        // cout++;
-        // SmartDashboard.putNumber("tele exe", cout);
-        // StateController sc = StateController.getInstance();
-        // SmartDashboard.putBoolean("autoAiming", sc.isAutoAimming);
-        // if (sc.isAutoAimming || sc.isAutoIntakeAimming) {
-        //     // i don't know if this excute function is running when other command executing. by majun
+        cout++;
+        SmartDashboard.putNumber("tele exe", cout);
+        StateController sc = StateController.getInstance();
+        SmartDashboard.putBoolean("autoAiming", sc.isAutoAimming);
+        if (sc.isAutoAimming || sc.isAutoIntakeAimming) {
+            // i don't know if this excute function is running when other command executing. by majun
             
-        // }
-        // else {
-        //     /* Get Values, Deadband*/
-        //     double translationVal = MathUtil.applyDeadband(translationSup.getAsDouble(), Constants2025.stickDeadband);
-        //     double strafeVal = MathUtil.applyDeadband(strafeSup.getAsDouble(), Constants2025.stickDeadband);
-        //     double rotationVal = MathUtil.applyDeadband(rotationSup.getAsDouble(), Constants2025.stickDeadband);
+        }
+        else {
+            /* Get Values, Deadband*/
+            double translationVal = MathUtil.applyDeadband(translationSup.getAsDouble(), Constants2025.stickDeadband);
+            double strafeVal = MathUtil.applyDeadband(strafeSup.getAsDouble(), Constants2025.stickDeadband);
+            double rotationVal = MathUtil.applyDeadband(rotationSup.getAsDouble(), Constants2025.stickDeadband);
 
-        //     /* Drive */
-        //     s_Swerve.drive(
-        //         new Translation2d(translationVal, strafeVal).times(Constants2025.Swerve.maxSpeed), 
-        //         rotationVal * Constants2025.Swerve.maxAngularVelocity, 
-        //         !robotCentricSup.getAsBoolean(), 
-        //         // true,
-        //         true
-        //     );
-        // }
+            /* Drive */
+            s_Swerve.drive(
+                new Translation2d(translationVal, strafeVal).times(Constants2025.Swerve.maxSpeed), 
+                rotationVal * Constants2025.Swerve.maxAngularVelocity, 
+                !robotCentricSup.getAsBoolean(), 
+                // true,
+                true
+            );
+        }
 
     }
 }

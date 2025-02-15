@@ -21,17 +21,16 @@ import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-
-
+import frc.robot.Constants.Candle;
 import frc.robot.commands.*;
 import frc.robot.commands.SlightlyMoveCmd2025.DIR;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.Aim2025.Aim2025;
+import frc.robot.subsystems.Candle2025.Candle2025;
 import frc.robot.subsystems.Elevator2025.Elevator2025;
 import frc.robot.subsystems.Intake2025.Intake2025;
 import frc.robot.subsystems.MoveTo.MoveTo2025;
 import frc.robot.subsystems.TurningArm2025.TurningArm2025;
-import frc.robot.utils.JoystickButtonEx;
 
 
 /**
@@ -63,7 +62,7 @@ public class RobotContainer2025 implements RobotContainerInterface {
     private final JoystickButton turningArmBtn = null; //new JoystickButton(driver,2);
     private final JoystickButton intakeBtn = new JoystickButton(driver,2);
     private final JoystickButton zeroStateBtn = null; //new JoystickButton(driver, 3);
-    private final JoystickButtonEx resetUpperCanCodePositionBtn = new JoystickButtonEx(driver, 8);
+    private final JoystickButton resetUpperCanCodePositionBtn = new JoystickButton(driver, 8);
     private final JoystickButton zeroUpperPosBtn = new JoystickButton(driver, 7);
     private final JoystickButton switchCoralnBallBtn = null; // new JoystickButton(driver, 5);
     private final Swerve2025 s_Swerve = new Swerve2025();
@@ -73,6 +72,7 @@ public class RobotContainer2025 implements RobotContainerInterface {
     TurningArm2025 m_turningArm = new TurningArm2025();
     Elevator2025 m_elevator = new Elevator2025();
     Intake2025 m_intake = new Intake2025();
+    Candle2025 m_candle = new Candle2025();
 
     private final StructArrayPublisher<SwerveModuleState> swerveStatePublisher;
 
@@ -88,7 +88,7 @@ public class RobotContainer2025 implements RobotContainerInterface {
                     () -> robotCentric.getAsBoolean()
                 )
                 , new UpperSystem2025Cmd(
-                    m_turningArm, m_elevator, m_intake,
+                    m_turningArm, m_elevator, m_intake, m_candle,
                     resetUpperCanCodePositionBtn, zeroUpperPosBtn, switchCoralnBallBtn, aimBtn, intakeBtn,
                     turningArmBtn, zeroStateBtn
                 )
@@ -124,20 +124,20 @@ public class RobotContainer2025 implements RobotContainerInterface {
     private void configureButtonBindings() {
         /* Driver Buttons */
 
-        // rightButton.whileTrue(new SlightlyMoveCmd2025(s_Swerve, DIR.RIGHT));
-        // leftButton.whileTrue(new SlightlyMoveCmd2025(s_Swerve, DIR.LEFT));
-        // upButton.whileTrue(new SlightlyMoveCmd2025(s_Swerve, DIR.UP));
-        // downButton.whileTrue(new SlightlyMoveCmd2025(s_Swerve, DIR.DOWN));
+        rightButton.whileTrue(new SlightlyMoveCmd2025(s_Swerve, DIR.RIGHT));
+        leftButton.whileTrue(new SlightlyMoveCmd2025(s_Swerve, DIR.LEFT));
+        upButton.whileTrue(new SlightlyMoveCmd2025(s_Swerve, DIR.UP));
+        downButton.whileTrue(new SlightlyMoveCmd2025(s_Swerve, DIR.DOWN));
 
-        // zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
-        // aimBtn.whileTrue(new Aim2025Cmd(m_moveToSubSys, s_Swerve));
+        zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
+        aimBtn.whileTrue(new Aim2025Cmd(m_moveToSubSys, s_Swerve));
 
-        // ControlPadHelper.goTargetTrigger.whileTrue(new Aim2025Cmd(m_moveToSubSys, s_Swerve));
-        // ControlPadHelper.tapTrigger.whileTrue(new MoveTo2025Cmd(m_moveToSubSys, s_Swerve));
+        ControlPadHelper.goTargetTrigger.whileTrue(new Aim2025Cmd(m_moveToSubSys, s_Swerve));
+        ControlPadHelper.tapTrigger.whileTrue(new MoveTo2025Cmd(m_moveToSubSys, s_Swerve));
 
-        // ControlPadHelper.goTargetTrigger.onTrue(new InstantCommand(()-> {
-        //     System.out.println("abc");
-        // }));
+        ControlPadHelper.goTargetTrigger.onTrue(new InstantCommand(()-> {
+            System.out.println("abc");
+        }));
 
         // new JoystickButton(tester, 1).whileTrue(s_Swerve.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
         // new JoystickButton(tester, 2).whileTrue(s_Swerve.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
@@ -155,27 +155,14 @@ public class RobotContainer2025 implements RobotContainerInterface {
     }
 
     public void update() {
-        // Pose2d pos = s_Swerve.getPose();
-        // count ++;
-        // if (count % 50 == 0)
-        //     System.out.println(String.format("pos2d: (%f, %f)", pos.getX(), pos.getY()));
-
-        // ControlPadHelper.publishRobotPos(pos);
-        
-        // ControlPadHelper.ControlPadInfo.ControlPadInfoData info = ControlPadHelper.getControlPadInfo();
-        // if (info == null) {
-        //     SmartDashboard.putString("ControlPad info is", "NULL");
-        // }
-        // else {
-        //     SmartDashboard.putString("ControlPad info is", "OK");
-        // }
+        Pose2d pos = s_Swerve.getPose();
+        ControlPadHelper.publishRobotPos(pos);
 
 
-        // swerveStatePublisher.set(s_Swerve.getModuleStates());
+        swerveStatePublisher.set(s_Swerve.getModuleStates());
     }
 
     public void updateAlways() {
         ControlPadHelper.update();
-        JoystickButtonEx.update();
     }
 }

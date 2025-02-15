@@ -134,29 +134,29 @@ public class Swerve2025 extends SubsystemBase {
     // SysIdRoutine end
 
     public Swerve2025() {
-        // gyro = new Pigeon2(Constants2025.Swerve.pigeonID, Constants2025.canivore_name);
-        // gyro.getConfigurator().apply(new Pigeon2Configuration());
-        // gyro.setYaw(0);
+        gyro = new Pigeon2(Constants2025.Swerve.pigeonID, Constants2025.canivore_name);
+        gyro.getConfigurator().apply(new Pigeon2Configuration());
+        gyro.setYaw(0);
 
-        // mSwerveMods = new SwerveModule2025[] {
-        //         new SwerveModule2025(0),
-        //         new SwerveModule2025(1),
-        //         new SwerveModule2025(2),
-        //         new SwerveModule2025(3)
-        // };
-        // reset_time.start();
-        // if (useEstimatorOdo) {
-        //     est_swerveOdometry = new SwerveDrivePoseEstimator(
-        //         Constants2025.Swerve.swerveKinematics, 
-        //         getGyroYaw(), 
-        //         getModulePositions(),
-        //         new Pose2d(),
-        //         VecBuilder.fill(0.05, 0.05, Units.degreesToRadians(5)),
-        //         VecBuilder.fill(0.5, 0.5, Units.degreesToRadians(30)));
-        // }
-        // else {
-        //     swerveOdometry = new SwerveDriveOdometry(Constants2025.Swerve.swerveKinematics, getGyroYaw(), getModulePositions());
-        // }
+        mSwerveMods = new SwerveModule2025[] {
+                new SwerveModule2025(0),
+                new SwerveModule2025(1),
+                new SwerveModule2025(2),
+                new SwerveModule2025(3)
+        };
+        reset_time.start();
+        if (useEstimatorOdo) {
+            est_swerveOdometry = new SwerveDrivePoseEstimator(
+                Constants2025.Swerve.swerveKinematics, 
+                getGyroYaw(), 
+                getModulePositions(),
+                new Pose2d(),
+                VecBuilder.fill(0.05, 0.05, Units.degreesToRadians(5)),
+                VecBuilder.fill(0.5, 0.5, Units.degreesToRadians(30)));
+        }
+        else {
+            swerveOdometry = new SwerveDriveOdometry(Constants2025.Swerve.swerveKinematics, getGyroYaw(), getModulePositions());
+        }
     }
 
 
@@ -253,29 +253,29 @@ public class Swerve2025 extends SubsystemBase {
 
     @Override
     public void periodic() {
-        // if (useEstimatorOdo) {
-        //     est_swerveOdometry.update(getGyroYaw(), getModulePositions());
-        // }
-        // else {
-        //     swerveOdometry.update(getGyroYaw(), getModulePositions());
-        // }
+        if (useEstimatorOdo) {
+            est_swerveOdometry.update(getGyroYaw(), getModulePositions());
+        }
+        else {
+            swerveOdometry.update(getGyroYaw(), getModulePositions());
+        }
         
-        // if (this.currentVelTranslation2d.getNorm() < 0.01 && reset_time.hasElapsed(10)) {
-        //     reset_time.reset();
-        //     for (SwerveModule2025 mod : mSwerveMods) {
-        //         mod.resetToAbsolute();
-        //     }
-        // }
-        // for (SwerveModule2025 mod : mSwerveMods) {
-        //     SmartDashboard.putNumber("Mod " + mod.moduleNumber + " CANcoder", mod.getCANcoder().getDegrees());
-        //     SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Angle", mod.getPosition().angle.getDegrees());
-        //     SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Velocity", mod.getState().speedMetersPerSecond);
-        // }
-        // SmartDashboard.putNumber("Gyro", getGyroYaw().getDegrees());
+        if (this.currentVelTranslation2d.getNorm() < 0.01 && reset_time.hasElapsed(10)) {
+            reset_time.reset();
+            for (SwerveModule2025 mod : mSwerveMods) {
+                mod.resetToAbsolute();
+            }
+        }
+        for (SwerveModule2025 mod : mSwerveMods) {
+            SmartDashboard.putNumber("Mod " + mod.moduleNumber + " CANcoder", mod.getCANcoder().getDegrees());
+            SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Angle", mod.getPosition().angle.getDegrees());
+            SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Velocity", mod.getState().speedMetersPerSecond);
+        }
+        SmartDashboard.putNumber("Gyro", getGyroYaw().getDegrees());
 
-        // if (useEstimatorOdo) {
-        //     updateOdometryWithVision();
-        // }
+        if (useEstimatorOdo) {
+            updateOdometryWithVision();
+        }
     }
 
     private void updateOdometryWithVision() {

@@ -125,7 +125,7 @@ public class Intake2025 extends SubsystemBase {
         this.curState = st;
     }
 
-    private boolean getIsCarryingCarol() {
+    public boolean getIsCarryingCarol() {
         return isIntakeCoralSensorOn;
     }
 

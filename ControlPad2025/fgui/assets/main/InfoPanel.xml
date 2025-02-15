@@ -2,7 +2,7 @@
 <component size="400,563" opaque="false">
   <controller name="SIDE" pages="0,BLUE,1,RED" selected="0"/>
   <controller name="NET" pages="0,ON,1,OFF" selected="0"/>
-  <controller name="HIDE" pages="0,SHOW,1,HIDE" selected="1"/>
+  <controller name="HIDE" pages="0,SHOW,1,HIDE" selected="0"/>
   <displayList>
     <graph id="n21_l60g" name="BG" xy="0,31" size="400,500" group="n22_l60g" type="rect" lineSize="2" lineColor="#ffffffff" fillColor="#ffffcc99" corner="10">
       <relation target="" sidePair="width-width,center-center,top-top"/>
@@ -43,6 +43,21 @@
       <relation target="" sidePair="width-width,center-center,top-top"/>
     </text>
     <group id="n15_l60g" name="RobotPos" xy="11,136" size="378,81" group="n22_l60g"/>
+    <graph id="n25_fd33" name="n25" xy="11,371" size="378,114" group="n35_fd33" type="rect" lineSize="2" lineColor="#ffffffff" fillColor="#00ffffff" corner="10">
+      <relation target="" sidePair="width-width,center-center,top-top"/>
+    </graph>
+    <text id="n26_fd33" name="n26" xy="25,384" size="351,24" group="n35_fd33" fontSize="16" align="center" autoSize="shrink" text="UpperSystem States:">
+      <relation target="" sidePair="width-width,center-center,top-top"/>
+    </text>
+    <text id="n27_fd33" name="stateTitle" xy="28,422" size="39,19" group="n35_fd33" fontSize="12" text="State:"/>
+    <text id="n28_fd33" name="state" xy="77,422" size="59,19" group="n35_fd33" fontSize="12" color="#ff0000" text="UNKOWN"/>
+    <text id="n29_fd33" name="runningStateTitle" xy="203,422" size="78,19" group="n35_fd33" fontSize="12" text="RuningState:"/>
+    <text id="n30_fd33" name="runningState" xy="291,422" size="59,19" group="n35_fd33" fontSize="12" color="#ff0000" text="UNKOWN"/>
+    <text id="n31_fd33" name="coralTitle" xy="28,454" size="88,19" group="n35_fd33" fontSize="12" text="CarryingCoral:"/>
+    <text id="n32_fd33" name="coral" xy="126,454" size="35,19" group="n35_fd33" fontSize="12" color="#ff0000" text="TRUE"/>
+    <text id="n33_fd33" name="ballTitle" xy="203,454" size="73,19" group="n35_fd33" fontSize="12" text="CarringBall:"/>
+    <text id="n34_fd33" name="ball" xy="282,454" size="35,19" group="n35_fd33" fontSize="12" color="#ff0000" text="TRUE"/>
+    <group id="n35_fd33" name="UpperSystemState" xy="11,371" size="378,114" group="n22_l60g"/>
     <group id="n22_l60g" name="Panels" xy="0,31" size="400,500" advanced="true">
       <gearDisplay controller="HIDE" pages="0"/>
       <relation target="" sidePair="width-width,center-center,middle-middle"/>

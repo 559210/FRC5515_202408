@@ -258,4 +258,9 @@ public final class Constants2025 {
         public static final double BallInSpeed = 15;
         public static final double BAllOutSpeed = -15;
     }
+
+    public static final class Candle {
+        public static final int candleID = 24;
+        public static final String canBusName = "rio";
+    }
 }
