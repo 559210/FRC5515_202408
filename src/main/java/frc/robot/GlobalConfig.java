@@ -6,6 +6,7 @@ import com.pathplanner.lib.path.PathPlannerPath;
 
 public final class GlobalConfig {
     public static final int version = 2025;
+    public static boolean isTuningMode = false;
 
     private static HashMap<String, PathPlannerPath> aimPathDic = new HashMap<String,PathPlannerPath>();
     private static final String[] aimPathNames = new String[] {

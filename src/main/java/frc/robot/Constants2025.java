@@ -205,11 +205,11 @@ public final class Constants2025 {
         public static final double SensorToMechanismRatio = 1.0;
         public static final double RotorToSensorRatio = 44;
         public static final double zeroPos = 0;
-        public static final double basePos = 0.265625;
-        public static final double l1Pos = 0.5;
-        public static final double l2Pos = 0.75;
-        public static final double l3Pos = 1.0;
-        public static final double l4Pos = 1.25;
+        public static final double basePos = 0.3146980;
+        public static final double l1Pos = 0.407227;
+        public static final double l2Pos = 1.039307;
+        public static final double l3Pos = 1.039307;
+        public static final double l4Pos = 1.039307;
     }
 
     public static final class Elevator {
@@ -223,14 +223,14 @@ public final class Constants2025 {
             public static final double KD = 0.2;
         }
         public static class Down {
-            public static final double KP = 5.0;// 0.1;
-            public static final double KI = 1;
+            public static final double KP = 2.0;// 0.1;
+            public static final double KI = 0.05;
             public static final double KD = 0;
         }
         public static final double KV = 1;//0.1;
         public static final double KS = 0.05;
         public static final double KA = 0.07;
-        public static final double Velocity = 100; // 100.0;
+        public static final double Velocity = 10; //100; // 100.0;
         public static final double Acceleration = 75; // 50; // 600.0;
         public static final double Jerk = 0.0;
         public static final double SensorToMechanismRatio = 1.0;
@@ -238,9 +238,9 @@ public final class Constants2025 {
         public static final double zeroPos = 0;
         public static final double basePos = 0;
         public static final double l1Pos = -1;
-        public static final double l2Pos = -2;
-        public static final double l3Pos = -3;
-        public static final double l4Pos = -5;
+        public static final double l2Pos = -4.66582;
+        public static final double l3Pos = -9.135644;
+        public static final double l4Pos = -15.8;
     }
 
 

@@ -78,6 +78,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void autonomousInit() {
+        GlobalConfig.isTuningMode = false;
         m_robotContainer.autoInit();
 
         m_autonomousCommand = m_robotContainer.getAutonomousCommand();
@@ -103,6 +104,7 @@ public class Robot extends TimedRobot {
         // teleop starts running. If you want the autonomous to
         // continue until interrupted by another command, remove
         // this line or comment it out.
+        GlobalConfig.isTuningMode = false;
         if (m_autonomousCommand != null) {
             m_autonomousCommand.cancel();
         }
@@ -118,7 +120,9 @@ public class Robot extends TimedRobot {
     @Override
     public void testInit() {
         // Cancels all running commands at the start of test mode.
+        GlobalConfig.isTuningMode = true;
         CommandScheduler.getInstance().cancelAll();
+        
     }
 
     /** This function is called periodically during test mode. */

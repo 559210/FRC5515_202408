@@ -37,12 +37,16 @@ public class Intake2025 extends SubsystemBase {
     private boolean isIntakeCoralSensorOn = false;
     private int intakeCoralSensorOnTickCount = -1;
     private int intakeCoralSensorOffTickCount = -1;
-    private final int intakeCoralSensorOnTickCountThreshold = 50;       // a tick is about 1/50 second(50Hz)
-    private final int intakeCoralSensorOffTickCountThreshold = 50;      // a tick is about 1/50 second(50Hz)
+    private final int intakeCoralSensorOnTickCountThreshold = 0;       // a tick is about 1/50 second(50Hz)
+    private final int intakeCoralSensorOffTickCountThreshold = 0;      // a tick is about 1/50 second(50Hz)
+    private final int maxGotCoralTicks = 5;
+    private int gotCoralTicks = 0;
+
 
     public enum STATE {
         READY,
         CORAL_IN,
+        GOT_CORAL,
         CARRYING_CORAL,
         CORAL_OUT,
         BALL_IN,
@@ -90,14 +94,17 @@ public class Intake2025 extends SubsystemBase {
     public void toggleCoralIntake() {
         if (this.curState == STATE.READY) {
             setState(STATE.CORAL_IN);
+            return;
         }
 
         if (this.curState == STATE.CORAL_IN) {
             setState(STATE.READY);
+            return;
         }
 
         if (this.curState == STATE.CARRYING_CORAL) {
             setState(STATE.CORAL_OUT);
+            return;
         }
     }
 
@@ -160,10 +167,18 @@ public class Intake2025 extends SubsystemBase {
                 break;
             case CORAL_IN:
                 if (getIsCarryingCarol()) {
-                    curState = STATE.CARRYING_CORAL;
+                    gotCoralTicks = 0;
+                    curState = STATE.GOT_CORAL;
                 }
                 else {
                     speed = Constants2025.Intake.coralInSpeed;
+                }
+                break;
+            case GOT_CORAL:
+                speed = -15;
+                gotCoralTicks++;
+                if (gotCoralTicks >= maxGotCoralTicks) {
+                    curState = STATE.CARRYING_CORAL;
                 }
                 break;
             case CORAL_OUT:
@@ -197,5 +212,10 @@ public class Intake2025 extends SubsystemBase {
     public void periodic() {
         updateIsCarryingCarol();
         updateState();
+        telemetry();
+    }
+
+    protected void telemetry() {
+        SmartDashboard.putString("Intake2025_Sensor", "state: " + intakeCoralSensor.get());
     }
 }

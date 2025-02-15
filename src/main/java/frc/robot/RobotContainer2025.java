@@ -63,7 +63,7 @@ public class RobotContainer2025 implements RobotContainerInterface {
     private final JoystickButton turningArmBtn = null; //new JoystickButton(driver,2);
     private final JoystickButton intakeBtn = new JoystickButton(driver,2);
     private final JoystickButton zeroStateBtn = null; //new JoystickButton(driver, 3);
-    private final JoystickButtonEx resetUpperCanCodePositionBtn = new JoystickButton(driver, 8);
+    private final JoystickButtonEx resetUpperCanCodePositionBtn = new JoystickButtonEx(driver, 8);
     private final JoystickButton zeroUpperPosBtn = new JoystickButton(driver, 7);
     private final JoystickButton switchCoralnBallBtn = null; // new JoystickButton(driver, 5);
     private final Swerve2025 s_Swerve = new Swerve2025();

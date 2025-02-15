@@ -26,6 +26,7 @@ import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants2025;
+import frc.robot.utils.MiscUtils;
 
 public class Elevator2025 extends SubsystemBase {
     public enum EV_STATE {
@@ -65,7 +66,8 @@ public class Elevator2025 extends SubsystemBase {
     public static final CANcoder m_canCoder = new CANcoder(Constants2025.Elevator.canCoderID, Constants2025.Elevator.canBusName);
     public MotionMagicVoltage motionMagicVoltage1 = new MotionMagicVoltage(0);
     // public MotionMagicVoltage motionMagicVoltage2 = new MotionMagicVoltage(1);
-
+    protected double lastMoveTargetPos = 9999; 
+    protected int curPidSlot = 0;
     @Override
     public void periodic() {
         // This method will be called once per scheduler run
@@ -159,23 +161,40 @@ public class Elevator2025 extends SubsystemBase {
         return false;
     }
 
+    protected void updatePidSlot(double targetPos) {
+        if (MiscUtils.compareDouble(lastMoveTargetPos, 9999)) {
+            lastMoveTargetPos = targetPos;
+        }
+        if (MiscUtils.compareDouble(lastMoveTargetPos, targetPos)) {
+            return;
+        }
+        System.out.println("-------------> " + targetPos + " ---> " + lastMoveTargetPos);
+        if (targetPos < lastMoveTargetPos) {
+            // up
+            curPidSlot = 0;
+        }
+        else {
+            // down
+            curPidSlot = 1;
+        }
+
+        lastMoveTargetPos = targetPos;
+    }
+
     protected void updateState() {
         SmartDashboard.putNumber("ELEVATOR ccc1", m_canCoder.getPosition().getValueAsDouble());
         SmartDashboard.putNumber("ELEVATOR ccc2", m_primaryMotor.getPosition().getValueAsDouble());
         
         double pos = Constants2025.Elevator.basePos;
-        int pidSlot = 0;
         switch (curState) {
             case ZERO:
                 pos = Constants2025.Elevator.zeroPos;
-                pidSlot = 1;
                 if (isDone(pos)) {
                     curRunningState = RUNNING_STATE.DONE;
                 }
                 break;
             case BASE:
                 pos = Constants2025.Elevator.basePos;
-                pidSlot = 1;
                 if (isDone(pos)) {
                     curRunningState = RUNNING_STATE.DONE;
                 }
@@ -213,7 +232,9 @@ public class Elevator2025 extends SubsystemBase {
         SmartDashboard.putString("ELEVATOR ccc curState", curState.name());
         SmartDashboard.putString("ELEVATOR ccc curRuningState", curRunningState.name());
 
-        m_primaryMotor.setControl(motionMagicVoltage1.withPosition(pos).withSlot(pidSlot));
+        updatePidSlot(pos);
+        SmartDashboard.putNumber("ELEVATOR ccc pidSlot", (int)curPidSlot);
+        m_primaryMotor.setControl(motionMagicVoltage1.withPosition(pos).withSlot(curPidSlot));
     }
     
 

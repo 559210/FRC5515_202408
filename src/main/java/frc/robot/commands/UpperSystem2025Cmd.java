@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants;
 import frc.robot.Constants2025;
 import frc.robot.ControlPadHelper;
+import frc.robot.GlobalConfig;
 import frc.robot.ControlPadHelper.ControlPadInfo;
 import frc.robot.StateController;
 import frc.robot.subsystems.Swerve2025;
@@ -34,6 +35,8 @@ import frc.robot.subsystems.intake.Intake.IntakeState;
 import frc.robot.utils.MiscUtils;
 
 public class UpperSystem2025Cmd extends Command {
+    public static UpperSystem2025Cmd inst = null;
+
     private enum STATE {
         NONE,
         ZERO,
@@ -45,6 +48,20 @@ public class UpperSystem2025Cmd extends Command {
         L4,
         BALL1,
     }
+
+    // -1 down, 1 up, 0 unknow
+    private int[][] table = new int[][]{
+        //          NONE, ZERO,  READY_FOR_LOAD_CORAL, READY_FOR_LOAD_BALL, L1, L2, L3, L4, BALL1
+        new int[]{  0,    0,     0,                    0,                    0,  0,  0,  0,  0     },// NONE
+        new int[]{  0,    0,     -1,                   -2,                  -1, -1, -1, -1, 0     },// ZERO
+        new int[]{  0,    1,     0,                    -1,                  -1, -1, -1, -1, -1     },// READY_FOR_LOAD_CORAL
+        new int[]{  0,    0,     0,                    0,                   0,  0,  0,  0,  0     },// READY_FOR_LOAD_BALL
+        new int[]{  0,    1,     1,                    0,                   0,  -1, -1, -1, -1     },// L1
+        new int[]{  0,    1,     1,                    0,                   1,  0,  -1, -1, -1     },// L2
+        new int[]{  0,    1,     1,                    0,                   1,  1,  0,  -1, -1     },// L3
+        new int[]{  0,    1,     1,                    0,                   1,  1,  1,  0,  -1     },// L4
+        new int[]{  0,    0,     0,                    0,                   0,  0,  0,  0,  0     },// BALL1
+    };
 
     private enum RUNNING_STATE {
         NEW_SET,
@@ -80,12 +97,16 @@ public class UpperSystem2025Cmd extends Command {
             TurningArm2025 turningArm, Elevator2025 elev, Intake2025 intake,
             Trigger resetCanCodePositionBtn, Trigger resetToZeroPosBtn, Trigger switchCnB, Trigger aimCoral, Trigger intakeTrigger,
             Trigger test_arm, Trigger test_zero) {
+
+        inst = this;
+
         // for debug begin
         switchCnB = null;
         aimCoral = null;
         test_arm = null;
         test_zero = null;
         // for debug end
+
 
         this.m_turningArm = turningArm;
         addRequirements(m_turningArm);
@@ -116,9 +137,15 @@ public class UpperSystem2025Cmd extends Command {
         if (resetCanCodePositionBtn != null) {
             this.resetCanCodePositionBtn = resetCanCodePositionBtn;
             this.resetCanCodePositionBtn.onTrue(new InstantCommand(() -> {
-                System.out.println("reset elevator and turning arm's cancoder position to 0");
-                m_elevator.resetCancodePosition();
-                m_turningArm.resetCancodePosition();
+                if (GlobalConfig.isTuningMode) {
+                    System.out.println("reset elevator and turning arm's cancoder position to 0");
+                    m_elevator.resetCancodePosition();
+                    m_turningArm.resetCancodePosition();
+                }
+                else {
+                    System.out.println("No No No, only working at TEST mode! reset elevator and turning arm's cancoder position to 0");
+                }
+
             }));
         }
 
@@ -162,7 +189,6 @@ public class UpperSystem2025Cmd extends Command {
         if (intakeTrigger != null) {
             this.intakeTrigger = intakeTrigger;
             this.intakeTrigger.onTrue(new InstantCommand(() -> {
-                System.out.println("-----------------------> intake ---------------");
                 this.m_intake.toggleCoralIntake();
             }));
         }
@@ -218,9 +244,12 @@ public class UpperSystem2025Cmd extends Command {
         // runs every time when roborio is enabled
 
         m_elevator.init();
-        m_turningArm.init();
+        m_turningArm.init(); 
         m_intake.init();
-        setState(STATE.READY_FOR_LOAD_CORAL);
+        if (!GlobalConfig.isTuningMode)
+        {
+            setState(STATE.READY_FOR_LOAD_CORAL);
+        }
     }
 
     @Override
@@ -275,7 +304,7 @@ public class UpperSystem2025Cmd extends Command {
             return;
         }
 
-        if (newState == STATE.L1 || curState == STATE.L2 || curState == STATE.L3 || curState == STATE.L4) {
+        if (newState == STATE.L1 || newState == STATE.L2 || newState == STATE.L3 || newState == STATE.L4) {
             if (curState != STATE.READY_FOR_LOAD_CORAL
                     && curState != STATE.L1
                     && curState != STATE.L2
@@ -325,25 +354,105 @@ public class UpperSystem2025Cmd extends Command {
         System.out.println("UpperSystem2025Cmd::setState: try set: comfirmed");
     }
 
+    private int curRunningDir = 0;
+    private void doStateAction(TA_STATE taState, EV_STATE evState) {
+        if (curRunningState == RUNNING_STATE.NEW_SET)
+        {
+            STATE sx = lastState;
+            STATE sy = curState;
+            // sx = STATE.ZERO;
+            // sy = STATE.READY_FOR_LOAD_BALL;
+            int tx = sx.ordinal();
+            int ty = sy.ordinal(); //
+
+            curRunningDir = table[ty][tx];
+            System.out.println("tx: " + tx + " ty: " + ty);
+            System.out.println("curRunningDir is " + curRunningDir);
+        }
+
+        if (curRunningDir == -1) {
+            // down
+            switch (curRunningState) {
+                case NEW_SET:
+                    m_elevator.setState(evState);   
+                    curRunningState = RUNNING_STATE.RUNNING;
+                    break;
+                case RUNNING:
+                    if (m_elevator.getCurRunningState() == Elevator2025.RUNNING_STATE.DONE) {
+                        m_turningArm.setState(taState);
+                        if (m_turningArm.getCurRunningState() == TurningArm2025.RUNNING_STATE.DONE) {
+                            curRunningState = RUNNING_STATE.DONE;
+                        }
+                    }
+                    break;
+                case DONE:
+                    break;
+            }
+        }
+        else if (curRunningDir == 0) {
+            switch (curRunningState) {
+                case NEW_SET:
+                    m_turningArm.setState(taState);
+                    m_elevator.setState(evState);
+                    curRunningState = RUNNING_STATE.RUNNING;
+                    break;
+                case RUNNING:
+                    if (m_turningArm.getCurRunningState() == TurningArm2025.RUNNING_STATE.DONE &&
+                            m_elevator.getCurRunningState() == Elevator2025.RUNNING_STATE.DONE) {
+                        curRunningState = RUNNING_STATE.DONE;
+                    }
+                    break;
+                case DONE:
+                    break;
+            }
+        }
+        else if (curRunningDir == 1) {
+            // up
+            switch (curRunningState) {
+                case NEW_SET:
+                    m_turningArm.setState(taState);
+                      
+                    curRunningState = RUNNING_STATE.RUNNING;
+                    break;
+                case RUNNING:
+                    if (m_turningArm.getCurRunningState() == TurningArm2025.RUNNING_STATE.DONE) {
+                        m_elevator.setState(evState); 
+                        if (m_elevator.getCurRunningState() == Elevator2025.RUNNING_STATE.DONE) {
+                            curRunningState = RUNNING_STATE.DONE;
+                        }
+                    }
+                    break;
+                case DONE:
+                    break;
+            }
+        }
+    }
+
     private void runState() {
         switch (curState) {
             case ZERO:
-                updateStateZero();
+                doStateAction(TA_STATE.ZERO, EV_STATE.ZERO);
+                // updateStateZero();
                 break;
             case READY_FOR_LOAD_CORAL:
-                updateStateReadyForLoadCoral();
+                doStateAction(TA_STATE.BASE, EV_STATE.BASE);
+                // updateStateReadyForLoadCoral();
                 break;
             case L1:
-                updateStateL1();
+                doStateAction(TA_STATE.L1, EV_STATE.L1);
+                // updateStateL1();
                 break;
             case L2:
-                updateStateL2();
+                doStateAction(TA_STATE.L2, EV_STATE.L2);
+                // updateStateL2();
                 break;
             case L3:
-                updateStateL3();
+                doStateAction(TA_STATE.L3, EV_STATE.L3);
+                // updateStateL3();
                 break;
             case L4:
-                updateStateL4();
+                doStateAction(TA_STATE.L4, EV_STATE.L4);
+                // updateStateL4();
                 break;
             default:
                 break;
@@ -433,14 +542,18 @@ public class UpperSystem2025Cmd extends Command {
         } else {
             switch (curRunningState) {
                 case NEW_SET:
-                    m_turningArm.setState(TA_STATE.BASE);
                     m_elevator.setState(EV_STATE.BASE);
+                    
+                    
                     curRunningState = RUNNING_STATE.RUNNING;
                     break;
                 case RUNNING:
-                    if (m_turningArm.getCurRunningState() == TurningArm2025.RUNNING_STATE.DONE &&
-                            m_elevator.getCurRunningState() == Elevator2025.RUNNING_STATE.DONE) {
-                        curRunningState = RUNNING_STATE.DONE;
+                    if (m_elevator.getCurRunningState() == Elevator2025.RUNNING_STATE.DONE) {
+                        m_turningArm.setState(TA_STATE.BASE);
+                        if (m_turningArm.getCurRunningState() == TurningArm2025.RUNNING_STATE.DONE) {
+                            curRunningState = RUNNING_STATE.DONE;
+                        }
+                        
                     }
                     break;
                 case DONE:
@@ -452,14 +565,15 @@ public class UpperSystem2025Cmd extends Command {
     private void updateStateL1() {
         switch (curRunningState) {
             case NEW_SET:
-                m_turningArm.setState(TA_STATE.L1);
-                m_elevator.setState(EV_STATE.L1);
+                m_elevator.setState(EV_STATE.L1);   
                 curRunningState = RUNNING_STATE.RUNNING;
                 break;
             case RUNNING:
-                if (m_turningArm.getCurRunningState() == TurningArm2025.RUNNING_STATE.DONE &&
-                        m_elevator.getCurRunningState() == Elevator2025.RUNNING_STATE.DONE) {
-                    curRunningState = RUNNING_STATE.DONE;
+                if (m_elevator.getCurRunningState() == Elevator2025.RUNNING_STATE.DONE) {
+                    m_turningArm.setState(TA_STATE.L1);
+                    if (m_turningArm.getCurRunningState() == TurningArm2025.RUNNING_STATE.DONE) {
+                        curRunningState = RUNNING_STATE.DONE;
+                    }
                 }
                 break;
             case DONE:
