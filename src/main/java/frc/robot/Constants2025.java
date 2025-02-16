@@ -76,6 +76,9 @@ public final class Constants2025 {
         public static final double driveKS = 0.17201; //TODO
         public static final double driveKV = 2.2429;//TODO
         public static final double driveKA = 0.30202;//TODO
+        // public static final double driveKS = 0; //TODO
+        // public static final double driveKV = 0;//TODO
+        // public static final double driveKA = 0;//TODO
 
         /* Swerve Profiling Values */
         /** Meters per Second */
@@ -223,7 +226,7 @@ public final class Constants2025 {
             public static final double KD = 0.2;
         }
         public static class Down {
-            public static final double KP = 2.0;// 0.1;
+            public static final double KP = 10.0;// 0.1;
             public static final double KI = 0.05;
             public static final double KD = 0;
         }
@@ -260,7 +263,7 @@ public final class Constants2025 {
     }
 
     public static final class Candle {
-        public static final int candleID = 24;
+        public static final int candleID = 19;
         public static final String canBusName = "rio";
     }
 }

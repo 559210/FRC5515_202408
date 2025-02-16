@@ -405,7 +405,7 @@ public class Swerve2025 extends SubsystemBase {
                 this::getRobotRelativeSpeeds,
                 this::driveRobotRelative,
                 new PPHolonomicDriveController( // HolonomicPathFollowerConfig, this should likely live in your
-                        new PIDConstants(1.0, 0.0, 0.0), // Translation PID constants
+                        new PIDConstants(3, 1.0, 0.0), // Translation PID constants
                         new PIDConstants(1.0, 0.0, 0.0) // Rotation PID constants
                 ),
                 config,

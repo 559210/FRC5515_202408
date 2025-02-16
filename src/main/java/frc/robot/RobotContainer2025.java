@@ -132,8 +132,8 @@ public class RobotContainer2025 implements RobotContainerInterface {
         zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
         aimBtn.whileTrue(new Aim2025Cmd(m_moveToSubSys, s_Swerve));
 
-        ControlPadHelper.goTargetTrigger.whileTrue(new Aim2025Cmd(m_moveToSubSys, s_Swerve));
-        ControlPadHelper.tapTrigger.whileTrue(new MoveTo2025Cmd(m_moveToSubSys, s_Swerve));
+        // ControlPadHelper.goTargetTrigger.whileTrue(new Aim2025Cmd(m_moveToSubSys, s_Swerve));
+        // ControlPadHelper.tapTrigger.whileTrue(new MoveTo2025Cmd(m_moveToSubSys, s_Swerve));
 
         ControlPadHelper.goTargetTrigger.onTrue(new InstantCommand(()-> {
             System.out.println("abc");

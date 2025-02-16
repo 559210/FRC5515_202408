@@ -41,7 +41,7 @@ public final class GlobalConfig {
 
     
     private static String getApPathName(int apId, boolean isLeft) {
-        return "ap_" + apId + "_" + (isLeft ? "left" : "right");
+        return "ap" + apId + "_" + (isLeft ? "left" : "right");
     }
 
     public static boolean init() {

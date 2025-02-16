@@ -15,6 +15,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.ControlPadHelper;
 import frc.robot.GlobalConfig;
 import frc.robot.StateController;
 import frc.robot.subsystems.Swerve2025;
@@ -40,7 +41,9 @@ public class MoveTo2025 extends SubsystemBase{
 
         Pose2d robotPos = s_Swerve.getPose();
         moveCmd = createPathCmd(robotPos, targetPose);
-        moveCmd.schedule();
+        if (moveCmd != null) {
+            moveCmd.schedule();
+        }
     }
 
     private Command createPathCmd(Pose2d from, Pose2d to) {
@@ -51,8 +54,13 @@ public class MoveTo2025 extends SubsystemBase{
         // System.out.println("from: " + from.toString());
         // System.out.println("to: " + to.toString());
 
-        int fid = 17;
-        String pathName = String.format("ap%d_right", fid);
+        ControlPadHelper.ControlPadInfo.ControlPadInfoData info = ControlPadHelper.getControlPadInfo();
+        if (info == null) {
+            return null;
+        }
+        int fid = (int)info.aprilTagId;
+        String leftORright = info.branch == -1 ? "left" : "right";
+        String pathName = String.format("ap%d_%s", fid, leftORright);
         PathPlannerPath path = GlobalConfig.getAimPath(pathName);
         System.out.println("---------------> 2");
         // Create the constraints to use while pathfinding. The constraints defined in the path will only be used for the path.

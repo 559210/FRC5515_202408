@@ -65,6 +65,7 @@ public class Elevator2025 extends SubsystemBase {
     public static final TalonFX m_followerMotor = new TalonFX(Constants2025.Elevator.followerMotorID, Constants2025.Elevator.canBusName);
     public static final CANcoder m_canCoder = new CANcoder(Constants2025.Elevator.canCoderID, Constants2025.Elevator.canBusName);
     public MotionMagicVoltage motionMagicVoltage1 = new MotionMagicVoltage(0);
+    // private final VelocityVoltage driveVelocity = new VelocityVoltage(0);
     // public MotionMagicVoltage motionMagicVoltage2 = new MotionMagicVoltage(1);
     protected double lastMoveTargetPos = 9999; 
     protected int curPidSlot = 0;
@@ -141,6 +142,9 @@ public class Elevator2025 extends SubsystemBase {
     }
 
     public void setState(EV_STATE stat) {
+        if (curState == stat) {
+            return;
+        }
         curRunningState = RUNNING_STATE.RUNNING;
         curState = stat;
     }
@@ -197,6 +201,9 @@ public class Elevator2025 extends SubsystemBase {
                 pos = Constants2025.Elevator.basePos;
                 if (isDone(pos)) {
                     curRunningState = RUNNING_STATE.DONE;
+                }
+                else {
+                    // System.out.println("---------EEEE: " + m_canCoder.getPosition().getValueAsDouble() + ", " + pos);
                 }
                 break;
             case L1:

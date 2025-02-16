@@ -478,7 +478,7 @@ public class FieldMap : MonoBehaviour
         var usState = Main.inst.NT.getUpperSystemStates();
         if (usState != null )
         {
-            debugPanel
+            debugPanel.setCoralLoadState(bool.Parse(usState.isCarryingCoral));
         }
         infoPanel.showUpperSystemState(usState);
 

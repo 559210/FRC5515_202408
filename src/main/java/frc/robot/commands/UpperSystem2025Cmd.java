@@ -255,7 +255,7 @@ public class UpperSystem2025Cmd extends Command {
         m_turningArm.init(); 
         m_intake.init();
         m_candle.init();
-        if (Robot.inst.isTeleopEnabled() || Robot.inst.isAutonomousEnabled())
+        if (Robot.inst.isTeleop() || Robot.inst.isAutonomous())
         {
             setState(STATE.READY_FOR_LOAD_CORAL);
         }
@@ -289,9 +289,9 @@ public class UpperSystem2025Cmd extends Command {
 
     private boolean getIsCarryingBall() {
         // TODO: get this from sesnor
-        if (isDebugEnabled) {
-            return isCarryingBallFromDebug;
-        }
+        // if (isDebugEnabled) {
+        //     return isCarryingBallFromDebug;
+        // }
         return false;
     }
 
@@ -300,9 +300,9 @@ public class UpperSystem2025Cmd extends Command {
             return true;
         }
 
-        if (isDebugEnabled) {
-            return isCarryingCoralFromDebug;
-        }
+        // if (isDebugEnabled) {
+        //     return isCarryingCoralFromDebug;
+        // }
 
         return false;
     }
@@ -513,143 +513,6 @@ public class UpperSystem2025Cmd extends Command {
         }
     }
 
-    private void updateStateZero() {
-        switch (curRunningState) {
-            case NEW_SET:
-                // make elevator go to zero first.
-                m_elevator.setState(EV_STATE.ZERO);
-                curRunningState = RUNNING_STATE.RUNNING;
-                break;
-            case RUNNING:
-                if (m_elevator.getState() != EV_STATE.ZERO) {
-                    // something is wrong, we should not be here
-                    System.out.println("UpperSystem2025Cmd::updateStateZero: elevator is not in zero state");
-                    return;
-                }
-                if (m_elevator.getCurRunningState() == Elevator2025.RUNNING_STATE.DONE) {
-                    m_turningArm.setState(TA_STATE.ZERO); // state can be set repeatedly
-
-                    if (m_turningArm.getCurRunningState() == TurningArm2025.RUNNING_STATE.DONE) {
-                        curRunningState = RUNNING_STATE.DONE;
-                    }
-                }
-                break;
-            case DONE:
-                break;
-        }
-    }
-
-    private void updateStateReadyForLoadCoral() {
-        if (lastState == STATE.ZERO) {
-            switch (curRunningState) {
-                case NEW_SET:
-                    m_turningArm.setState(TA_STATE.BASE);
-                    curRunningState = RUNNING_STATE.RUNNING;
-                    break;
-                case RUNNING:
-                    if (m_turningArm.getCurRunningState() == TurningArm2025.RUNNING_STATE.DONE) {
-                        curRunningState = RUNNING_STATE.DONE;
-                    }
-                    break;
-                case DONE:
-                    break;
-            }
-        } else {
-            switch (curRunningState) {
-                case NEW_SET:
-                    m_elevator.setState(EV_STATE.BASE);
-                    
-                    
-                    curRunningState = RUNNING_STATE.RUNNING;
-                    break;
-                case RUNNING:
-                    if (m_elevator.getCurRunningState() == Elevator2025.RUNNING_STATE.DONE) {
-                        m_turningArm.setState(TA_STATE.BASE);
-                        if (m_turningArm.getCurRunningState() == TurningArm2025.RUNNING_STATE.DONE) {
-                            curRunningState = RUNNING_STATE.DONE;
-                        }
-                        
-                    }
-                    break;
-                case DONE:
-                    break;
-            }
-        }
-    }
-
-    private void updateStateL1() {
-        switch (curRunningState) {
-            case NEW_SET:
-                m_elevator.setState(EV_STATE.L1);   
-                curRunningState = RUNNING_STATE.RUNNING;
-                break;
-            case RUNNING:
-                if (m_elevator.getCurRunningState() == Elevator2025.RUNNING_STATE.DONE) {
-                    m_turningArm.setState(TA_STATE.L1);
-                    if (m_turningArm.getCurRunningState() == TurningArm2025.RUNNING_STATE.DONE) {
-                        curRunningState = RUNNING_STATE.DONE;
-                    }
-                }
-                break;
-            case DONE:
-                break;
-        }
-    }
-
-    private void updateStateL2() {
-        switch (curRunningState) {
-            case NEW_SET:
-                m_turningArm.setState(TA_STATE.L2);
-                m_elevator.setState(EV_STATE.L2);
-                curRunningState = RUNNING_STATE.RUNNING;
-                break;
-            case RUNNING:
-                if (m_turningArm.getCurRunningState() == TurningArm2025.RUNNING_STATE.DONE &&
-                        m_elevator.getCurRunningState() == Elevator2025.RUNNING_STATE.DONE) {
-                    curRunningState = RUNNING_STATE.DONE;
-                }
-                break;
-            case DONE:
-                break;
-        }
-    }
-
-    private void updateStateL3() {
-        switch (curRunningState) {
-            case NEW_SET:
-                m_turningArm.setState(TA_STATE.L3);
-                m_elevator.setState(EV_STATE.L3);
-                curRunningState = RUNNING_STATE.RUNNING;
-                break;
-            case RUNNING:
-                if (m_turningArm.getCurRunningState() == TurningArm2025.RUNNING_STATE.DONE &&
-                        m_elevator.getCurRunningState() == Elevator2025.RUNNING_STATE.DONE) {
-                    curRunningState = RUNNING_STATE.DONE;
-                }
-                break;
-            case DONE:
-                break;
-        }
-    }
-
-    private void updateStateL4() {
-        switch (curRunningState) {
-            case NEW_SET:
-                m_turningArm.setState(TA_STATE.L4);
-                m_elevator.setState(EV_STATE.L4);
-                curRunningState = RUNNING_STATE.RUNNING;
-                break;
-            case RUNNING:
-                if (m_turningArm.getCurRunningState() == TurningArm2025.RUNNING_STATE.DONE &&
-                        m_elevator.getCurRunningState() == Elevator2025.RUNNING_STATE.DONE) {
-                    curRunningState = RUNNING_STATE.DONE;
-                }
-                break;
-            case DONE:
-                break;
-        }
-    }
-
     private void updateLeds() {
         if (getIsCarryingCoral()) {
             this.m_candle.showCarryingCoral();
@@ -691,9 +554,13 @@ public class UpperSystem2025Cmd extends Command {
         // DON'T DELETE BELOW SmartDashboard push, cause ControlPad is using them!!!
         // DON'T DELETE BELOW SmartDashboard push, cause ControlPad is using them!!!
         SmartDashboard.putString("US2025Cmd_State", "state: " + curState + " running state: " + curRunningState);
+        // SmartDashboard.putString("US2025Cmd_CarryingState",
+        //     "isCarryingCoral: " + m_intake.getIsCarryingCarol() + " isCarryingBall: " + getIsCarryingBall());
         SmartDashboard.putString("US2025Cmd_CarryingState",
-                "isCarryingCoral: " + getIsCarryingCoral() + " isCarryingBall: " + getIsCarryingBall());
-        // DON'T DELETE UP CODES
+            "isCarryingCoral: " + getIsCarryingCoral() + " isCarryingBall: " + getIsCarryingBall());
+
+        SmartDashboard.putString("US2025Cmd_Sub_Running_State", "arm: " + m_turningArm.getCurRunningState() + " elevator: " + m_elevator.getCurRunningState() + " elevator state: " + m_elevator.getState());
+                // DON'T DELETE UP CODES
         // DON'T DELETE UP CODES
         // DON'T DELETE UP CODES
     }

@@ -69,6 +69,7 @@ public class Candle2025 extends SubsystemBase {
         clear();
     }
 
+
     public void clear() {
         for (int i = 0; i < slotNum; ++i) {
             clearSlot(i);
@@ -77,25 +78,26 @@ public class Candle2025 extends SubsystemBase {
     }
 
     private void show() {
-        for (int i = 0; i < slotNum; ++i) {
-            COLOR[] slot = slots[i];
-            int start = 0;
-            while (start < ledNum) {
-                COLOR currentColor = slot[start];
-                if (i > 0 && currentColor == COLOR.NONE) {
-                    start++;
-                    continue;
-                }
-                int end = start + 1;
-                while (end < ledNum && slot[end] == currentColor) {
-                    end++;
-                }
-                Tuple3<Integer> color = palette.get(currentColor.ordinal());
-                led.setLEDs(color.get_0().intValue(), color.get_1().intValue(), color.get_2().intValue(), 0,
-                        start + ledOffset, end - start);
-                start = end;
-            }
-        }
+        // for (int i = 0; i < slotNum; ++i) {
+        //     COLOR[] slot = slots[i];
+        //     int start = 0;
+        //     while (start < ledNum) {
+        //         COLOR currentColor = slot[start];
+        //         if (i > 0 && currentColor == COLOR.NONE) {
+        //             start++;
+        //             continue;
+        //         }
+        //         int end = start + 1;
+        //         while (end < ledNum && slot[end] == currentColor) {
+        //             end++;
+        //         }
+        //         Tuple3<Integer> color = palette.get(currentColor.ordinal());
+        //         led.setLEDs(color.get_0().intValue(), color.get_1().intValue(), color.get_2().intValue(), 0,
+        //                 start + ledOffset, end - start);
+        //         start = end;
+        //     }
+        // }
+        led.setLEDs(0, 0, 0);
     }
 
     public void showIdle() {

@@ -113,7 +113,11 @@ public class TurningArm2025 extends SubsystemBase {
     }
 
     public void setState(TA_STATE stat) {
+        if (curState == stat) {
+            return;
+        }
         curState = stat;
+        curRunningState = RUNNING_STATE.RUNNING;
     }
 
     public TA_STATE getState() {
