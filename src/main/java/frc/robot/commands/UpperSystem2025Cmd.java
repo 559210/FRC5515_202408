@@ -1,6 +1,7 @@
 package frc.robot.commands;
 
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 import edu.wpi.first.math.MathUtil;
@@ -36,6 +37,7 @@ import frc.robot.subsystems.TurningArm2025.TurningArm2025.TA_STATE;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.intake.Intake.IntakeState;
 import frc.robot.utils.MiscUtils;
+import frc.robot.utils.ActionRunner;
 
 public class UpperSystem2025Cmd extends Command {
     public static UpperSystem2025Cmd inst = null;
@@ -65,6 +67,37 @@ public class UpperSystem2025Cmd extends Command {
         new int[]{  0,    1,     1,                    0,                   1,  1,  1,  0,  -1     },// L4
         new int[]{  0,    0,     0,                    0,                   0,  0,  0,  0,  0     },// BALL1
     };
+
+    // private STATE[] STATE_UP_DIR = new STATE[] {
+    //     STATE.ZERO,
+    //     STATE.READY_FOR_LOAD_CORAL,
+    //     STATE.L1,
+    //     STATE.L2,
+    //     STATE.L3,
+    //     STATE.L4,
+    // };
+    
+
+    // private STATE[] getStatePath(STATE from, STATE to) {
+    //     int fromIndex = from.ordinal();
+    //     int toIndex = to.ordinal();
+    //     int dir = table[toIndex][fromIndex];
+    //     if (dir == 0) {
+    //         return new STATE[]{};
+    //     }
+    //     List<STATE> path = new ArrayList<STATE>();
+    //     if (dir == 1) {
+    //         for (int i = fromIndex + 1; i <= toIndex; i++) {
+    //             path.add(STATE_UP_DIR[i]);
+    //         }
+    //     }
+    //     else if (dir == -1) {
+    //         for (int i = fromIndex - 1; i >= toIndex; i--) {
+    //             path.add(STATE_UP_DIR[i]);
+    //         }
+    //     }
+    //     return path.toArray(new STATE[0]);
+    // }
 
     private enum RUNNING_STATE {
         NEW_SET,
@@ -96,6 +129,8 @@ public class UpperSystem2025Cmd extends Command {
 
     private boolean isCarryingCoralFromDebug = false;
     private boolean isCarryingBallFromDebug = false;
+
+    ActionRunner m_actionRunner = null;
 
     public UpperSystem2025Cmd(
             TurningArm2025 turningArm, Elevator2025 elev, Intake2025 intake, Candle2025 candle,
@@ -369,8 +404,9 @@ public class UpperSystem2025Cmd extends Command {
         System.out.println("UpperSystem2025Cmd::setState: try set: comfirmed");
     }
 
+
     private int curRunningDir = 0;
-    private void doStateAction(TA_STATE taState, EV_STATE evState) {
+    private void doStateAction_____OLD(TA_STATE taState, EV_STATE evState) {
         if (curRunningState == RUNNING_STATE.NEW_SET)
         {
             STATE sx = lastState;
@@ -439,6 +475,145 @@ public class UpperSystem2025Cmd extends Command {
                     break;
                 case DONE:
                     break;
+            }
+        }
+    }
+
+
+    private void doStateAction(TA_STATE taState, EV_STATE evState) {
+        boolean isNeedDodge = false;
+        if (curRunningState == RUNNING_STATE.NEW_SET)
+        {
+            STATE sx = lastState;
+            STATE sy = curState;
+            int tx = sx.ordinal();
+            int ty = sy.ordinal(); //
+
+            curRunningDir = table[ty][tx];
+            System.out.println("tx: " + tx + " ty: " + ty);
+            System.out.println("curRunningDir is " + curRunningDir);
+
+            double[] dodgePosList = m_elevator.getDodgePosOrderFromUp2Down();
+            double elevatorStartPos = m_elevator.getCurPos();
+            double elevatorEndPos = m_elevator.getStatePos(evState);
+            for (int i = 0; i < dodgePosList.length; i++) {
+                if (MiscUtils.isBeween(dodgePosList[i], elevatorStartPos, elevatorEndPos)) {
+                    isNeedDodge = true;
+                    break;
+                }
+            }
+
+            if (m_actionRunner != null) {
+                m_actionRunner.cancel();
+            }
+            m_actionRunner = new ActionRunner();
+
+            curRunningState = RUNNING_STATE.RUNNING;
+        }
+
+        if (curRunningState == RUNNING_STATE.RUNNING) {
+            if (curRunningDir == -1) {
+                // down
+                if (isNeedDodge) {
+                    m_actionRunner.addQueueAction(
+                        () -> { // init
+                        m_turningArm.setState(TA_STATE.DODGE);
+                        },
+                        () -> { // update
+                        },
+                        () -> {},   // onCancel
+                        () -> { // endCondition
+                            return m_turningArm.getCurRunningState() == TurningArm2025.RUNNING_STATE.DONE;
+                        }
+                    );
+                }
+                m_actionRunner.addQueueAction(
+                    () -> { // init
+                        m_elevator.setState(evState);
+                    },
+                    () -> { // update
+                    },
+                    () -> {},   // onCancel
+                    () -> { // endCondition
+                        return m_elevator.getCurRunningState() == Elevator2025.RUNNING_STATE.DONE;
+                    }
+                ).addConditionAction(
+                    () -> { // init
+                        m_turningArm.setState(taState);
+                    },
+                    () -> { // update
+                    },
+                    () -> {},   // onCancel
+                    () -> { // startCondition
+                        return m_elevator.isCurPosBelow(Constants2025.Elevator.downDodgePos);
+                    },
+                    () -> { // endCondition
+                        return m_turningArm.getCurRunningState() == TurningArm2025.RUNNING_STATE.DONE;
+                    }
+                ).start();
+            }
+            // else if (curRunningDir == 0) {
+            //     switch (curRunningState) {
+            //         case NEW_SET:
+            //             m_turningArm.setState(taState);
+            //             m_elevator.setState(evState);
+            //             curRunningState = RUNNING_STATE.RUNNING;
+            //             break;
+            //         case RUNNING:
+            //             if (m_turningArm.getCurRunningState() == TurningArm2025.RUNNING_STATE.DONE &&
+            //                     m_elevator.getCurRunningState() == Elevator2025.RUNNING_STATE.DONE) {
+            //                 curRunningState = RUNNING_STATE.DONE;
+            //             }
+            //             break;
+            //         case DONE:
+            //             break;
+            //     }
+            // }
+            else if (curRunningDir == 1) {
+                // up
+                if (isNeedDodge) {
+                    m_actionRunner.addQueueAction(
+                        () -> { // init
+                        m_turningArm.setState(TA_STATE.DODGE);
+                        },
+                        () -> { // update
+                        },
+                        () -> {},   // onCancel
+                        () -> { // endCondition
+                            return m_turningArm.getCurRunningState() == TurningArm2025.RUNNING_STATE.DONE;
+                        }
+                    );
+                }
+                m_actionRunner.addQueueAction(
+                    () -> { // init
+                        m_elevator.setState(evState);
+                    },
+                    () -> { // update
+                    },
+                    () -> {},   // onCancel
+                    () -> { // endCondition
+                        return m_elevator.getCurRunningState() == Elevator2025.RUNNING_STATE.DONE;
+                    }
+                ).addConditionAction(
+                    () -> { // init
+                        m_turningArm.setState(taState);
+                    },
+                    () -> { // update
+                    },
+                    () -> {},   // onCancel
+                    () -> { // startCondition
+                        return m_elevator.isCurPosUpper(Constants2025.Elevator.upDodgePos);
+                    },
+                    () -> { // endCondition
+                        return m_turningArm.getCurRunningState() == TurningArm2025.RUNNING_STATE.DONE;
+                    }
+                ).start();
+            }
+
+            m_actionRunner.update();
+
+            if (m_actionRunner.getIsDone(getName())) {
+                curRunningState = RUNNING_STATE.DONE;
             }
         }
     }

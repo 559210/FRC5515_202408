@@ -190,9 +190,6 @@ public final class Constants2025 {
     }};
 
     public static final class TurningArm {
-        // -1          待机
-        // -0.723145   等待接球
-        // 0.027100    不影响升降
         public static final int motorID = 13;
         public static final int canCoderID = 14;
         public static final String canBusName = "rio";
@@ -207,10 +204,12 @@ public final class Constants2025 {
         public static final double Jerk = 0.0;
         public static final double SensorToMechanismRatio = 1.0;
         public static final double RotorToSensorRatio = 44;
+        // bigger value means arm is more expanded(clockwise)
         public static final double zeroPos = 0;
         public static final double basePos = 0.3146980;
         public static final double l1Pos = 0.407227;
         public static final double l2Pos = 1.039307;
+        public static final double dodgePos =  1.039307;  // the pos that allows elevator to move
         public static final double l3Pos = 1.039307;
         public static final double l4Pos = 1.039307;
     }
@@ -238,12 +237,15 @@ public final class Constants2025 {
         public static final double Jerk = 0.0;
         public static final double SensorToMechanismRatio = 1.0;
         public static final double RotorToSensorRatio = 11.33;
+        // smaller value means higher position
         public static final double zeroPos = 0;
         public static final double basePos = 0;
         public static final double l1Pos = -1;
         public static final double l2Pos = -4.66582;
         public static final double l3Pos = -9.135644;
         public static final double l4Pos = -15.8;
+        public static final double upDodgePos = -9.135644;
+        public static final double downDodgePos = -4.66582;
     }
 
 

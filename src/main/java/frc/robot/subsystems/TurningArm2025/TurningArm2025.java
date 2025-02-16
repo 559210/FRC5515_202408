@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants2025;
 import frc.robot.subsystems.Elevator2025.Elevator2025.EV_STATE;
+import frc.robot.utils.MiscUtils;
 import edu.wpi.first.wpilibj.RobotBase;
 
 public class TurningArm2025 extends SubsystemBase {
@@ -34,6 +35,7 @@ public class TurningArm2025 extends SubsystemBase {
         L2,
         L3,
         L4,
+        DODGE,
     }
 
     public enum RUNNING_STATE {
@@ -42,7 +44,9 @@ public class TurningArm2025 extends SubsystemBase {
         DONE,
     }
 
+    private final double NONE_POS = -9999;
     private final double threshold = 0.05;
+
     TA_STATE curState = TA_STATE.NONE;
     RUNNING_STATE curRunningState = RUNNING_STATE.READY;
 
@@ -139,48 +143,53 @@ public class TurningArm2025 extends SubsystemBase {
     protected void updateState() {
         SmartDashboard.putNumber("ARM ccc1", m_canCoder.getPosition().getValueAsDouble());
         SmartDashboard.putNumber("ARM ccc2", m_armMotor.getPosition().getValueAsDouble());
-        double pos = Constants2025.TurningArm.basePos;
-        switch (curState) {
-            case ZERO:
-                pos = Constants2025.TurningArm.zeroPos;
-                if (isDone(pos)) {
-                    curRunningState = RUNNING_STATE.DONE;
-                }
-                break;
-            case BASE:
-                pos = Constants2025.TurningArm.basePos;
-                if (isDone(pos)) {
-                    curRunningState = RUNNING_STATE.DONE;
-                }
-                break;
-            case L1:
-                pos = Constants2025.TurningArm.l1Pos;
-                if (isDone(pos)) {
-                    curRunningState = RUNNING_STATE.DONE;
-                }
-                break;
-            case L2:
-                pos = Constants2025.TurningArm.l2Pos;
-                if (isDone(pos)) {
-                    curRunningState = RUNNING_STATE.DONE;
-                }
-                break;
-            case L3:
-                pos = Constants2025.TurningArm.l3Pos;
-                if (isDone(pos)) {
-                    curRunningState = RUNNING_STATE.DONE;
-                }
-                break;
-            case L4:
-                pos = Constants2025.TurningArm.l4Pos;
-                if (isDone(pos)) {
-                    curRunningState = RUNNING_STATE.DONE;
-                }
-                break;
-            case NONE:
-                return;
-            default:
-                break;
+        // double pos = Constants2025.TurningArm.basePos;
+        // switch (curState) {
+        //     case ZERO:
+        //         pos = Constants2025.TurningArm.zeroPos;
+        //         if (isDone(pos)) {
+        //             curRunningState = RUNNING_STATE.DONE;
+        //         }
+        //         break;
+        //     case BASE:
+        //         pos = Constants2025.TurningArm.basePos;
+        //         if (isDone(pos)) {
+        //             curRunningState = RUNNING_STATE.DONE;
+        //         }
+        //         break;
+        //     case L1:
+        //         pos = Constants2025.TurningArm.l1Pos;
+        //         if (isDone(pos)) {
+        //             curRunningState = RUNNING_STATE.DONE;
+        //         }
+        //         break;
+        //     case L2:
+        //         pos = Constants2025.TurningArm.l2Pos;
+        //         if (isDone(pos)) {
+        //             curRunningState = RUNNING_STATE.DONE;
+        //         }
+        //         break;
+        //     case L3:
+        //         pos = Constants2025.TurningArm.l3Pos;
+        //         if (isDone(pos)) {
+        //             curRunningState = RUNNING_STATE.DONE;
+        //         }
+        //         break;
+        //     case L4:
+        //         pos = Constants2025.TurningArm.l4Pos;
+        //         if (isDone(pos)) {
+        //             curRunningState = RUNNING_STATE.DONE;
+        //         }
+        //         break;
+        //     case NONE:
+        //         return;
+        //     default:
+        //         break;
+        // }
+
+        double pos = getStatePos(curState);
+        if (MiscUtils.compareDouble(pos, NONE_POS)) {
+            return;
         }
         SmartDashboard.putNumber("ARM ccc targetPos", pos);
         SmartDashboard.putString("ARM ccc curState", curState.name());
@@ -261,4 +270,25 @@ public class TurningArm2025 extends SubsystemBase {
     //     else
     //         return false;
     // }
+
+    public double getStatePos(TA_STATE state) {
+        switch (state) {
+            case ZERO:
+                return Constants2025.TurningArm.zeroPos;
+            case BASE:
+                return Constants2025.TurningArm.basePos;
+            case L1:
+                return Constants2025.TurningArm.l1Pos;
+            case L2:
+                return Constants2025.TurningArm.l2Pos;
+            case L3:
+                return Constants2025.TurningArm.l3Pos;
+            case L4:
+                return Constants2025.TurningArm.l4Pos;
+            case DODGE:
+                return Constants2025.TurningArm.dodgePos;
+            default:
+                return NONE_POS;
+        }
+    }
 }

@@ -44,6 +44,7 @@ public class Elevator2025 extends SubsystemBase {
         DONE,
     }
 
+    
     private String getFilePath() {
         if (RobotBase.isSimulation()) {
             return "d:/simulated_elevatorLastPosition.txt";
@@ -52,6 +53,7 @@ public class Elevator2025 extends SubsystemBase {
         }
     }
 
+    private final double NONE_POS = -9999;
     private final double threshold = 0.05;
 
     EV_STATE curState = EV_STATE.NONE;
@@ -189,51 +191,55 @@ public class Elevator2025 extends SubsystemBase {
         SmartDashboard.putNumber("ELEVATOR ccc1", m_canCoder.getPosition().getValueAsDouble());
         SmartDashboard.putNumber("ELEVATOR ccc2", m_primaryMotor.getPosition().getValueAsDouble());
         
-        double pos = Constants2025.Elevator.basePos;
-        switch (curState) {
-            case ZERO:
-                pos = Constants2025.Elevator.zeroPos;
-                if (isDone(pos)) {
-                    curRunningState = RUNNING_STATE.DONE;
-                }
-                break;
-            case BASE:
-                pos = Constants2025.Elevator.basePos;
-                if (isDone(pos)) {
-                    curRunningState = RUNNING_STATE.DONE;
-                }
-                else {
-                    // System.out.println("---------EEEE: " + m_canCoder.getPosition().getValueAsDouble() + ", " + pos);
-                }
-                break;
-            case L1:
-                pos = Constants2025.Elevator.l1Pos;
-                if (isDone(pos)) {
-                    curRunningState = RUNNING_STATE.DONE;
-                }
-                break;
-            case L2:
-                pos = Constants2025.Elevator.l2Pos;
-                if (isDone(pos)) {
-                    curRunningState = RUNNING_STATE.DONE;
-                }
-                break;
-            case L3:
-                pos = Constants2025.Elevator.l3Pos;
-                if (isDone(pos)) {
-                    curRunningState = RUNNING_STATE.DONE;
-                }
-                break;
-            case L4:
-                pos = Constants2025.Elevator.l4Pos;
-                if (isDone(pos)) {
-                    curRunningState = RUNNING_STATE.DONE;
-                }
-                break;
-            case NONE:
-                return;
-            default:
-                break;
+        // double pos = Constants2025.Elevator.basePos;
+        // switch (curState) {
+        //     case ZERO:
+        //         pos = Constants2025.Elevator.zeroPos;
+        //         if (isDone(pos)) {
+        //             curRunningState = RUNNING_STATE.DONE;
+        //         }
+        //         break;
+        //     case BASE:
+        //         pos = Constants2025.Elevator.basePos;
+        //         if (isDone(pos)) {
+        //             curRunningState = RUNNING_STATE.DONE;
+        //         }
+        //         else {
+        //             // System.out.println("---------EEEE: " + m_canCoder.getPosition().getValueAsDouble() + ", " + pos);
+        //         }
+        //         break;
+        //     case L1:
+        //         pos = Constants2025.Elevator.l1Pos;
+        //         if (isDone(pos)) {
+        //             curRunningState = RUNNING_STATE.DONE;
+        //         }
+        //         break;
+        //     case L2:
+        //         pos = Constants2025.Elevator.l2Pos;
+        //         if (isDone(pos)) {
+        //             curRunningState = RUNNING_STATE.DONE;
+        //         }
+        //         break;
+        //     case L3:
+        //         pos = Constants2025.Elevator.l3Pos;
+        //         if (isDone(pos)) {
+        //             curRunningState = RUNNING_STATE.DONE;
+        //         }
+        //         break;
+        //     case L4:
+        //         pos = Constants2025.Elevator.l4Pos;
+        //         if (isDone(pos)) {
+        //             curRunningState = RUNNING_STATE.DONE;
+        //         }
+        //         break;
+        //     case NONE:
+        //         return;
+        //     default:
+        //         break;
+        // }
+        double pos = getStatePos(curState);
+        if (MiscUtils.compareDouble(pos, NONE_POS)) {
+            return;
         }
         SmartDashboard.putNumber("ELEVATOR ccc targetPos", pos);
         SmartDashboard.putString("ELEVATOR ccc curState", curState.name());
@@ -315,5 +321,53 @@ public class Elevator2025 extends SubsystemBase {
             e.printStackTrace();
         }
         m_canCoder.setPosition(0);
+    }
+
+    public double getStatePos(EV_STATE state) {
+        switch (state) {
+            case ZERO:
+                return Constants2025.Elevator.zeroPos;
+            case BASE:
+                return Constants2025.Elevator.basePos;
+            case L1:
+                return Constants2025.Elevator.l1Pos;
+            case L2:
+                return Constants2025.Elevator.l2Pos;
+            case L3:
+                return Constants2025.Elevator.l3Pos;
+            case L4:
+                return Constants2025.Elevator.l4Pos;
+            default:
+                return NONE_POS;
+        }
+    }
+
+    public double[] getDodgePosOrderFromUp2Down() {
+        return new double[] {
+            Constants2025.Elevator.upDodgePos,
+            Constants2025.Elevator.downDodgePos,
+        };
+    }
+
+    public double getCurPos() {
+        return m_canCoder.getPosition().getValueAsDouble();
+    }
+
+    public boolean isCurPosBelow(double pos) {
+        return isPosBelow(getCurPos(), pos);
+    }
+
+    public boolean isCurPosUpper(double pos) {
+        return isPosUpper(getCurPos(), pos);
+    }
+    
+    public boolean isPosBelow(double pos1, double pos2) {
+        // smaller value means higher position
+        return pos1 > pos2;
+    }
+
+    public boolean isPosUpper(double pos1, double pos2) {
+        // smaller value means higher position
+        return !isPosBelow(pos1, pos2);
     }
 }

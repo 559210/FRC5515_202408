@@ -46,6 +46,11 @@ public final class MiscUtils {
         return angleDeg;
     }
     
+    public static boolean isBeween(double val, double range1, double range2) {
+        double min = Math.min(range1, range2);
+        double max = Math.max(range1, range2);
+        return val >= min && val <= max;
+    }
 }
 
 
