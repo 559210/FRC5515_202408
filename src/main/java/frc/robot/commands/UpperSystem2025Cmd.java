@@ -113,6 +113,7 @@ public class UpperSystem2025Cmd extends Command {
     private Elevator2025 m_elevator;
     private Intake2025 m_intake;
     private Candle2025 m_candle;
+    private MoveTo2025 m_moveTo;
     // TODO: additional subsystems: sensor for checking if we are carrying Coral;
     // outtake coral; intake coral, intake ball, outtake ball
 
@@ -133,7 +134,7 @@ public class UpperSystem2025Cmd extends Command {
     ActionRunner m_actionRunner = null;
 
     public UpperSystem2025Cmd(
-            TurningArm2025 turningArm, Elevator2025 elev, Intake2025 intake, Candle2025 candle,
+            TurningArm2025 turningArm, Elevator2025 elev, Intake2025 intake, Candle2025 candle, MoveTo2025 moveto,
             Trigger resetCanCodePositionBtn, Trigger resetToZeroPosBtn, Trigger switchCnB, Trigger aimCoral, Trigger intakeTrigger,
             Trigger test_arm, Trigger test_zero) {
 
@@ -141,7 +142,6 @@ public class UpperSystem2025Cmd extends Command {
 
         // for debug begin
         switchCnB = null;
-        aimCoral = null;
         test_arm = null;
         test_zero = null;
         // for debug end
@@ -158,6 +158,9 @@ public class UpperSystem2025Cmd extends Command {
 
         this.m_candle = candle;
         addRequirements(m_candle);
+
+        this.m_moveTo = moveto;
+        addRequirements(m_moveTo);
 
         schedule();
 
@@ -217,15 +220,29 @@ public class UpperSystem2025Cmd extends Command {
                 if (info == null) {
                     return;
                 }
-                if (info.level == 0) {
-                    setState(STATE.L1);
-                } else if (info.level == 1) {
-                    setState(STATE.L2);
-                } else if (info.level == 2) {
-                    setState(STATE.L3);
-                } else if (info.level == 3) {
-                    setState(STATE.L4);
+                // if (info.level == 0) {
+                //     setState(STATE.L1);
+                // } else if (info.level == 1) {
+                //     setState(STATE.L2);
+                // } else if (info.level == 2) {
+                //     setState(STATE.L3);
+                // } else if (info.level == 3) {
+                //     setState(STATE.L4);
+                // }
+
+                Pose2d targetPos = Constants2025.aimPoses.get(info.aprilTagId);
+
+                if (targetPos == null) {
+                    System.out.println("Aim2025Cmd init targetPos is null");
+                    return;
                 }
+                SmartDashboard.putNumber("Aim2025Cmd", info.aprilTagId);
+                SmartDashboard.putString("Aim2025Cmd target", targetPos.toString());
+        
+                // StateController.getInstance().useVisionOdometry = false;
+                m_moveTo.init(targetPos);
+            })).whileFalse(new InstantCommand(() -> {
+                this.m_moveTo.cancelAimMoveCmd();
             }));
         }
 
@@ -282,10 +299,7 @@ public class UpperSystem2025Cmd extends Command {
         }
     }
 
-    @Override
-    public void initialize() {
-        // runs every time when roborio is enabled
-
+    public void onRobotEnabled() {
         m_elevator.init();
         m_turningArm.init(); 
         m_intake.init();
@@ -294,6 +308,17 @@ public class UpperSystem2025Cmd extends Command {
         {
             setState(STATE.READY_FOR_LOAD_CORAL);
         }
+    }
+
+    public void onRobotDisabled() {
+        m_elevator.onDisable();
+        m_turningArm.onDisable();
+        m_candle.onDisable();
+    }
+
+    @Override
+    public void initialize() {
+
     }
 
     @Override
@@ -306,10 +331,7 @@ public class UpperSystem2025Cmd extends Command {
 
     @Override
     public void end(boolean interrupted) {
-        System.out.println("UpperSystem2025Cmd end");
-        m_elevator.onDisable();
-        m_turningArm.onDisable();
-        m_candle.onDisable();
+
     }
 
     @Override
@@ -331,7 +353,7 @@ public class UpperSystem2025Cmd extends Command {
     }
 
     private boolean getIsCarryingCoral() {
-        if (m_intake.getIsCarryingCarol()) {
+        if (m_intake.getIsCarryingCoral()) {
             return true;
         }
 
@@ -490,8 +512,9 @@ public class UpperSystem2025Cmd extends Command {
             int ty = sy.ordinal(); //
 
             curRunningDir = table[ty][tx];
-            System.out.println("tx: " + tx + " ty: " + ty);
-            System.out.println("curRunningDir is " + curRunningDir);
+            System.out.println("doStateAction NEW_SET: lastState: " + lastState.name() + ", curState: " + curState.name());
+            System.out.println("doStateAction NEW_SET: tx: " + tx + " ty: " + ty);
+            System.out.println("doStateAction NEW_SET: curRunningDir is " + curRunningDir);
 
             double[] dodgePosList = m_elevator.getDodgePosOrderFromUp2Down();
             double elevatorStartPos = m_elevator.getCurPos();
@@ -503,15 +526,12 @@ public class UpperSystem2025Cmd extends Command {
                 }
             }
 
+            System.out.println("doStateAction NEW_SET: isNeedDodge: " + isNeedDodge);
             if (m_actionRunner != null) {
                 m_actionRunner.cancel();
             }
             m_actionRunner = new ActionRunner();
 
-            curRunningState = RUNNING_STATE.RUNNING;
-        }
-
-        if (curRunningState == RUNNING_STATE.RUNNING) {
             if (curRunningDir == -1) {
                 // down
                 if (isNeedDodge) {
@@ -544,31 +564,17 @@ public class UpperSystem2025Cmd extends Command {
                     () -> { // update
                     },
                     () -> {},   // onCancel
-                    () -> { // startCondition
+                    // startCondition
+                    isNeedDodge ?
+                    () -> { 
                         return m_elevator.isCurPosBelow(Constants2025.Elevator.downDodgePos);
-                    },
+                    } :
+                    () -> true,
                     () -> { // endCondition
                         return m_turningArm.getCurRunningState() == TurningArm2025.RUNNING_STATE.DONE;
                     }
                 ).start();
             }
-            // else if (curRunningDir == 0) {
-            //     switch (curRunningState) {
-            //         case NEW_SET:
-            //             m_turningArm.setState(taState);
-            //             m_elevator.setState(evState);
-            //             curRunningState = RUNNING_STATE.RUNNING;
-            //             break;
-            //         case RUNNING:
-            //             if (m_turningArm.getCurRunningState() == TurningArm2025.RUNNING_STATE.DONE &&
-            //                     m_elevator.getCurRunningState() == Elevator2025.RUNNING_STATE.DONE) {
-            //                 curRunningState = RUNNING_STATE.DONE;
-            //             }
-            //             break;
-            //         case DONE:
-            //             break;
-            //     }
-            // }
             else if (curRunningDir == 1) {
                 // up
                 if (isNeedDodge) {
@@ -601,18 +607,25 @@ public class UpperSystem2025Cmd extends Command {
                     () -> { // update
                     },
                     () -> {},   // onCancel
-                    () -> { // startCondition
+                    // startCondition
+                    isNeedDodge ? 
+                    () -> { 
                         return m_elevator.isCurPosUpper(Constants2025.Elevator.upDodgePos);
-                    },
+                    } : 
+                    () -> true,
                     () -> { // endCondition
                         return m_turningArm.getCurRunningState() == TurningArm2025.RUNNING_STATE.DONE;
                     }
                 ).start();
             }
 
-            m_actionRunner.update();
+            curRunningState = RUNNING_STATE.RUNNING;
+        }
 
-            if (m_actionRunner.getIsDone(getName())) {
+
+        if (curRunningState == RUNNING_STATE.RUNNING) {
+            m_actionRunner.update();
+            if (m_actionRunner.getIsDone()) {
                 curRunningState = RUNNING_STATE.DONE;
             }
         }
@@ -705,7 +718,7 @@ public class UpperSystem2025Cmd extends Command {
                 this.m_candle.showL1();
             }
             else {
-                boolean isLeft = info.branch == -1;
+                boolean isLeft = (info.branch == -1);
                 switch ((int)info.level) {
                     case 1:
                         m_candle.showL2(isLeft);

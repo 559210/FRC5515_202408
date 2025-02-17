@@ -267,15 +267,15 @@ public class ControlPadHelper {
     private static void refreshControlPad() {
         long[] datas = controlPadInfoTopic.getIntArrayValue();
         // datas[0] is apriltag id
-        // datas[1] is level of branch. 0 is bottom, 1 is 1st level, 2 is 2nd level, 3 is 3rd level
-        // datas[2] is the left or right branch. -1 is left, 1 is right, 0 means level is bottom
+        // datas[2] is level of branch. 0 is bottom, 1 is 1st level, 2 is 2nd level, 3 is 3rd level
+        // datas[1] is the left or right branch. -1 is left, 1 is right, 0 means level is bottom
         if (datas.length == 0) {
             return;
         }
         controlPadInfo.backup();
         controlPadInfo.data.aprilTagId = datas[0];
-        controlPadInfo.data.level = datas[1];
-        controlPadInfo.data.branch = datas[2];
+        controlPadInfo.data.level = datas[2];
+        controlPadInfo.data.branch = datas[1];
         controlPadInfo.compareOld();
 
         SmartDashboard.putNumber("ControlPad aprilTagId", controlPadInfo.data.aprilTagId);

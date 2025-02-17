@@ -8,24 +8,40 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.614511667911857,
-        "y": 2.7425513222046605
+        "x": 5.547738579606279,
+        "y": 2.7960856928318814
       },
       "isLocked": false,
       "linkedName": "StartPoint1"
     },
     {
       "anchor": {
-        "x": 5.54406887755102,
-        "y": 2.763966836734694
+        "x": 3.439,
+        "y": 1.622321428573922
       },
       "prevControl": {
-        "x": 7.126436678360212,
-        "y": 3.425432182786439
+        "x": 3.7222450331870927,
+        "y": 1.9903680428184702
+      },
+      "nextControl": {
+        "x": 3.286527586757502,
+        "y": 1.4241998416632349
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 3.92,
+        "y": 2.59
+      },
+      "prevControl": {
+        "x": 3.769447670721695,
+        "y": 2.3904154411060894
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "AP22R"
+      "linkedName": null
     }
   ],
   "rotationTargets": [],
@@ -42,13 +58,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 119.99999999999999
+    "rotation": 59.38139459109046
   },
   "reversed": false,
-  "folder": "BAuto",
+  "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": 0.0
   },
   "useDefaultConstraints": true
 }

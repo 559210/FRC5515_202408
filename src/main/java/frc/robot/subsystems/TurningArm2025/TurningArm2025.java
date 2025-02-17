@@ -188,11 +188,17 @@ public class TurningArm2025 extends SubsystemBase {
         // }
 
         double pos = getStatePos(curState);
+        SmartDashboard.putNumber("ARM ccc targetPos", pos);
+        SmartDashboard.putString("ARM ccc curState", curState.name());
+
         if (MiscUtils.compareDouble(pos, NONE_POS)) {
             return;
         }
-        SmartDashboard.putNumber("ARM ccc targetPos", pos);
-        SmartDashboard.putString("ARM ccc curState", curState.name());
+        if (isDone(pos)) {
+            curRunningState = RUNNING_STATE.DONE;
+        }
+
+
         m_armMotor.setControl(motionMagicVoltage.withPosition(pos));
     }
 

@@ -213,4 +213,8 @@ public class RobotContainer implements RobotContainerInterface {
 
     public void updateAlways() {
     }
+
+    public void onDisabled() {
+        
+    }
 }

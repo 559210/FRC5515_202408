@@ -69,8 +69,6 @@ public class Aim2025Cmd extends Command {
             SmartDashboard.putString("Aim2025Cmd", "interrupted");
         }
         this.m_moveToSubSys.cancelAimMoveCmd();
-        Pose2d pos = s_Swerve.getPose();
-        System.out.println("end pos: " + pos.toString());
     }
 
     @Override

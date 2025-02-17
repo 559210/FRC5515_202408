@@ -33,15 +33,12 @@ public class Intake2025 extends SubsystemBase {
             Constants2025.Intake.canBusName);
     private VelocityVoltage intakeVelDutycycle = new VelocityVoltage(0);
 
-    private DigitalInput intakeCoralSensor = new DigitalInput(0);
-    private boolean isIntakeCoralSensorOn = false;
+    private DigitalInput intakeCoralSensor0 = new DigitalInput(0);      // upper sensor
+    private DigitalInput intakeCoralSensor1 = new DigitalInput(1);      // lower sensor
     private int intakeCoralSensorOnTickCount = -1;
     private int intakeCoralSensorOffTickCount = -1;
     private final int intakeCoralSensorOnTickCountThreshold = 0;       // a tick is about 1/50 second(50Hz)
     private final int intakeCoralSensorOffTickCountThreshold = 0;      // a tick is about 1/50 second(50Hz)
-    private final int maxGotCoralTicks = 5;
-    private int gotCoralTicks = 0;
-
 
     public enum STATE {
         READY,
@@ -125,12 +122,23 @@ public class Intake2025 extends SubsystemBase {
         this.curState = st;
     }
 
-    public boolean getIsCarryingCarol() {
-        return isIntakeCoralSensorOn;
+    public boolean getIsCarryingCoral() {
+        // return isIntakeCoralSensorOn;
+        // System.out.println("------------------------=============> " + curState.name());
+        return curState == STATE.CARRYING_CORAL;
     }
 
+    private boolean isAllSensored() {
+        return !intakeCoralSensor0.get() && !intakeCoralSensor1.get();
+    }
+
+    private boolean isCoralTotallyOut() {
+        return intakeCoralSensor0.get() == true && intakeCoralSensor1.get() == true;
+    }
+
+
     private void updateIsCarryingCarol() {
-        boolean isCarrying = !intakeCoralSensor.get();
+        boolean isCarrying = !intakeCoralSensor0.get();
         if (isCarrying) {
             intakeCoralSensorOffTickCount = -1;
             if (intakeCoralSensorOnTickCount == -1) {
@@ -140,7 +148,6 @@ public class Intake2025 extends SubsystemBase {
                 intakeCoralSensorOnTickCount++;
             }
             if (intakeCoralSensorOnTickCount > intakeCoralSensorOnTickCountThreshold) {
-                isIntakeCoralSensorOn = true;
             }
         }
         else {
@@ -152,11 +159,52 @@ public class Intake2025 extends SubsystemBase {
                 intakeCoralSensorOffTickCount++;
             }
             if (intakeCoralSensorOffTickCount > intakeCoralSensorOffTickCountThreshold) {
-                isIntakeCoralSensorOn = false;
             }
         }
     };
 
+    enum CORAL_IN_STATE {
+        READY,
+        STEP1,
+        STEP2,
+    };
+
+    CORAL_IN_STATE coralInState = CORAL_IN_STATE.READY;
+
+    private double updateCoralIn() {
+        double speed = 0;
+        switch (coralInState) {
+            case READY:
+            {
+                speed = Constants2025.Intake.coralInSpeed;
+                if (!intakeCoralSensor0.get()) {
+                    speed = Constants2025.Intake.coralInSlowSpeed;
+                }
+                if (isAllSensored()) {
+                    coralInState = CORAL_IN_STATE.STEP1;
+                    speed = Constants2025.Intake.coralInReverseSpeed;
+                }
+            }
+            break;
+            case STEP1:
+            {
+                speed = Constants2025.Intake.coralInReverseSpeed;
+                if (intakeCoralSensor1.get()) {
+                    // sensor1 not on
+                    curState = STATE.CARRYING_CORAL;
+                    coralInState = CORAL_IN_STATE.READY;
+                    speed = 0;
+                }
+            }
+            break;
+            case STEP2:
+            {
+
+            }
+            break;
+        }
+        return speed;
+    }
     private void updateState() {
         double speed = 0;
         switch (curState) {
@@ -166,23 +214,17 @@ public class Intake2025 extends SubsystemBase {
                 speed = 0;
                 break;
             case CORAL_IN:
-                if (getIsCarryingCarol()) {
-                    gotCoralTicks = 0;
-                    curState = STATE.GOT_CORAL;
-                }
-                else {
-                    speed = Constants2025.Intake.coralInSpeed;
-                }
+                speed = updateCoralIn();
                 break;
-            case GOT_CORAL:
-                speed = -15;
-                gotCoralTicks++;
-                if (gotCoralTicks >= maxGotCoralTicks) {
-                    curState = STATE.CARRYING_CORAL;
-                }
-                break;
+            // case GOT_CORAL:
+            //     speed = -15;
+            //     gotCoralTicks++;
+            //     if (gotCoralTicks >= maxGotCoralTicks) {
+            //         curState = STATE.CARRYING_CORAL;
+            //     }
+            //     break;
             case CORAL_OUT:
-                if (!getIsCarryingCarol()) {
+                if (isCoralTotallyOut()) {
                     curState = STATE.READY;
                 }
                 else {
@@ -210,12 +252,16 @@ public class Intake2025 extends SubsystemBase {
 
     @Override
     public void periodic() {
-        updateIsCarryingCarol();
+        // updateIsCarryingCarol();
         updateState();
         telemetry();
     }
 
     protected void telemetry() {
-        SmartDashboard.putString("Intake2025_Sensor", "state: " + intakeCoralSensor.get());
+        SmartDashboard.putString("Intake2025 state", curState.name());
+        SmartDashboard.putString("Intake2025 coral in state", coralInState.name());
+        SmartDashboard.putString("Intake2025_Sensor0", "state: " + intakeCoralSensor0.get());
+        SmartDashboard.putString("Intake2025_Sensor1", "state: " + intakeCoralSensor1.get());
+
     }
 }
