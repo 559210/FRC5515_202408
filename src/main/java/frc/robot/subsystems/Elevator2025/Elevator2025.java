@@ -71,7 +71,7 @@ public class Elevator2025 extends SubsystemBase {
     public MotionMagicVoltage motionMagicVoltage1 = new MotionMagicVoltage(0);
     // private final VelocityVoltage driveVelocity = new VelocityVoltage(0);
     // public MotionMagicVoltage motionMagicVoltage2 = new MotionMagicVoltage(1);
-    protected double lastMoveTargetPos = 9999; 
+    protected double lastMoveTargetPos = NONE_POS; 
     protected int curPidSlot = 0;
     @Override
     public void periodic() {
@@ -170,14 +170,16 @@ public class Elevator2025 extends SubsystemBase {
     }
 
     protected void updatePidSlot(double targetPos) {
-        if (MiscUtils.compareDouble(lastMoveTargetPos, 9999)) {
+        if (MiscUtils.compareDouble(lastMoveTargetPos, NONE_POS)) {
             lastMoveTargetPos = targetPos;
         }
         if (MiscUtils.compareDouble(lastMoveTargetPos, targetPos)) {
             return;
         }
-        System.out.println("-------------> " + targetPos + " ---> " + lastMoveTargetPos);
-        if (targetPos < lastMoveTargetPos) {
+        // System.out.println("-------------> " + targetPos + " ---> " + lastMoveTargetPos);
+        if (isCurPosBelow(targetPos))
+        // if (targetPos < lastMoveTargetPos) 
+        {
             // up
             curPidSlot = 0;
         }
@@ -240,12 +242,16 @@ public class Elevator2025 extends SubsystemBase {
         //         break;
         // }
         double pos = getStatePos(curState);
-        if (MiscUtils.compareDouble(pos, NONE_POS)) {
-            return;
-        }
         SmartDashboard.putNumber("ELEVATOR ccc targetPos", pos);
         SmartDashboard.putString("ELEVATOR ccc curState", curState.name());
         SmartDashboard.putString("ELEVATOR ccc curRuningState", curRunningState.name());
+
+        if (MiscUtils.compareDouble(pos, NONE_POS)) {
+            return;
+        }
+        if (isDone(pos)) {
+            curRunningState = RUNNING_STATE.DONE;
+        }
 
         updatePidSlot(pos);
         SmartDashboard.putNumber("ELEVATOR ccc pidSlot", (int)curPidSlot);
@@ -339,6 +345,10 @@ public class Elevator2025 extends SubsystemBase {
                 return Constants2025.Elevator.l3Pos;
             case L4:
                 return Constants2025.Elevator.l4Pos;
+            case BALL1:
+                return Constants2025.Elevator.ball1Pos;
+            case BALL2:
+                return Constants2025.Elevator.ball2Pos;
             default:
                 return NONE_POS;
         }

@@ -35,6 +35,8 @@ public class TurningArm2025 extends SubsystemBase {
         L2,
         L3,
         L4,
+        BALL1,
+        BALL2,
         DODGE,
     }
 
@@ -188,11 +190,17 @@ public class TurningArm2025 extends SubsystemBase {
         // }
 
         double pos = getStatePos(curState);
+        SmartDashboard.putNumber("ARM ccc targetPos", pos);
+        SmartDashboard.putString("ARM ccc curState", curState.name());
+
         if (MiscUtils.compareDouble(pos, NONE_POS)) {
             return;
         }
-        SmartDashboard.putNumber("ARM ccc targetPos", pos);
-        SmartDashboard.putString("ARM ccc curState", curState.name());
+        if (isDone(pos)) {
+            curRunningState = RUNNING_STATE.DONE;
+        }
+
+
         m_armMotor.setControl(motionMagicVoltage.withPosition(pos));
     }
 
@@ -287,6 +295,10 @@ public class TurningArm2025 extends SubsystemBase {
                 return Constants2025.TurningArm.l4Pos;
             case DODGE:
                 return Constants2025.TurningArm.dodgePos;
+            case BALL1:
+                return Constants2025.TurningArm.ball1Pos;
+            case BALL2:
+                return Constants2025.TurningArm.ball2Pos;
             default:
                 return NONE_POS;
         }

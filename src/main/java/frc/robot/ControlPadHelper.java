@@ -25,31 +25,31 @@ import frc.robot.utils.MiscUtils;
 public class ControlPadHelper {
     public static class DebugCtrl {
         // the code below is from ControlPad Unity project.
-        // public enum DebugPanelInfo
-        // {
-        //     NONE = 0,
-        //     ZERO,
-        //     READY_FOR_LOAD_CORAL,
-        //     READY_FOR_LOAD_BALL,
-        //     L1,
-        //     L2,
-        //     L3,
-        //     L4,
-        //     BALL1,
-        // }
+        private enum DebugPanelInfo
+        {
+            NONE,
+            ZERO,
+            READY_FOR_LOAD_CORAL,
+            L1,
+            L2,
+            L3,
+            L4,
+            BALL1,
+            BALL2,
+        }
         static public long val = -1;
         static public boolean isLoadCoral = false;
         static public boolean isLoadBall = false;
-        static public Trigger onZero = new Trigger(eventLoop, () -> val == 1);
-        static public Trigger onReadyForloadCoral = new Trigger(eventLoop, () -> val == 2);
-        static public Trigger onReadyForloadBall = new Trigger(eventLoop, () -> val == 3);
-        static public Trigger onL1 = new Trigger(eventLoop, () -> val == 4);
-        static public Trigger onL2 = new Trigger(eventLoop, () -> val == 5);
-        static public Trigger onL3 = new Trigger(eventLoop, () -> val == 6);
-        static public Trigger onL4 = new Trigger(eventLoop, () -> val == 7);
-        static public Trigger onBall1 = new Trigger(eventLoop, () -> val == 8);
-        static public Trigger onLoadCoral = new Trigger(eventLoop, () -> isLoadCoral);
-        static public Trigger onLoadBall = new Trigger(eventLoop, () -> isLoadBall);
+        // static public Trigger onZero = new Trigger(eventLoop, () -> val == DebugPanelInfo.ZERO.ordinal());
+        // static public Trigger onReadyForloadCoral = new Trigger(eventLoop, () -> val == 2);
+        static public Trigger onL1 = new Trigger(eventLoop, () -> val == DebugPanelInfo.L1.ordinal());
+        static public Trigger onL2 = new Trigger(eventLoop, () -> val == DebugPanelInfo.L2.ordinal());
+        static public Trigger onL3 = new Trigger(eventLoop, () -> val == DebugPanelInfo.L3.ordinal());
+        static public Trigger onL4 = new Trigger(eventLoop, () -> val == DebugPanelInfo.L4.ordinal());
+        static public Trigger onBall1 = new Trigger(eventLoop, () -> val == DebugPanelInfo.BALL1.ordinal());
+        static public Trigger onBall2 = new Trigger(eventLoop, () -> val == DebugPanelInfo.BALL2.ordinal());
+        // static public Trigger onLoadCoral = new Trigger(eventLoop, () -> isLoadCoral);
+        // static public Trigger onLoadBall = new Trigger(eventLoop, () -> isLoadBall);
     }
     public static class ControlPadInfo {
         public static class ControlPadInfoData {
@@ -267,15 +267,15 @@ public class ControlPadHelper {
     private static void refreshControlPad() {
         long[] datas = controlPadInfoTopic.getIntArrayValue();
         // datas[0] is apriltag id
-        // datas[1] is level of branch. 0 is bottom, 1 is 1st level, 2 is 2nd level, 3 is 3rd level
-        // datas[2] is the left or right branch. -1 is left, 1 is right, 0 means level is bottom
+        // datas[2] is level of branch. 0 is bottom, 1 is 1st level, 2 is 2nd level, 3 is 3rd level
+        // datas[1] is the left or right branch. -1 is left, 1 is right, 0 means level is bottom
         if (datas.length == 0) {
             return;
         }
         controlPadInfo.backup();
         controlPadInfo.data.aprilTagId = datas[0];
-        controlPadInfo.data.level = datas[1];
-        controlPadInfo.data.branch = datas[2];
+        controlPadInfo.data.level = datas[2];
+        controlPadInfo.data.branch = datas[1];
         controlPadInfo.compareOld();
 
         SmartDashboard.putNumber("ControlPad aprilTagId", controlPadInfo.data.aprilTagId);

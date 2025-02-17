@@ -46,7 +46,7 @@ LED:
 25lights 8-32
 Status Lights: 
 IDLE #0f4ff2(15, 79, 242)
-WithCoral #0ff2ee(15, 242, 238)
+WithCoral #f5f242(245, 242, 66)
 
 Coral Lights:
 L0 #ffffff(255, 255, 255)
@@ -78,11 +78,21 @@ IDLE:
 
 2/15 TODO:
 去掉一切试图在Disable状态下的外部输入操作，基本不可行 (待真机测试)
-Elvator上下时候加一个障碍点，在通过障碍点的时候调整手臂姿态，避免碰到，同时也避免等Elevator到达目的地后再调整手臂姿态，导致的延时
-CANdle代码 (待真机测试)
+Elvator上下时候加一个障碍点，在通过障碍点的时候调整手臂姿态，避免碰到，同时也避免等Elevator到达目的地后再调整手臂姿态，导致的延时(done)
+CANdle代码 (done)
 Disable后，UpperSystem状态重置，避免下次Enable后莫名移动
-ControlPad加入机器UpperSystem的状态同步
+ControlPad加入机器UpperSystem的状态同步(done)
 ControlPad加入虚拟上下左右按钮，用于微调机器，用于人工瞄准
-恢复底盘代码
+恢复底盘代码(done)
 Test调试模式，支持Elevator解锁，支持重置UpperSystem状态
 CurrentLimit
+
+intake改双传感器 
+s0 靠近入口
+s1 靠近出口
+
+先考虑进入状况：
+option1： s0，s1 all on  慢速反转直到s1 off
+option2： s0 on 减速，直到s1 on
+出情况
+s0，s1 all off

@@ -85,10 +85,11 @@ public class RobotContainer2025 implements RobotContainerInterface {
                     () -> -driver.getRawAxis(translationAxis), 
                     () -> -driver.getRawAxis(strafeAxis), 
                     () -> -driver.getRawAxis(rotationAxis), 
+                    // ()->0, ()->0, ()->0,
                     () -> robotCentric.getAsBoolean()
                 )
                 , new UpperSystem2025Cmd(
-                    m_turningArm, m_elevator, m_intake, m_candle,
+                    m_turningArm, m_elevator, m_intake, m_candle, m_moveToSubSys,
                     resetUpperCanCodePositionBtn, zeroUpperPosBtn, switchCoralnBallBtn, aimBtn, intakeBtn,
                     turningArmBtn, zeroStateBtn
                 )
@@ -110,9 +111,15 @@ public class RobotContainer2025 implements RobotContainerInterface {
 
     public void telInit() {
         StateController.getInstance().useVisionOdometry = true;
-    }
+        UpperSystem2025Cmd.inst.onRobotEnabled();
+    } 
     public void autoInit() {
         StateController.getInstance().useVisionOdometry = true;
+        UpperSystem2025Cmd.inst.onRobotEnabled();
+    }
+
+    public void onDisabled() {
+        UpperSystem2025Cmd.inst.onRobotDisabled();
     }
 
     /**
@@ -130,7 +137,7 @@ public class RobotContainer2025 implements RobotContainerInterface {
         downButton.whileTrue(new SlightlyMoveCmd2025(s_Swerve, DIR.DOWN));
 
         zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
-        aimBtn.whileTrue(new Aim2025Cmd(m_moveToSubSys, s_Swerve));
+        // aimBtn.whileTrue(new Aim2025Cmd(m_moveToSubSys, s_Swerve));
 
         // ControlPadHelper.goTargetTrigger.whileTrue(new Aim2025Cmd(m_moveToSubSys, s_Swerve));
         // ControlPadHelper.tapTrigger.whileTrue(new MoveTo2025Cmd(m_moveToSubSys, s_Swerve));

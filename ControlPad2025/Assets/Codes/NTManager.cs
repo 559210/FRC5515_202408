@@ -49,12 +49,12 @@ public class NTManager
         NONE = 0,
         ZERO,
         READY_FOR_LOAD_CORAL,
-        READY_FOR_LOAD_BALL,
         L1,
         L2,
         L3,
         L4,
         BALL1,
+        BALL2,
     }
     readonly static string ID_NAME = "5515ControlPad"; 
     readonly string ROBOT_POS_ENTRY_NAME = $"/{ID_NAME}/RobotPos";

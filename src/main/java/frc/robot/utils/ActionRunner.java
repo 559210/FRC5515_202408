@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BooleanSupplier;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 public class ActionRunner {
     class Action {
         Runnable m_init;
@@ -116,13 +118,15 @@ public class ActionRunner {
                 }
             }
 
+            SmartDashboard.putString("ActionRunner State: ", 
+                String.format("isAllConditionDone %b, actions: %d/%d", isAllConditionDone, m_runningActionIndex, m_actions.size()));
             if (isAllConditionDone && m_runningActionIndex >= m_actions.size()) {
                 state = STATE.DONE;
             }
         }
     }
 
-    public boolean getIsDone(String name) {
+    public boolean getIsDone() {
         return state == STATE.DONE;
     }
 

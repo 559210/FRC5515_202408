@@ -229,12 +229,12 @@ public class DebugPanel
     GComponent root;
     GButton zeroBtn;
     GButton waitCoralBtn;
-    GButton waitBallBtn;
     GButton l1Btn;
     GButton l2Btn;
     GButton l3Btn;
     GButton l4Btn;
     GButton ball1Btn;
+    GButton ball2Btn;
 
     GButton loadCoralBtn;
     GButton loadBallBtn;
@@ -248,8 +248,6 @@ public class DebugPanel
         zeroBtn.onClick.Set(onZeroBtnClick);
         waitCoralBtn = root.GetChild("waitCoralBtn").asButton;
         waitCoralBtn.onClick.Set(onWaitCoralBtnClick);
-        waitBallBtn = root.GetChild("waitBallBtn").asButton;
-        waitBallBtn.onClick.Set(onWaitBallBtnClick);
         l1Btn = root.GetChild("L1Btn").asButton;
         l1Btn.onClick.Set(onL1BtnClick);
         l2Btn = root.GetChild("L2Btn").asButton;
@@ -260,6 +258,8 @@ public class DebugPanel
         l4Btn.onClick.Set(onL4BtnClick);
         ball1Btn = root.GetChild("ball1Btn").asButton;
         ball1Btn.onClick.Set(onBall1BtnClick);
+        ball2Btn = root.GetChild("ball2Btn").asButton;
+        ball2Btn.onClick.Set(onBall2BtnClick);
         loadCoralBtn = root.GetChild("loadCoralBtn").asButton;
         loadCoralBtn.onClick.Set(onLoadCoralBtnClick);
         loadBallBtn = root.GetChild("loadBallBtn").asButton;
@@ -274,10 +274,6 @@ public class DebugPanel
     void onWaitCoralBtnClick()
     {
         send((int)NTManager.DebugPanelInfo.READY_FOR_LOAD_CORAL);
-    }
-
-    void onWaitBallBtnClick() {
-        send((int)NTManager.DebugPanelInfo.READY_FOR_LOAD_BALL);
     }
 
     void onL1BtnClick() {
@@ -298,6 +294,10 @@ public class DebugPanel
 
     void onBall1BtnClick() {
         send((int)NTManager.DebugPanelInfo.BALL1);
+    }
+
+    void onBall2BtnClick() {
+        send((int)NTManager.DebugPanelInfo.BALL2);
     }
 
     void onLoadCoralBtnClick() {
