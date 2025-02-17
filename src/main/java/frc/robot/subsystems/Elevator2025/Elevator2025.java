@@ -37,6 +37,8 @@ public class Elevator2025 extends SubsystemBase {
         L2,
         L3,
         L4,
+        BALL1,
+        BALL2,
     }
     public enum RUNNING_STATE {
         READY,

@@ -244,6 +244,9 @@ public final class Constants2025 {
         public static final double l2Pos = -4.66582;
         public static final double l3Pos = -9.135644;
         public static final double l4Pos = -15.8;
+        public static final double ball1Pos = -4.66582;
+        public static final double ball2Pos = -9.135644;
+
         public static final double upDodgePos = -9.135644;
         public static final double downDodgePos = -4.66582;
     }

@@ -52,6 +52,7 @@ public class UpperSystem2025Cmd extends Command {
         L3,
         L4,
         BALL1,
+        BALL2,
     }
 
     // -1 down, 1 up, 0 unknow
