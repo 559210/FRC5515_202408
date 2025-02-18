@@ -5,7 +5,7 @@
     <component id="n0_gh6e" name="zeroBtn" src="frd4c" fileName="commonBtn.xml" xy="20,6" size="69,20" group="n8_gh6e" visible="false">
       <Button title="ZERO&#xA;"/>
     </component>
-    <component id="n1_gh6e" name="waitCoralBtn" src="frd4c" fileName="commonBtn.xml" xy="94,6" size="69,20" group="n8_gh6e" visible="false">
+    <component id="n1_gh6e" name="waitCoralBtn" src="frd4c" fileName="commonBtn.xml" xy="94,6" size="69,20" group="n8_gh6e">
       <Button title="Wait Coral"/>
     </component>
     <component id="n3_gh6e" name="L1Btn" src="frd4c" fileName="commonBtn.xml" xy="168,6" size="69,20" group="n8_gh6e">

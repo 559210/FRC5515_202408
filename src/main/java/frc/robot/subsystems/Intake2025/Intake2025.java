@@ -91,17 +91,15 @@ public class Intake2025 extends SubsystemBase {
     public void toggleCoralIntake() {
         if (this.curState == STATE.READY) {
             setState(STATE.CORAL_IN);
-            return;
         }
-
-        if (this.curState == STATE.CORAL_IN) {
+        else if (this.curState == STATE.CORAL_IN) {
             setState(STATE.READY);
-            return;
         }
-
-        if (this.curState == STATE.CARRYING_CORAL) {
+        else if (this.curState == STATE.CARRYING_CORAL) {
             setState(STATE.CORAL_OUT);
-            return;
+        }
+        else {
+            setState(STATE.READY);
         }
     }
 
@@ -110,11 +108,14 @@ public class Intake2025 extends SubsystemBase {
             setState(STATE.BALL_IN);
         }
 
-        if (this.curState == STATE.BALL_IN) {
+        else if (this.curState == STATE.BALL_IN) {
             setState(STATE.READY);
         }
-        if (this.curState == STATE.CARRYING_BALL) {
+        else if (this.curState == STATE.CARRYING_BALL) {
             setState(STATE.BALL_OUT);
+        }
+        else {
+            setState(STATE.READY);
         }
     }
 

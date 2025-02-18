@@ -2,6 +2,7 @@ package frc.robot.commands;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 import edu.wpi.first.math.MathUtil;
@@ -15,6 +16,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants;
@@ -57,16 +59,15 @@ public class UpperSystem2025Cmd extends Command {
     // -1 down, 1 up, 0 unknow
     private int[][] table = new int[][]{
         //          NONE, ZERO,  READY_FOR_LOAD_CORAL, L1, L2, L3, L4, BALL1, BALL2
-        new int[]{  0,    0,     0,                    0,  0,  0,  0, 0,     0     },// NONE
+        new int[]{  0,    0,     0,                    0,  0,  0,  0,   0,     0     },// NONE
         new int[]{  0,    0,     -1,                   -1, -1, -1, -1, -1,    -1     },// ZERO
-        new int[]{  0,    1,     0,                    -1, -1, -1, -1, -1,    0     },// READY_FOR_LOAD_CORAL
-        new int[]{  0,    0,     0,                    0,  0,  0,  0,  0,     0     },// READY_FOR_LOAD_BALL
+        new int[]{  0,    1,     0,                    -1, -1, -1, -1, -1,    -1     },// READY_FOR_LOAD_CORAL
         new int[]{  0,    1,     1,                    0,  -1, -1, -1, -1,    0     },// L1
         new int[]{  0,    1,     1,                    1,  0,  -1, -1, -1,    0     },// L2
         new int[]{  0,    1,     1,                    1,  1,  0,  -1, -1,    0     },// L3
         new int[]{  0,    1,     1,                    1,  1,  1,  0,  -1,    0     },// L4
-        new int[]{  0,    0,     0,                    0,  0,  0,  0,  0 ,    0    },// BALL1
-        new int[]{  0,    0,     0,                    0,  0,  0,  0,  0 ,    0    },// BALL2
+        new int[]{  0,    0,     1,                    0,  0,  0,  0,   0,    1    },// BALL1
+        new int[]{  0,    0,     0,                    0,  0,  0,  0,  -1 ,    0    },// BALL2
     };
 
     // private STATE[] STATE_UP_DIR = new STATE[] {
@@ -226,9 +227,9 @@ public class UpperSystem2025Cmd extends Command {
                 // } else if (info.level == 1) {
                 //     setState(STATE.L2);
                 // } else if (info.level == 2) {
-                //     setState(STATE.L3);
+                //     setState(STATE.L2);
                 // } else if (info.level == 3) {
-                //     setState(STATE.L4);
+                //     setState(STATE.L2);
                 // }
 
                 Pose2d targetPos = Constants2025.aimPoses.get(info.aprilTagId);
@@ -250,7 +251,13 @@ public class UpperSystem2025Cmd extends Command {
         if (intakeTrigger != null) {
             this.intakeTrigger = intakeTrigger;
             this.intakeTrigger.onTrue(new InstantCommand(() -> {
-                this.m_intake.toggleCoralIntake();
+                if (curState == STATE.BALL1 || curState == STATE.BALL2) {
+                    this.m_intake.toggleBallIntake();
+                }
+                else {
+                    this.m_intake.toggleCoralIntake();
+                }
+                
             }));
         }
 
@@ -262,9 +269,9 @@ public class UpperSystem2025Cmd extends Command {
             // ControlPadHelper.DebugCtrl.onZero.onTrue(new InstantCommand(() -> {
             //     setState(STATE.ZERO);
             // }));
-            // ControlPadHelper.DebugCtrl.onReadyForloadCoral.onTrue(new InstantCommand(() -> {
-            //     setState(STATE.READY_FOR_LOAD_CORAL);
-            // }));
+            ControlPadHelper.DebugCtrl.onReadyForloadCoral.onTrue(new InstantCommand(() -> {
+                setState(STATE.READY_FOR_LOAD_CORAL);
+            }));
             ControlPadHelper.DebugCtrl.onL1.onTrue(new InstantCommand(() -> {
                 setState(STATE.L1);
             }));
@@ -296,7 +303,8 @@ public class UpperSystem2025Cmd extends Command {
         }
     }
 
-    public void onRobotEnabled() {
+    @Override
+    public void initialize() {
         m_elevator.init();
         m_turningArm.init(); 
         m_intake.init();
@@ -305,17 +313,6 @@ public class UpperSystem2025Cmd extends Command {
         {
             setState(STATE.READY_FOR_LOAD_CORAL);
         }
-    }
-
-    public void onRobotDisabled() {
-        m_elevator.onDisable();
-        m_turningArm.onDisable();
-        m_candle.onDisable();
-    }
-
-    @Override
-    public void initialize() {
-
     }
 
     @Override
@@ -328,8 +325,12 @@ public class UpperSystem2025Cmd extends Command {
 
     @Override
     public void end(boolean interrupted) {
-
+        System.out.println("UpperSystemCmd END ======>" + interrupted);
+        m_elevator.onDisable();
+        m_turningArm.onDisable();
+        m_candle.onDisable();
     }
+    
 
     @Override
     public boolean isFinished() {
@@ -732,6 +733,31 @@ public class UpperSystem2025Cmd extends Command {
             
         }
 
+    }
+
+    public void setStateLn() {
+        ControlPadInfo.ControlPadInfoData info = ControlPadHelper.getControlPadInfo();
+        if (info == null) {
+            return;
+        }
+        STATE newState = STATE.NONE;
+        switch ((int)info.level) {
+            case 0:
+                newState = STATE.L1;
+                break;
+            case 1:
+                newState = STATE.L2;
+                break;
+            case 2:
+                newState = STATE.L3;
+                break;
+            case 3:
+                newState = STATE.L4;
+                break;
+        }
+        if (newState != STATE.NONE) {
+            setState(newState);
+        }
     }
 
     protected void telemetry() {

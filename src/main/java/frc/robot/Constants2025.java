@@ -212,8 +212,8 @@ public final class Constants2025 {
         public static final double dodgePos =  1.039307;  // the pos that allows elevator to move
         public static final double l3Pos = 1.039307;
         public static final double l4Pos = 0.6;
-        public static final double ball1Pos = 1.4;
-        public static final double ball2Pos = 1.4;
+        public static final double ball1Pos = 4.3;
+        public static final double ball2Pos = 4.3;
     }
 
     public static final class Elevator {
@@ -247,8 +247,8 @@ public final class Constants2025 {
         public static final double l2Pos = -5.41582;
         public static final double l3Pos = -9.885644;
         public static final double l4Pos = -15.5;
-        public static final double ball1Pos = -5.41582;
-        public static final double ball2Pos = -9.885644;
+        public static final double ball1Pos = -6;
+        public static final double ball2Pos = -10;
         public static final double upDodgePos = -9.135644;
         public static final double downDodgePos = -4.66582;
     }
@@ -267,8 +267,8 @@ public final class Constants2025 {
         public static final double coralInSlowSpeed = 2;
         public static final double coralInReverseSpeed = -3;
         public static final double coralOutSpeed = 15;
-        public static final double BallInSpeed = 15;
-        public static final double BAllOutSpeed = -15;
+        public static final double BallInSpeed = -15;
+        public static final double BAllOutSpeed = 15;
     }
 
     public static final class Candle {

@@ -4,11 +4,13 @@ import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.FollowPathCommand;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.commands.PathfindingCommand;
+import com.pathplanner.lib.events.EventTrigger;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructArrayPublisher;
+import edu.wpi.first.networktables.StructPublisher;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
@@ -75,7 +77,8 @@ public class RobotContainer2025 implements RobotContainerInterface {
     Candle2025 m_candle = new Candle2025();
 
     private final StructArrayPublisher<SwerveModuleState> swerveStatePublisher;
-
+    private final StructPublisher<Pose2d> robotPospublisher = NetworkTableInstance.getDefault()
+        .getStructTopic("MyPose", Pose2d.struct).publish();
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer2025() {
         s_Swerve.setDefaultCommand(
@@ -88,12 +91,13 @@ public class RobotContainer2025 implements RobotContainerInterface {
                     // ()->0, ()->0, ()->0,
                     () -> robotCentric.getAsBoolean()
                 )
-                , new UpperSystem2025Cmd(
-                    m_turningArm, m_elevator, m_intake, m_candle, m_moveToSubSys,
-                    resetUpperCanCodePositionBtn, zeroUpperPosBtn, switchCoralnBallBtn, aimBtn, intakeBtn,
-                    turningArmBtn, zeroStateBtn
-                )
             )
+        );
+
+        new UpperSystem2025Cmd(
+            m_turningArm, m_elevator, m_intake, m_candle, m_moveToSubSys,
+            resetUpperCanCodePositionBtn, zeroUpperPosBtn, switchCoralnBallBtn, aimBtn, intakeBtn,
+            turningArmBtn, zeroStateBtn
         );
 
         // Configure the button bindings
@@ -106,20 +110,19 @@ public class RobotContainer2025 implements RobotContainerInterface {
         FollowPathCommand.warmupCommand().schedule();
         // LimelightHelpers.setLEDMode_PipelineControl("limelight-one");
         swerveStatePublisher = NetworkTableInstance.getDefault()
-            .getStructArrayTopic("/SwerveStates", SwerveModuleState.struct).publish();
+            .getStructArrayTopic("/MyStates", SwerveModuleState.struct).publish();
     }
 
     public void telInit() {
         StateController.getInstance().useVisionOdometry = true;
-        UpperSystem2025Cmd.inst.onRobotEnabled();
+        UpperSystem2025Cmd.inst.schedule();
     } 
     public void autoInit() {
         StateController.getInstance().useVisionOdometry = true;
-        UpperSystem2025Cmd.inst.onRobotEnabled();
+        UpperSystem2025Cmd.inst.schedule();
     }
 
     public void onDisabled() {
-        UpperSystem2025Cmd.inst.onRobotDisabled();
     }
 
     /**
@@ -146,6 +149,11 @@ public class RobotContainer2025 implements RobotContainerInterface {
             System.out.println("abc");
         }));
 
+        EventTrigger LnTrigger = new EventTrigger("LN");
+        LnTrigger.onTrue(new InstantCommand(() -> {
+            System.out.println("---------------------------------> LNLNLNLNL");
+            UpperSystem2025Cmd.inst.setStateLn();
+        }));
         // new JoystickButton(tester, 1).whileTrue(s_Swerve.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
         // new JoystickButton(tester, 2).whileTrue(s_Swerve.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
         // new JoystickButton(tester, 3).whileTrue(s_Swerve.sysIdDynamic(SysIdRoutine.Direction.kForward));
@@ -167,6 +175,7 @@ public class RobotContainer2025 implements RobotContainerInterface {
 
 
         swerveStatePublisher.set(s_Swerve.getModuleStates());
+        robotPospublisher.set(pos);
     }
 
     public void updateAlways() {

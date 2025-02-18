@@ -41,7 +41,7 @@ public class ControlPadHelper {
         static public boolean isLoadCoral = false;
         static public boolean isLoadBall = false;
         // static public Trigger onZero = new Trigger(eventLoop, () -> val == DebugPanelInfo.ZERO.ordinal());
-        // static public Trigger onReadyForloadCoral = new Trigger(eventLoop, () -> val == 2);
+        static public Trigger onReadyForloadCoral = new Trigger(eventLoop, () -> val == DebugPanelInfo.READY_FOR_LOAD_CORAL.ordinal());
         static public Trigger onL1 = new Trigger(eventLoop, () -> val == DebugPanelInfo.L1.ordinal());
         static public Trigger onL2 = new Trigger(eventLoop, () -> val == DebugPanelInfo.L2.ordinal());
         static public Trigger onL3 = new Trigger(eventLoop, () -> val == DebugPanelInfo.L3.ordinal());
