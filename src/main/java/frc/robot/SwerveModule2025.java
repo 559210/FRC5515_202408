@@ -58,19 +58,27 @@ public class SwerveModule2025 {
         mDriveMotor.getConfigurator().setPosition(0.0);
     }
 
+    public void setDesiredState(SwerveModuleState desiredState, boolean isOpenLoop, double maxSpeedScale) {
+        Rotation2d currentAngle = getState().angle;
+        desiredState.optimize(currentAngle);
+        // desiredState = SwerveModuleState.optimize(desiredState, getState().angle); 
+        mAngleMotor.setControl(anglePosition.withPosition(desiredState.angle.getRotations()));
+        desiredState.speedMetersPerSecond *= desiredState.angle.minus(currentAngle).getCos();   // Cosine compensation, added by majun 
+        setSpeed(desiredState, isOpenLoop, maxSpeedScale);
+    }
+
     public void setDesiredState(SwerveModuleState desiredState, boolean isOpenLoop) {
         Rotation2d currentAngle = getState().angle;
         desiredState.optimize(currentAngle);
         // desiredState = SwerveModuleState.optimize(desiredState, getState().angle); 
         mAngleMotor.setControl(anglePosition.withPosition(desiredState.angle.getRotations()));
         desiredState.speedMetersPerSecond *= desiredState.angle.minus(currentAngle).getCos();   // Cosine compensation, added by majun 
-        setSpeed(desiredState, isOpenLoop);
+        setSpeed(desiredState, isOpenLoop, 1);
     }
 
-
-    private void setSpeed(SwerveModuleState desiredState, boolean isOpenLoop){
+    private void setSpeed(SwerveModuleState desiredState, boolean isOpenLoop, double maxSpeedScale){
         if(isOpenLoop){
-            driveDutyCycle.Output = Constants2025.TeleSpeedScale * desiredState.speedMetersPerSecond / Constants2025.Swerve.maxSpeed;
+            driveDutyCycle.Output = maxSpeedScale * Constants2025.TeleSpeedScale * desiredState.speedMetersPerSecond / Constants2025.Swerve.maxSpeed;
             mDriveMotor.setControl(driveDutyCycle);
         }
         else {

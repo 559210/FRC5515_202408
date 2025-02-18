@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component size="150,100" opaque="false">
+  <displayList>
+    <component id="n6_wi65" name="up" src="wi65i" fileName="ArrowBtn.xml" xy="75,25" pivot="0.5,0.5" anchor="true" size="50,50"/>
+    <component id="n7_wi65" name="right" src="wi65i" fileName="ArrowBtn.xml" xy="125,75" pivot="0.5,0.5" anchor="true" size="50,50" rotation="90"/>
+    <component id="n8_wi65" name="down" src="wi65i" fileName="ArrowBtn.xml" xy="75,75" pivot="0.5,0.5" anchor="true" size="50,50" rotation="180"/>
+    <component id="n9_wi65" name="left" src="wi65i" fileName="ArrowBtn.xml" xy="25,75" pivot="0.5,0.5" anchor="true" size="50,50" rotation="-90"/>
+  </displayList>
+</component>

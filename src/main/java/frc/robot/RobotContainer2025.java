@@ -1,5 +1,8 @@
 package frc.robot;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.FollowPathCommand;
 import com.pathplanner.lib.commands.PathPlannerAuto;
@@ -22,6 +25,7 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants.Candle;
 import frc.robot.commands.*;
@@ -76,6 +80,8 @@ public class RobotContainer2025 implements RobotContainerInterface {
     Intake2025 m_intake = new Intake2025();
     Candle2025 m_candle = new Candle2025();
 
+    private List<Trigger> pathplannerEvents = new ArrayList<Trigger>();
+
     private final StructArrayPublisher<SwerveModuleState> swerveStatePublisher;
     private final StructPublisher<Pose2d> robotPospublisher = NetworkTableInstance.getDefault()
         .getStructTopic("MyPose", Pose2d.struct).publish();
@@ -89,7 +95,8 @@ public class RobotContainer2025 implements RobotContainerInterface {
                     () -> -driver.getRawAxis(strafeAxis), 
                     () -> -driver.getRawAxis(rotationAxis), 
                     // ()->0, ()->0, ()->0,
-                    () -> robotCentric.getAsBoolean()
+                    () -> robotCentric.getAsBoolean(),
+                    () -> false     // TODO: bind left trigger key of joystick
                 )
             )
         );
@@ -102,6 +109,7 @@ public class RobotContainer2025 implements RobotContainerInterface {
 
         // Configure the button bindings
         configureButtonBindings();
+        registerPathplannerEventsAndNamedCommands();
 
         GlobalConfig.init();
         ControlPadHelper.init();
@@ -139,6 +147,8 @@ public class RobotContainer2025 implements RobotContainerInterface {
         upButton.whileTrue(new SlightlyMoveCmd2025(s_Swerve, DIR.UP));
         downButton.whileTrue(new SlightlyMoveCmd2025(s_Swerve, DIR.DOWN));
 
+
+
         zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
         // aimBtn.whileTrue(new Aim2025Cmd(m_moveToSubSys, s_Swerve));
 
@@ -149,15 +159,63 @@ public class RobotContainer2025 implements RobotContainerInterface {
             System.out.println("abc");
         }));
 
-        EventTrigger LnTrigger = new EventTrigger("LN");
-        LnTrigger.onTrue(new InstantCommand(() -> {
-            System.out.println("---------------------------------> LNLNLNLNL");
-            UpperSystem2025Cmd.inst.setStateLn();
-        }));
+        ControlPadHelper.DebugCtrl.up.whileTrue(new SlightlyMoveCmd2025(s_Swerve, DIR.UP));
+        ControlPadHelper.DebugCtrl.right.whileTrue(new SlightlyMoveCmd2025(s_Swerve, DIR.RIGHT));
+        ControlPadHelper.DebugCtrl.left.whileTrue(new SlightlyMoveCmd2025(s_Swerve, DIR.LEFT));
+        ControlPadHelper.DebugCtrl.down.whileTrue(new SlightlyMoveCmd2025(s_Swerve, DIR.DOWN));
+
         // new JoystickButton(tester, 1).whileTrue(s_Swerve.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
         // new JoystickButton(tester, 2).whileTrue(s_Swerve.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
         // new JoystickButton(tester, 3).whileTrue(s_Swerve.sysIdDynamic(SysIdRoutine.Direction.kForward));
         // new JoystickButton(tester, 4).whileTrue(s_Swerve.sysIdDynamic(SysIdRoutine.Direction.kReverse));
+    }
+
+    private void registerPathplannerEventsAndNamedCommands() {
+        pathplannerEvents.add(new EventTrigger("LN").onTrue(new InstantCommand(() -> {
+            UpperSystem2025Cmd.inst.setStateLn();
+        })));
+        pathplannerEvents.add(new EventTrigger(("Raise2L1")).onTrue(new InstantCommand(() -> {
+            UpperSystem2025Cmd.inst.setStateL1();
+        })));
+        pathplannerEvents.add(new EventTrigger(("Raise2L2")).onTrue(new InstantCommand(() -> {
+            UpperSystem2025Cmd.inst.setStateL2();
+        })));
+        pathplannerEvents.add(new EventTrigger(("Raise2L3")).onTrue(new InstantCommand(() -> {
+            UpperSystem2025Cmd.inst.setStateL3();
+        })));
+        pathplannerEvents.add(new EventTrigger(("Raise2L4")).onTrue(new InstantCommand(() -> {
+            UpperSystem2025Cmd.inst.setStateL4();
+        })));
+
+        pathplannerEvents.add(new EventTrigger(("Intake")).onTrue(new InstantCommand(() -> {
+            UpperSystem2025Cmd.inst.startIntake();
+        })));
+        pathplannerEvents.add(new EventTrigger(("Shoot")).onTrue(new InstantCommand(() -> {
+            UpperSystem2025Cmd.inst.startShoot();
+        })));
+
+        NamedCommands.registerCommand("LN", new InstantCommand(()->{
+            UpperSystem2025Cmd.inst.setStateLn();
+        }));
+        NamedCommands.registerCommand("Raise2L1",new InstantCommand(() -> {
+            UpperSystem2025Cmd.inst.setStateL1();
+        }));
+        NamedCommands.registerCommand("Raise2L2",new InstantCommand(() -> {
+            UpperSystem2025Cmd.inst.setStateL2();
+        }));
+        NamedCommands.registerCommand("Raise2L3",new InstantCommand(() -> {
+            UpperSystem2025Cmd.inst.setStateL3();
+        }));
+        NamedCommands.registerCommand("Raise2L4",new InstantCommand(() -> {
+            UpperSystem2025Cmd.inst.setStateL4();
+        }));
+
+        NamedCommands.registerCommand("Intake",new InstantCommand(() -> {
+            UpperSystem2025Cmd.inst.startIntake();
+        }));
+        NamedCommands.registerCommand("Shoot",new InstantCommand(() -> {
+            UpperSystem2025Cmd.inst.startShoot();
+        }));
     }
 
     /**
@@ -172,7 +230,6 @@ public class RobotContainer2025 implements RobotContainerInterface {
     public void update() {
         Pose2d pos = s_Swerve.getPose();
         ControlPadHelper.publishRobotPos(pos);
-
 
         swerveStatePublisher.set(s_Swerve.getModuleStates());
         robotPospublisher.set(pos);

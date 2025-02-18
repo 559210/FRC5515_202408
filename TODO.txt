@@ -35,7 +35,7 @@ Y (4) null
 LeftBumper（5） zeroGyro
 RightBumper(6)  长按，机器按照相对自身位置前后移动
 SELECT(7) 机器上层归位，关机前记住要归位
-OK(8) 上层CanCode归零，手掰过motor以后，要记得归零
+OK(8) 上层CanCode归零，手掰过motor以后，要记得归零 (仅test模式有效)
 
 2/14 TODO:
 1. 验证光学传感器的延时功能有效 （有效）

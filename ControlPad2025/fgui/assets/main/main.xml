@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <component size="1000,563">
-  <controller name="debugMenuC" pages="0,,1," selected="0"/>
+  <controller name="debugMenuC" pages="0,,1," selected="1"/>
   <displayList>
     <graph id="n23_sikm" name="bg" xy="0,0" size="1000,563" type="rect" lineSize="0" fillColor="#ff666666">
       <relation target="" sidePair="width-width,height-height%,center-center,middle-middle"/>
@@ -18,5 +18,6 @@
       <gearDisplay controller="debugMenuC" pages="0,1"/>
       <relation target="" sidePair="center-center,bottom-bottom"/>
     </component>
+    <component id="n28_wi65" name="arrowPanel" src="wi65g" fileName="ArrowPanel.xml" xy="162,422"/>
   </displayList>
 </component>

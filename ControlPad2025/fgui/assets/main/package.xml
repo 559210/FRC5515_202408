@@ -15,6 +15,9 @@
     <component id="bpsnd" name="Robot.xml" path="/"/>
     <component id="l60ge" name="InfoPanel.xml" path="/"/>
     <component id="gh6ef" name="DebugMenu.xml" path="/"/>
+    <component id="wi65g" name="ArrowPanel.xml" path="/"/>
+    <image id="wi65h" name="arrow.png" path="/"/>
+    <component id="wi65i" name="ArrowBtn.xml" path="/"/>
   </resources>
   <publish name=""/>
 </packageDescription>

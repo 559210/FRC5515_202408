@@ -70,7 +70,6 @@ public class Candle2025 extends SubsystemBase {
 
     public Candle2025() {
         led.setLEDs(0, 0, 0);
-        System.out.println("clear 11111111111111111111111111111111111");
         clear();
     }
 
@@ -222,7 +221,6 @@ public class Candle2025 extends SubsystemBase {
     }
 
     public void onDisable() {
-        System.out.println("clear 22222222222222222222222222222222222");
         clear();
     }
 }

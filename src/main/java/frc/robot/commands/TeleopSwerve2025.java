@@ -19,8 +19,9 @@ public class TeleopSwerve2025 extends Command {
     private DoubleSupplier strafeSup;
     private DoubleSupplier rotationSup;
     private BooleanSupplier robotCentricSup;
+    private BooleanSupplier isSlowSpeedRobotCentric;
 
-    public TeleopSwerve2025(Swerve2025 s_Swerve, DoubleSupplier translationSup, DoubleSupplier strafeSup, DoubleSupplier rotationSup, BooleanSupplier robotCentricSup) {
+    public TeleopSwerve2025(Swerve2025 s_Swerve, DoubleSupplier translationSup, DoubleSupplier strafeSup, DoubleSupplier rotationSup, BooleanSupplier robotCentricSup, BooleanSupplier _isSlowSpeedRobotCentric) {
         this.s_Swerve = s_Swerve;
         addRequirements(s_Swerve);
 
@@ -28,6 +29,8 @@ public class TeleopSwerve2025 extends Command {
         this.strafeSup = strafeSup;
         this.rotationSup = rotationSup;
         this.robotCentricSup = robotCentricSup;
+
+        isSlowSpeedRobotCentric = _isSlowSpeedRobotCentric;
     }
     
     int cout = 0;
@@ -47,13 +50,19 @@ public class TeleopSwerve2025 extends Command {
             double strafeVal = MathUtil.applyDeadband(strafeSup.getAsDouble(), Constants2025.stickDeadband);
             double rotationVal = MathUtil.applyDeadband(rotationSup.getAsDouble(), Constants2025.stickDeadband);
 
+            double maxSpeedScale = 1;
+            if (!robotCentricSup.getAsBoolean() && isSlowSpeedRobotCentric.getAsBoolean()) {
+                maxSpeedScale = 0.2;
+            }
+
             /* Drive */
             s_Swerve.drive(
                 new Translation2d(translationVal, strafeVal).times(Constants2025.Swerve.maxSpeed), 
                 rotationVal * Constants2025.Swerve.maxAngularVelocity, 
                 !robotCentricSup.getAsBoolean(), 
                 // true,
-                true
+                true,
+                maxSpeedScale
             );
         }
 

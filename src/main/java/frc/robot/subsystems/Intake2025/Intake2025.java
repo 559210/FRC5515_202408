@@ -119,6 +119,18 @@ public class Intake2025 extends SubsystemBase {
         }
     }
 
+    public void startIntake() {
+        if (this.curState == STATE.READY) {
+            setState(STATE.CORAL_IN);
+        }
+    }
+
+    public void startShoot() {
+        if (this.curState == STATE.CARRYING_CORAL) {
+            setState(STATE.CORAL_OUT);
+        }
+    }
+
     public void setState(STATE st) {
         this.curState = st;
     }

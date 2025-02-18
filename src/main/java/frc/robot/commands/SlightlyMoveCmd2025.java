@@ -36,6 +36,8 @@ public class SlightlyMoveCmd2025 extends Command {
     public SlightlyMoveCmd2025(Swerve2025 swerve, DIR dir) {
         s_Swerve = swerve;
         m_dir = dir;
+
+        addRequirements(s_Swerve);
         schedule();
     }
 
@@ -55,7 +57,7 @@ public class SlightlyMoveCmd2025 extends Command {
             case LEFT: y = data; break;
             case RIGHT: y = -data; break;
         }
-        s_Swerve.drive(new Translation2d(x, y), 0, false, true);
+        s_Swerve.drive(new Translation2d(x, y), 0, false, true, 1);
     }
 
     @Override

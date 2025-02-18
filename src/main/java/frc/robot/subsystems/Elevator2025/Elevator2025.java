@@ -84,11 +84,11 @@ public class Elevator2025 extends SubsystemBase {
         // This method will be called once per scheduler run during simulation
     }
 
-    private TalonFXConfiguration getMotorConfiguration(boolean isPrimary) {
+    private TalonFXConfiguration getMotorConfiguration(boolean isPrimary, boolean lockMotor) {
         TalonFXConfiguration elevatorConfiguration = new TalonFXConfiguration();
 
         elevatorConfiguration.MotorOutput.Inverted = InvertedValue.CounterClockwise_Positive;
-        elevatorConfiguration.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+        elevatorConfiguration.MotorOutput.NeutralMode = lockMotor ? NeutralModeValue.Brake : NeutralModeValue.Coast;
         // elevatorConfiguration.SoftwareLimitSwitch.ForwardSoftLimitThreshold = 0;
         // elevatorConfiguration.SoftwareLimitSwitch.ReverseSoftLimitThreshold = -200;
         // elevatorConfiguration.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
@@ -131,8 +131,8 @@ public class Elevator2025 extends SubsystemBase {
         // SmartDashboard.putNumber("ccc init", m_canCoder.getPosition().getValueAsDouble());
         // SmartDashboard.putNumber("ccc init count", initCount);
         // Elevator.getConfigurator().apply(new TalonFXConfiguration());
-        m_primaryMotor.getConfigurator().apply(getMotorConfiguration(true));
-        m_followerMotor.getConfigurator().apply(getMotorConfiguration(false));
+        m_primaryMotor.getConfigurator().apply(getMotorConfiguration(true, true));
+        m_followerMotor.getConfigurator().apply(getMotorConfiguration(false, true));
 
         m_followerMotor.setControl(new Follower(m_primaryMotor.getDeviceID(), false));
         // m_primaryMotor.setSafetyEnabled(true);      // 例子代码，不知道有什么用，不明白safetyEnabled是什么
@@ -143,6 +143,11 @@ public class Elevator2025 extends SubsystemBase {
         }
         motionMagicVoltage1 = new MotionMagicVoltage(0);
 
+    }
+
+    public void unlockMotor() {
+        m_primaryMotor.getConfigurator().apply(getMotorConfiguration(true, false));
+        m_followerMotor.getConfigurator().apply(getMotorConfiguration(false, false));
     }
 
     public void setState(EV_STATE stat) {

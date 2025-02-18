@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 
+
 namespace NetworkTablesSharpEx
 {
     public class Nt4Source
@@ -144,14 +145,50 @@ namespace NetworkTablesSharpEx
                         break;
                     case "int[]":
                         {
-                            Debug.LogError(value.GetType());
                             object[] val = (object[])value;
                             long[] data = new long[val.Length];
                             for (int i = 0; i < val.Length; ++i)
                             {
-                                Debug.LogError(val[i].GetType());
-                                byte v = (System.Byte)val[i];
-                                data[i] = (long)v;
+                                //Debug.LogError(val[i].GetType());
+                                //Type type = val[i].GetType();
+
+                                var v = val[i];
+                                if (v is System.SByte)
+                                {
+                                    data[i] = (long)(System.SByte)v;
+                                }
+                                else if (v is System.Byte)
+                                {
+                                    data[i] = (long)(System.Byte)v;
+                                }
+                                else if (v is Int16)
+                                {
+                                    data[i] = (long)(System.Int16)v;
+                                }
+                                else if (v is UInt16)
+                                {
+                                    data[i] = (long)(System.UInt16)v;
+                                }
+                                else if (v is Int32)
+                                {
+                                    data[i] = (long)(System.Int32)v;
+                                }
+                                else if (v is UInt32)
+                                {
+                                    data[i] = (long)(System.UInt32)v;
+                                }
+                                else if (v is Int64)
+                                {
+                                    data[i] = (long)(System.Int64)v;
+                                }
+                                else if (v is UInt64)
+                                {
+                                    data[i] = (long)(System.UInt64)v;
+                                }
+                                else
+                                {
+                                    data[i] = long.Parse(val[i].ToString());
+                                }
                             }
                             AddValue(topic.Name, timestamp, data);
                         }

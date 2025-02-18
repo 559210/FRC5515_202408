@@ -224,9 +224,21 @@ public class InfoPanel
     }
 }
 
+
+public class ArrowPanel
+{
+    GComponent root;
+    GButton up;
+    GButton down;
+    GButton left;
+    GButton right;
+
+}
+
 public class DebugPanel
 {
     GComponent root;
+    GComponent arrowRoot;
     GButton zeroBtn;
     GButton waitCoralBtn;
     GButton l1Btn;
@@ -236,14 +248,20 @@ public class DebugPanel
     GButton ball1Btn;
     GButton ball2Btn;
 
+    GButton up;
+    GButton down;
+    GButton left;
+    GButton right;
+
     GButton loadCoralBtn;
     GButton loadBallBtn;
 
     bool isLoadCoral = false;
     bool isLoadBall = false;
-    public DebugPanel(GComponent comp)
+    public DebugPanel(GComponent debugPanel, GComponent arrowPanel)
     {
-        root = comp;
+        root = debugPanel;
+        arrowRoot = arrowPanel;
         zeroBtn = root.GetChild("zeroBtn").asButton;
         zeroBtn.onClick.Set(onZeroBtnClick);
         waitCoralBtn = root.GetChild("waitCoralBtn").asButton;
@@ -264,6 +282,22 @@ public class DebugPanel
         loadCoralBtn.onClick.Set(onLoadCoralBtnClick);
         loadBallBtn = root.GetChild("loadBallBtn").asButton;
         loadBallBtn.onClick.Set(onLoadBallBtnClick);
+
+        up = arrowRoot.GetChild("up").asButton;
+        up.onTouchBegin.Set(onUpBtnClick);
+        up.onTouchEnd.Set(reset);
+
+        down = arrowRoot.GetChild("down").asButton;
+        down.onTouchBegin.Set(onDownBtnClick);
+        down.onTouchEnd.Set(reset);
+
+        left = arrowRoot.GetChild("left").asButton;
+        left.onTouchBegin.Set(onLeftBtnClick);
+        left.onTouchEnd.Set(reset);
+
+        right = arrowRoot.GetChild("right").asButton;
+        right.onTouchBegin.Set(onRightBtnClick);
+        right.onTouchEnd.Set(reset);
     }
 
     void onZeroBtnClick()
@@ -292,6 +326,31 @@ public class DebugPanel
         send((int)NTManager.DebugPanelInfo.L4);
     }
 
+    void onUpBtnClick()
+    {
+        send((int)NTManager.DebugPanelInfo.UP_ARROW, false);
+    }
+    void reset()
+    {
+        send((int)NTManager.DebugPanelInfo.NONE, false);
+    }
+
+    void onDownBtnClick()
+    {
+        send((int)NTManager.DebugPanelInfo.DOWN_ARROW, false);
+    }
+
+    void onLeftBtnClick()
+    {
+        send((int)NTManager.DebugPanelInfo.LEFT_ARROW, false);
+    }
+
+    void onRightBtnClick()
+    {
+        send((int)NTManager.DebugPanelInfo.RIGHT_ARROW, false);
+    }
+
+
     void onBall1BtnClick() {
         send((int)NTManager.DebugPanelInfo.BALL1);
     }
@@ -312,10 +371,10 @@ public class DebugPanel
         send((int)NTManager.DebugPanelInfo.NONE);
     }
 
-    void send(int val) {
+    void send(int val, bool autoReset = true) {
         Main.inst.NT.publishDebugPanelInfo(val, isLoadCoral, isLoadBall);
 
-        if (val != (int)NTManager.DebugPanelInfo.NONE) {
+        if (val != (int)NTManager.DebugPanelInfo.NONE && autoReset) {
             Main.inst.callCBLater(() => {
                 Main.inst.NT.publishDebugPanelInfo((int)NTManager.DebugPanelInfo.NONE, isLoadCoral, isLoadBall);
             }, 1);
@@ -435,7 +494,7 @@ public class FieldMap : MonoBehaviour
         infoPanel = new(fieldRoot.GetChild("infoPanel").asCom);
         infoPanel.toggleSide(InfoPanel.SIDE.BLUE);
 
-        debugPanel = new(fieldRoot.GetChild("debugMenu").asCom);
+        debugPanel = new(fieldRoot.GetChild("debugMenu").asCom, fieldRoot.GetChild("arrowPanel").asCom);
         debugPanelCtrl = fieldRoot.GetController("debugMenuC");
         debugPanelCtrl.selectedIndex = debugPanelCtrl.selectedIndex = 0;
         Stage.inst.onKeyDown.Add(onKeyDown);

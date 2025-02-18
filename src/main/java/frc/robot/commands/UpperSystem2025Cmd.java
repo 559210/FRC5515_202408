@@ -222,15 +222,6 @@ public class UpperSystem2025Cmd extends Command {
                 if (info == null) {
                     return;
                 }
-                // if (info.level == 0) {
-                //     setState(STATE.L1);
-                // } else if (info.level == 1) {
-                //     setState(STATE.L2);
-                // } else if (info.level == 2) {
-                //     setState(STATE.L2);
-                // } else if (info.level == 3) {
-                //     setState(STATE.L2);
-                // }
 
                 Pose2d targetPos = Constants2025.aimPoses.get(info.aprilTagId);
 
@@ -305,13 +296,19 @@ public class UpperSystem2025Cmd extends Command {
 
     @Override
     public void initialize() {
-        m_elevator.init();
-        m_turningArm.init(); 
-        m_intake.init();
-        m_candle.init();
+
         if (Robot.inst.isTeleop() || Robot.inst.isAutonomous())
         {
+            System.out.println("UpperSystemCmd init in telop or auto");
+            m_elevator.init();
+            m_turningArm.init(); 
+            m_intake.init();
+            m_candle.init();            
             setState(STATE.READY_FOR_LOAD_CORAL);
+        }
+        else {
+            System.out.println("UpperSystemCmd init in test");
+            m_elevator.unlockMotor();
         }
     }
 
@@ -759,6 +756,31 @@ public class UpperSystem2025Cmd extends Command {
             setState(newState);
         }
     }
+
+    public void setStateL1() {
+        setState(STATE.L1);
+    }
+
+    public void setStateL2() {
+        setState(STATE.L2);
+    }
+
+    public void setStateL3() {
+        setState(STATE.L3);
+    }
+
+    public void setStateL4() {
+        setState(STATE.L4);
+    }
+
+    public void startIntake() {
+        m_intake.startIntake();
+    }
+
+    public void startShoot() {
+        m_intake.startShoot();
+    }
+
 
     protected void telemetry() {
 

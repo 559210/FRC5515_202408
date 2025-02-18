@@ -36,6 +36,10 @@ public class ControlPadHelper {
             L4,
             BALL1,
             BALL2,
+            UP_ARROW,
+            DOWN_ARROW,
+            LEFT_ARROW,
+            RIGHT_ARROW,
         }
         static public long val = -1;
         static public boolean isLoadCoral = false;
@@ -50,6 +54,11 @@ public class ControlPadHelper {
         static public Trigger onBall2 = new Trigger(eventLoop, () -> val == DebugPanelInfo.BALL2.ordinal());
         // static public Trigger onLoadCoral = new Trigger(eventLoop, () -> isLoadCoral);
         // static public Trigger onLoadBall = new Trigger(eventLoop, () -> isLoadBall);
+
+        static public Trigger up = new Trigger(eventLoop, () -> val == DebugPanelInfo.UP_ARROW.ordinal());
+        static public Trigger down = new Trigger(eventLoop, () -> val == DebugPanelInfo.DOWN_ARROW.ordinal());
+        static public Trigger left = new Trigger(eventLoop, () -> val == DebugPanelInfo.LEFT_ARROW.ordinal());
+        static public Trigger right = new Trigger(eventLoop, () -> val == DebugPanelInfo.RIGHT_ARROW.ordinal());
     }
     public static class ControlPadInfo {
         public static class ControlPadInfoData {
@@ -258,6 +267,8 @@ public class ControlPadHelper {
 
     private static void publishControlPadInfoRecall() {
         if (controlPadInfo.data.aprilTagId == -1) {
+            long[] datas = new long[]{-1, -1, -1};
+            controlPadInfoRecallTopic.publishIntArray(datas);
             return;
         }
         long[] datas = new long[]{controlPadInfo.data.aprilTagId, controlPadInfo.data.level, controlPadInfo.data.branch};

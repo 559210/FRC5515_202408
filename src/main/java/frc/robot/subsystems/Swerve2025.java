@@ -160,7 +160,7 @@ public class Swerve2025 extends SubsystemBase {
     }
 
 
-    public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop) {
+    public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop, double maxSpeedScale) {
         // System.out.println("trans x, y: " + translation.getX() + ", " + translation.getY());
         SwerveModuleState[] swerveModuleStates = Constants2025.Swerve.swerveKinematics.toSwerveModuleStates(
                 fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(
@@ -172,10 +172,10 @@ public class Swerve2025 extends SubsystemBase {
                                 translation.getX(),
                                 translation.getY(),
                                 rotation));
-        SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants2025.Swerve.maxSpeed);
+        SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants2025.Swerve.maxSpeed * maxSpeedScale);
 
         for (SwerveModule2025 mod : mSwerveMods) {
-            mod.setDesiredState(swerveModuleStates[mod.moduleNumber], isOpenLoop);
+            mod.setDesiredState(swerveModuleStates[mod.moduleNumber], isOpenLoop, maxSpeedScale);
         }
     }
 

@@ -55,6 +55,10 @@ public class NTManager
         L4,
         BALL1,
         BALL2,
+        UP_ARROW,
+        DOWN_ARROW,
+        LEFT_ARROW,
+        RIGHT_ARROW,
     }
     readonly static string ID_NAME = "5515ControlPad"; 
     readonly string ROBOT_POS_ENTRY_NAME = $"/{ID_NAME}/RobotPos";
@@ -87,8 +91,8 @@ public class NTManager
     }
     public bool init()
     {
-        nt = new("10.55.15.2", ID_NAME, false, 5810);
-        //nt = new("127.0.0.1", ID_NAME, false, 5810);
+        //nt = new("10.55.15.2", ID_NAME, false, 5810);
+        nt = new("127.0.0.1", ID_NAME, false, 5810);
 
         startGuard();
         return true;
