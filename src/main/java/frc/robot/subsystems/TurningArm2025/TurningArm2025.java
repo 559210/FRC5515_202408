@@ -13,7 +13,10 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.DutyCycleOut;
+import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
+import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
@@ -24,6 +27,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants2025;
 import frc.robot.subsystems.Elevator2025.Elevator2025.EV_STATE;
 import frc.robot.utils.MiscUtils;
+import edu.wpi.first.wpilibj.DutyCycle;
 import edu.wpi.first.wpilibj.RobotBase;
 
 public class TurningArm2025 extends SubsystemBase {
@@ -38,6 +42,9 @@ public class TurningArm2025 extends SubsystemBase {
         BALL1,
         BALL2,
         DODGE,
+
+        TUNING_UP,
+        TUNING_DOWN,
     }
 
     public enum RUNNING_STATE {
@@ -64,10 +71,11 @@ public class TurningArm2025 extends SubsystemBase {
     public TurningArm2025() {
     }
 
-    public static final TalonFX m_armMotor = new TalonFX(Constants2025.TurningArm.motorID, Constants2025.TurningArm.canBusName);
-    public static final CANcoder m_canCoder = new CANcoder(Constants2025.TurningArm.canCoderID, Constants2025.TurningArm.canBusName);
-    public MotionMagicVoltage motionMagicVoltage = new MotionMagicVoltage(0);
-
+    private final TalonFX m_armMotor = new TalonFX(Constants2025.TurningArm.motorID, Constants2025.TurningArm.canBusName);
+    private final CANcoder m_canCoder = new CANcoder(Constants2025.TurningArm.canCoderID, Constants2025.TurningArm.canBusName);
+    private MotionMagicVoltage motionMagicVoltage = new MotionMagicVoltage(0);
+    // private final VelocityVoltage driveVelocity = new VelocityVoltage(0);
+    private final DutyCycleOut driveDutyCycle = new DutyCycleOut(0);
     int runingCount = 0;
     @Override
     public void periodic() {
@@ -83,9 +91,9 @@ public class TurningArm2025 extends SubsystemBase {
         // This method will be called once per scheduler run during simulation
     }
 
-    private TalonFXConfiguration getMotorConfiguration() {
+    private TalonFXConfiguration getMotorConfiguration(boolean lockMotor) {
         TalonFXConfiguration elevatorConfiguration = new TalonFXConfiguration();
-        // elevatorConfiguration.MotorOutput.NeutralMode = NeutralModeValue.Coast;
+        elevatorConfiguration.MotorOutput.NeutralMode = lockMotor ? NeutralModeValue.Brake : NeutralModeValue.Coast;
         // elevatorConfiguration.SoftwareLimitSwitch.ForwardSoftLimitThreshold = 0;
         // elevatorConfiguration.SoftwareLimitSwitch.ReverseSoftLimitThreshold = -200;
         // elevatorConfiguration.SoftwareLimitSwitch.ForwardSoftLimitEnable = true;
@@ -112,12 +120,38 @@ public class TurningArm2025 extends SubsystemBase {
     }
 
     public void init() {
-        m_armMotor.getConfigurator().apply(getMotorConfiguration());
+        m_armMotor.getConfigurator().apply(getMotorConfiguration(true));
         if (!loadLastPosition()) {
             m_canCoder.setPosition(0);
         }
     }
 
+    public void initInTestMode() {
+        setState(TA_STATE.NONE);
+        curRunningState = RUNNING_STATE.READY;
+        m_armMotor.getConfigurator().apply(getMotorConfiguration(true));
+        m_armMotor.stopMotor();
+    }
+
+    public void toggleTuningUp() {
+        if (curState == TA_STATE.TUNING_UP) {
+            setState(TA_STATE.NONE);
+            m_armMotor.stopMotor();
+        }
+        else {
+            setState(TA_STATE.TUNING_UP);
+        }
+    }
+
+    public void toggleTuningDown() {
+        if (curState == TA_STATE.TUNING_DOWN) {
+            setState(TA_STATE.NONE);
+            m_armMotor.stopMotor();
+        }
+        else {
+            setState(TA_STATE.TUNING_DOWN);
+        }
+    }
     public void setState(TA_STATE stat) {
         if (curState == stat) {
             return;
@@ -145,50 +179,29 @@ public class TurningArm2025 extends SubsystemBase {
     protected void updateState() {
         SmartDashboard.putNumber("ARM ccc1", m_canCoder.getPosition().getValueAsDouble());
         SmartDashboard.putNumber("ARM ccc2", m_armMotor.getPosition().getValueAsDouble());
-        // double pos = Constants2025.TurningArm.basePos;
-        // switch (curState) {
-        //     case ZERO:
-        //         pos = Constants2025.TurningArm.zeroPos;
-        //         if (isDone(pos)) {
-        //             curRunningState = RUNNING_STATE.DONE;
-        //         }
-        //         break;
-        //     case BASE:
-        //         pos = Constants2025.TurningArm.basePos;
-        //         if (isDone(pos)) {
-        //             curRunningState = RUNNING_STATE.DONE;
-        //         }
-        //         break;
-        //     case L1:
-        //         pos = Constants2025.TurningArm.l1Pos;
-        //         if (isDone(pos)) {
-        //             curRunningState = RUNNING_STATE.DONE;
-        //         }
-        //         break;
-        //     case L2:
-        //         pos = Constants2025.TurningArm.l2Pos;
-        //         if (isDone(pos)) {
-        //             curRunningState = RUNNING_STATE.DONE;
-        //         }
-        //         break;
-        //     case L3:
-        //         pos = Constants2025.TurningArm.l3Pos;
-        //         if (isDone(pos)) {
-        //             curRunningState = RUNNING_STATE.DONE;
-        //         }
-        //         break;
-        //     case L4:
-        //         pos = Constants2025.TurningArm.l4Pos;
-        //         if (isDone(pos)) {
-        //             curRunningState = RUNNING_STATE.DONE;
-        //         }
-        //         break;
-        //     case NONE:
-        //         return;
-        //     default:
-        //         break;
-        // }
 
+        double output = 0.030;
+        if (curState == TA_STATE.TUNING_UP) {
+            // driveVelocity.Acceleration = 0.1;
+            // driveVelocity.Velocity = 0.05;
+            // m_armMotor.setControl(driveVelocity);
+            driveDutyCycle.Output = output;
+            m_armMotor.setControl(driveDutyCycle);
+            SmartDashboard.putNumber("ELEVATOR ccc TUNING pos", m_canCoder.getPosition().getValueAsDouble());
+            curRunningState = RUNNING_STATE.DONE;
+            return;
+        } else if (curState == TA_STATE.TUNING_DOWN) {
+            // driveVelocity.Acceleration = 0.1;
+            // driveVelocity.Velocity = -0.05;
+            // m_armMotor.setControl(driveVelocity.withVelocity(-0.011));
+
+            driveDutyCycle.Output = -output;
+            m_armMotor.setControl(driveDutyCycle);
+            SmartDashboard.putNumber("ELEVATOR ccc TUNING pos", m_canCoder.getPosition().getValueAsDouble());
+            curRunningState = RUNNING_STATE.DONE;
+            return;
+        }
+        
         double pos = getStatePos(curState);
         SmartDashboard.putNumber("ARM ccc targetPos", pos);
         SmartDashboard.putString("ARM ccc curState", curState.name());
@@ -278,6 +291,14 @@ public class TurningArm2025 extends SubsystemBase {
     //     else
     //         return false;
     // }
+
+    public void unlockMotor() {
+        m_armMotor.getConfigurator().apply(getMotorConfiguration(false));
+    }
+
+    public void lockMotor() {
+        m_armMotor.getConfigurator().apply(getMotorConfiguration(true));
+    }
 
     public double getStatePos(TA_STATE state) {
         switch (state) {

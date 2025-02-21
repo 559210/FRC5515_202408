@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 14.6,
-        "y": 6.2
+        "x": 3.95,
+        "y": 2.8
       },
       "prevControl": null,
       "nextControl": {
-        "x": 14.100000000000001,
-        "y": 5.333974596215563
+        "x": 2.2171823948365175,
+        "y": 1.2358312114482188
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 14.1,
-        "y": 5.3
+        "x": 1.6,
+        "y": 0.68
       },
       "prevControl": {
-        "x": 14.6,
-        "y": 6.166025403784438
+        "x": 1.785252935006886,
+        "y": 0.8533417704344481
       },
       "nextControl": null,
       "isLocked": false,
@@ -34,7 +34,7 @@
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 3.0,
-    "maxAcceleration": 3.0,
+    "maxAcceleration": 4.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -119.99999999999999
+    "rotation": 55.0
   },
   "reversed": false,
-  "folder": "ManualCoralR",
+  "folder": "RS A1",
   "idealStartingState": {
-    "velocity": 3,
-    "rotation": -119.99999999999999
+    "velocity": 0,
+    "rotation": 59.99999999999999
   },
   "useDefaultConstraints": true
 }

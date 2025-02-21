@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 6.05,
-        "y": 1.85
+        "x": 6.052,
+        "y": 1.824
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.8774999999999995,
-        "y": 2.1487787643056313
+        "x": 5.672,
+        "y": 2.3055063509461093
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 5.55,
-        "y": 2.75
+        "x": 5.402,
+        "y": 2.95
       },
       "prevControl": {
-        "x": 5.675,
-        "y": 2.53349364905389
+        "x": 5.58008638429281,
+        "y": 2.4646799994738853
       },
       "nextControl": null,
       "isLocked": false,
@@ -31,7 +31,14 @@
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "LN",
+      "waypointRelativePos": 0.75,
+      "endWaypointRelativePos": null,
+      "command": null
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 3.0,
     "maxAcceleration": 3.0,
@@ -47,7 +54,7 @@
   "reversed": false,
   "folder": "ManualCoralB",
   "idealStartingState": {
-    "velocity": 0.0,
+    "velocity": 3,
     "rotation": 119.99999999999999
   },
   "useDefaultConstraints": true

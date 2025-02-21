@@ -13,8 +13,10 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
+import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
@@ -26,6 +28,7 @@ import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants2025;
+import frc.robot.subsystems.TurningArm2025.TurningArm2025.TA_STATE;
 import frc.robot.utils.MiscUtils;
 
 public class Elevator2025 extends SubsystemBase {
@@ -39,6 +42,10 @@ public class Elevator2025 extends SubsystemBase {
         L4,
         BALL1,
         BALL2,
+
+
+        TUNING_UP,
+        TUNING_DOWN,
     }
     public enum RUNNING_STATE {
         READY,
@@ -65,12 +72,13 @@ public class Elevator2025 extends SubsystemBase {
     public Elevator2025() {
     }
 
-    public static final TalonFX m_primaryMotor = new TalonFX(Constants2025.Elevator.primaryMotorID, Constants2025.Elevator.canBusName);
-    public static final TalonFX m_followerMotor = new TalonFX(Constants2025.Elevator.followerMotorID, Constants2025.Elevator.canBusName);
-    public static final CANcoder m_canCoder = new CANcoder(Constants2025.Elevator.canCoderID, Constants2025.Elevator.canBusName);
+    private final TalonFX m_primaryMotor = new TalonFX(Constants2025.Elevator.primaryMotorID, Constants2025.Elevator.canBusName);
+    private final TalonFX m_followerMotor = new TalonFX(Constants2025.Elevator.followerMotorID, Constants2025.Elevator.canBusName);
+    private final CANcoder m_canCoder = new CANcoder(Constants2025.Elevator.canCoderID, Constants2025.Elevator.canBusName);
     public MotionMagicVoltage motionMagicVoltage1 = new MotionMagicVoltage(0);
-    // private final VelocityVoltage driveVelocity = new VelocityVoltage(0);
+    private final VelocityVoltage driveVelocity = new VelocityVoltage(0);
     // public MotionMagicVoltage motionMagicVoltage2 = new MotionMagicVoltage(1);
+    private final DutyCycleOut driveDutyCycle = new DutyCycleOut(0);
     protected double lastMoveTargetPos = NONE_POS; 
     protected int curPidSlot = 0;
     @Override
@@ -145,9 +153,47 @@ public class Elevator2025 extends SubsystemBase {
 
     }
 
+    public void initInTestMode() {
+        setState(EV_STATE.NONE);
+        curRunningState = RUNNING_STATE.READY;
+        m_primaryMotor.getConfigurator().apply(getMotorConfiguration(true, true));
+        m_followerMotor.getConfigurator().apply(getMotorConfiguration(false, true));
+        m_followerMotor.setControl(new Follower(m_primaryMotor.getDeviceID(), false));
+        m_primaryMotor.stopMotor();
+    }
     public void unlockMotor() {
         m_primaryMotor.getConfigurator().apply(getMotorConfiguration(true, false));
         m_followerMotor.getConfigurator().apply(getMotorConfiguration(false, false));
+    }
+
+    public void lockMotor() {
+        m_primaryMotor.getConfigurator().apply(getMotorConfiguration(true, true));
+        m_followerMotor.getConfigurator().apply(getMotorConfiguration(false, true));
+        m_followerMotor.setControl(new Follower(m_primaryMotor.getDeviceID(), false));
+    }
+
+    public void toggleTuningUp() {
+        if (curState == EV_STATE.TUNING_UP) {
+            setState(EV_STATE.NONE);
+            // m_primaryMotor.stopMotor();
+            driveDutyCycle.Output = 0;
+            m_primaryMotor.setControl(driveDutyCycle);
+        }
+        else {
+            setState(EV_STATE.TUNING_UP);
+        }
+    }
+
+    public void toggleTuningDown() {
+        if (curState == EV_STATE.TUNING_DOWN) {
+            setState(EV_STATE.NONE);
+            // m_primaryMotor.stopMotor();
+            driveDutyCycle.Output = 0;
+            m_primaryMotor.setControl(driveDutyCycle);
+        }
+        else {
+            setState(EV_STATE.TUNING_DOWN);
+        }
     }
 
     public void setState(EV_STATE stat) {
@@ -246,6 +292,23 @@ public class Elevator2025 extends SubsystemBase {
         //     default:
         //         break;
         // }
+
+        double output = 0.1;
+        if (curState == EV_STATE.TUNING_UP) {
+            // m_primaryMotor.setControl(driveVelocity.withVelocity(0.1));
+            driveDutyCycle.Output = -output;
+            m_primaryMotor.setControl(driveDutyCycle);
+            SmartDashboard.putNumber("ELEVATOR ccc TUNING pos", m_canCoder.getPosition().getValueAsDouble());
+            curRunningState = RUNNING_STATE.DONE;
+            return;
+        } else if (curState == EV_STATE.TUNING_DOWN) {
+            // m_primaryMotor.setControl(driveVelocity.withVelocity(-0.1));
+            driveDutyCycle.Output = output;
+            m_primaryMotor.setControl(driveDutyCycle);
+            SmartDashboard.putNumber("ELEVATOR ccc TUNING pos", m_canCoder.getPosition().getValueAsDouble());
+            curRunningState = RUNNING_STATE.DONE;
+            return;
+        }
         double pos = getStatePos(curState);
         SmartDashboard.putNumber("ELEVATOR ccc targetPos", pos);
         SmartDashboard.putString("ELEVATOR ccc curState", curState.name());

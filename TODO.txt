@@ -96,3 +96,6 @@ option1： s0，s1 all on  慢速反转直到s1 off
 option2： s0 on 减速，直到s1 on
 出情况
 s0，s1 all off
+
+
+usb camera ip: 10.55.15.30

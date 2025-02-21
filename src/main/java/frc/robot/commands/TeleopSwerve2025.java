@@ -52,7 +52,7 @@ public class TeleopSwerve2025 extends Command {
 
             double maxSpeedScale = 1;
             if (!robotCentricSup.getAsBoolean() && isSlowSpeedRobotCentric.getAsBoolean()) {
-                maxSpeedScale = 0.2;
+                maxSpeedScale = 0.4;
             }
 
             /* Drive */

@@ -208,9 +208,9 @@ public final class Constants2025 {
         public static final double zeroPos = 0;
         public static final double basePos = 0.3146980;
         public static final double l1Pos = 0.407227;
-        public static final double l2Pos = 1.039307;
-        public static final double dodgePos =  1.039307;  // the pos that allows elevator to move
-        public static final double l3Pos = 1.039307;
+        public static final double l2Pos = 1.139307;
+        public static final double dodgePos =  1.139307;  // the pos that allows elevator to move
+        public static final double l3Pos = 1.139307;
         public static final double l4Pos = 0.6;
         public static final double ball1Pos = 4.3;
         public static final double ball2Pos = 4.3;
@@ -222,23 +222,23 @@ public final class Constants2025 {
         public static final int canCoderID = 17;
         public static final String canBusName = "rio";
         public static class Up {
-            public static final double KP = 20.0;
-            public static final double KI = 3.2;
-            public static final double KD = 0.2;
+            public static final double KP = 5; // 25;  // 5; // 20.0;
+            public static final double KI = 0; //3.2; // 0;
+            public static final double KD = 0; //0.2;
         }
         public static class Down {
-            public static final double KP = 10.0;
+            public static final double KP = 2; // 10.0;
             public static final double KI = 0.05;
             public static final double KD = 0;
         }
-        public static final double KV = 1;//0.1;
-        public static final double KS = 0.05;
-        public static final double KA = 0.07;
-        public static final double Velocity = 10;
-        public static final double Acceleration = 75; // 50; // 600.0;
-        public static final double Jerk = 0.0;
+        public static final double KV = 0;//1;//0.1;
+        public static final double KS = 0;//0.05;
+        public static final double KA = 0;//0.07;
+        public static final double Velocity = 30;//50;
+        public static final double Acceleration = 30;// 100;// 75;
+        public static final double Jerk = 0;
         public static final double SensorToMechanismRatio = 1.0;
-        public static final double RotorToSensorRatio = 11.33;
+        public static final double RotorToSensorRatio = 4.8;//11.33;
         // smaller value means higher position
         public static final double zeroPos = 0;
         public static final double basePos = 0;
@@ -246,7 +246,7 @@ public final class Constants2025 {
         public static final double l1Pos = -1.75;
         public static final double l2Pos = -5.41582;
         public static final double l3Pos = -9.885644;
-        public static final double l4Pos = -15.5;
+        public static final double l4Pos = -15.3;
         public static final double ball1Pos = -6;
         public static final double ball2Pos = -10;
         public static final double upDodgePos = -9.135644;

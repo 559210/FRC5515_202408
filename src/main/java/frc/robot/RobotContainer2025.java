@@ -55,7 +55,9 @@ public class RobotContainer2025 implements RobotContainerInterface {
     private final int translationAxis = 1;
     private final int strafeAxis = 0;
     private final int rotationAxis = 4;
-
+    private final int leftTriggerAxis = 2;
+    private final int rightTriggerAxis = 3;
+    
     /* Driver Buttons */
     private final JoystickButton aimBtn = new JoystickButton(driver, 1);
     private final JoystickButton zeroGyro = new JoystickButton(driver, 5);
@@ -65,10 +67,13 @@ public class RobotContainer2025 implements RobotContainerInterface {
     private final POVButton upButton = new POVButton(driver, 0);
     private final POVButton leftButton = new POVButton(driver, 270);
 
+
     private final JoystickButton turningArmBtn = null; //new JoystickButton(driver,2);
     private final JoystickButton intakeBtn = new JoystickButton(driver,2);
     private final JoystickButton zeroStateBtn = null; //new JoystickButton(driver, 3);
-    private final JoystickButton resetUpperCanCodePositionBtn = new JoystickButton(driver, 8);
+    
+
+
     private final JoystickButton zeroUpperPosBtn = new JoystickButton(driver, 7);
     private final JoystickButton switchCoralnBallBtn = null; // new JoystickButton(driver, 5);
     private final Swerve2025 s_Swerve = new Swerve2025();
@@ -96,14 +101,14 @@ public class RobotContainer2025 implements RobotContainerInterface {
                     () -> -driver.getRawAxis(rotationAxis), 
                     // ()->0, ()->0, ()->0,
                     () -> robotCentric.getAsBoolean(),
-                    () -> false     // TODO: bind left trigger key of joystick
+                    () -> driver.getRawAxis(leftTriggerAxis) > 0.5
                 )
             )
         );
 
         new UpperSystem2025Cmd(
             m_turningArm, m_elevator, m_intake, m_candle, m_moveToSubSys,
-            resetUpperCanCodePositionBtn, zeroUpperPosBtn, switchCoralnBallBtn, aimBtn, intakeBtn,
+            zeroUpperPosBtn, switchCoralnBallBtn, aimBtn, intakeBtn,
             turningArmBtn, zeroStateBtn
         );
 
@@ -127,6 +132,32 @@ public class RobotContainer2025 implements RobotContainerInterface {
     } 
     public void autoInit() {
         StateController.getInstance().useVisionOdometry = true;
+        UpperSystem2025Cmd.inst.schedule();
+    }
+
+    public void testInit() {
+        var cmd = UpperSystem2025Cmd.inst;
+
+        POVButton downButton2 = new POVButton(driver2, 180);
+        POVButton rightButton2 = new POVButton(driver2, 90);
+        POVButton upButton2 = new POVButton(driver2, 0);
+        POVButton leftButton2 = new POVButton(driver2, 270);
+
+
+        JoystickButton resetUpperCanCodePositionBtn = new JoystickButton(driver2, 8);
+        JoystickButton unlockElevatorBtn = new JoystickButton(driver2, 1);
+        JoystickButton lockElvatorBtn = new JoystickButton(driver2, 2);
+
+        cmd.setArmTuningUpTrigger(rightButton2);
+        cmd.setArmTuningDownTrigger(leftButton2);
+
+        cmd.setElevatorTuningDownTrigger(downButton2);
+        cmd.setElevatorTuningUpTrigger(upButton2);
+
+        cmd.setResetCanCodePositionTrigger(resetUpperCanCodePositionBtn);
+        cmd.setLockElevatorTrigger(lockElvatorBtn);
+        cmd.setUnlockElevatorTrigger(unlockElevatorBtn);
+
         UpperSystem2025Cmd.inst.schedule();
     }
 
@@ -224,7 +255,7 @@ public class RobotContainer2025 implements RobotContainerInterface {
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
-        return s_Swerve.followPathPlannerAuto("test01");
+        return s_Swerve.followPathPlannerAuto("A1 test");
     }
 
     public void update() {

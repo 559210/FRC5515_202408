@@ -128,6 +128,11 @@ public class UpperSystem2025Cmd extends Command {
     private Trigger aimCoralBtn;
     private Trigger intakeTrigger;
 
+    private Trigger elevatorTuningUpTrigger;
+    private Trigger elevatorTuningDownTrigger;
+    private Trigger armTuningUpTrigger;
+    private Trigger armTuningDownTrigger;
+
     private final boolean isDebugEnabled = true;
 
     private boolean isCarryingCoralFromDebug = false;
@@ -137,7 +142,7 @@ public class UpperSystem2025Cmd extends Command {
 
     public UpperSystem2025Cmd(
             TurningArm2025 turningArm, Elevator2025 elev, Intake2025 intake, Candle2025 candle, MoveTo2025 moveto,
-            Trigger resetCanCodePositionBtn, Trigger resetToZeroPosBtn, Trigger switchCnB, Trigger aimCoral, Trigger intakeTrigger,
+            Trigger resetToZeroPosBtn, Trigger switchCnB, Trigger aimCoral, Trigger intakeTrigger,
             Trigger test_arm, Trigger test_zero) {
 
         inst = this;
@@ -179,21 +184,6 @@ public class UpperSystem2025Cmd extends Command {
             this.test_zeroBtn.onTrue(new InstantCommand(() -> {
                 m_elevator.setState(EV_STATE.ZERO);
                 /// m_turningArm.setState(TA_STATE.ZERO);
-            }));
-        }
-
-        if (resetCanCodePositionBtn != null) {
-            this.resetCanCodePositionBtn = resetCanCodePositionBtn;
-            this.resetCanCodePositionBtn.onTrue(new InstantCommand(() -> {
-                if (Robot.inst.isTestEnabled()) {
-                    System.out.println("reset elevator and turning arm's cancoder position to 0");
-                    m_elevator.resetCancodePosition();
-                    m_turningArm.resetCancodePosition();
-                }
-                else {
-                    System.out.println("No No No, only working at TEST mode! reset elevator and turning arm's cancoder position to 0");
-                }
-
             }));
         }
 
@@ -255,6 +245,90 @@ public class UpperSystem2025Cmd extends Command {
         initDebug();
     }
 
+    public void setElevatorTuningUpTrigger(Trigger t) {
+        if (t == null || elevatorTuningUpTrigger != null) {
+            return;
+        }
+        elevatorTuningUpTrigger = t;
+        t.onTrue(new InstantCommand(() -> {
+            m_elevator.toggleTuningUp();
+        }));
+    }
+
+    public void setElevatorTuningDownTrigger(Trigger t) {
+        if (t == null || elevatorTuningDownTrigger != null) {
+            return;
+        }
+        elevatorTuningDownTrigger = t;
+        t.onTrue(new InstantCommand(() -> {
+            m_elevator.toggleTuningDown();
+        }));
+    }
+
+    public void setArmTuningUpTrigger(Trigger t) {
+        if (t == null || armTuningUpTrigger != null) {
+            return;
+        }
+        armTuningUpTrigger = t;
+        t.onTrue(new InstantCommand(() -> {
+            m_turningArm.toggleTuningUp();
+        }));
+    }
+
+    public void setArmTuningDownTrigger(Trigger t) {
+        if (t == null || armTuningDownTrigger != null) {
+            return;
+        }
+        armTuningDownTrigger = t;
+        t.onTrue(new InstantCommand(() -> {
+            m_turningArm.toggleTuningDown();
+        }));
+    }
+
+    public void setResetCanCodePositionTrigger(Trigger t) {
+        if (this.resetCanCodePositionBtn != null) {
+            return;
+        }
+        if (t != null) {
+            this.resetCanCodePositionBtn = t;
+            this.resetCanCodePositionBtn.onTrue(new InstantCommand(() -> {
+                if (Robot.inst.isTestEnabled()) {
+                    System.out.println("reset elevator and turning arm's cancoder position to 0");
+                    m_elevator.resetCancodePosition();
+                    m_turningArm.resetCancodePosition();
+                }
+                else {
+                    System.out.println("No No No, only working at TEST mode! reset elevator and turning arm's cancoder position to 0");
+                }
+
+            }));
+        }
+    }
+
+    private Trigger lockElevatorTrigger;
+    private Trigger unlockElevatorTrigger;
+    public void setLockElevatorTrigger(Trigger t) {
+        if (t == null || lockElevatorTrigger != null) {
+            return;
+        }
+        lockElevatorTrigger = t;
+        lockElevatorTrigger.onTrue(new InstantCommand(() -> {
+            m_elevator.lockMotor();
+            m_turningArm.unlockMotor();
+        }));
+    }
+
+    public void setUnlockElevatorTrigger(Trigger t) {
+        if (t == null || unlockElevatorTrigger != null) {
+            return;
+        }
+        unlockElevatorTrigger = t;
+        unlockElevatorTrigger.onTrue(new InstantCommand(() -> {
+            m_elevator.unlockMotor();
+            m_turningArm.unlockMotor();
+        }));
+    }
+
     void initDebug() {
         if (isDebugEnabled) {
             // ControlPadHelper.DebugCtrl.onZero.onTrue(new InstantCommand(() -> {
@@ -303,12 +377,13 @@ public class UpperSystem2025Cmd extends Command {
             m_elevator.init();
             m_turningArm.init(); 
             m_intake.init();
-            m_candle.init();            
+            m_candle.init();
             setState(STATE.READY_FOR_LOAD_CORAL);
         }
-        else {
+        else if (Robot.inst.isTest()){
             System.out.println("UpperSystemCmd init in test");
-            m_elevator.unlockMotor();
+            m_elevator.initInTestMode();
+            m_turningArm.initInTestMode();
         }
     }
 
@@ -600,7 +675,8 @@ public class UpperSystem2025Cmd extends Command {
                     () -> { // endCondition
                         return m_elevator.getCurRunningState() == Elevator2025.RUNNING_STATE.DONE;
                     }
-                ).addConditionAction(
+                )
+                .addConditionAction(
                     () -> { // init
                         m_turningArm.setState(taState);
                     },
