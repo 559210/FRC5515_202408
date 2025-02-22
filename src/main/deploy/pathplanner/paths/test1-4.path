@@ -58,7 +58,7 @@
     "rotation": 59.99999999999999
   },
   "reversed": false,
-  "folder": "BAuto",
+  "folder": "test",
   "idealStartingState": {
     "velocity": 0,
     "rotation": 52.37376636133027

@@ -23,11 +23,13 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RepeatCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants.Candle;
+import frc.robot.ControlPadHelper.ControlPadInfo;
 import frc.robot.commands.*;
 import frc.robot.commands.SlightlyMoveCmd2025.DIR;
 import frc.robot.subsystems.*;
@@ -106,6 +108,10 @@ public class RobotContainer2025 implements RobotContainerInterface {
             )
         );
 
+        // setHeading here for auto 
+        //  TODO: RED...
+        s_Swerve.setHeading(180);
+
         new UpperSystem2025Cmd(
             m_turningArm, m_elevator, m_intake, m_candle, m_moveToSubSys,
             zeroUpperPosBtn, switchCoralnBallBtn, aimBtn, intakeBtn,
@@ -113,10 +119,12 @@ public class RobotContainer2025 implements RobotContainerInterface {
         );
 
         // Configure the button bindings
+        GlobalConfig.init();
+
         configureButtonBindings();
         registerPathplannerEventsAndNamedCommands();
 
-        GlobalConfig.init();
+        
         ControlPadHelper.init();
         s_Swerve.configPathPlanner();
         PathfindingCommand.warmupCommand().schedule();
@@ -124,6 +132,10 @@ public class RobotContainer2025 implements RobotContainerInterface {
         // LimelightHelpers.setLEDMode_PipelineControl("limelight-one");
         swerveStatePublisher = NetworkTableInstance.getDefault()
             .getStructArrayTopic("/MyStates", SwerveModuleState.struct).publish();
+
+        // GlobalConfig.ExtractApPathName("ap17_right");
+        // var data = ControlPadHelper.getControlPadInfoInAuto();
+        // System.out.println("============> ap: " + data.aprilTagId + " , branch: " + data.branch + " , level: " + data.level);
     }
 
     public void telInit() {
@@ -133,6 +145,10 @@ public class RobotContainer2025 implements RobotContainerInterface {
     public void autoInit() {
         StateController.getInstance().useVisionOdometry = true;
         UpperSystem2025Cmd.inst.schedule();
+
+        UpperSystem2025Cmd.inst.getRequirements().forEach(sys -> {
+            System.out.println("up: " + sys.getName());
+        });
     }
 
     public void testInit() {
@@ -247,6 +263,27 @@ public class RobotContainer2025 implements RobotContainerInterface {
         NamedCommands.registerCommand("Shoot",new InstantCommand(() -> {
             UpperSystem2025Cmd.inst.startShoot();
         }));
+
+        
+        String[] list = GlobalConfig.getAllAimPathNames();
+        for (int i = 0; i < list.length; ++i) {
+            String name = list[i];
+            // pathplannerEvents.add(new EventTrigger((name)).onTrue(new MoveToByPath2025Cmd(m_moveToSubSys, s_Swerve, name)));
+            NamedCommands.registerCommand(name, 
+                new SequentialCommandGroup(new InstantCommand(() -> {
+                    if (name.startsWith("ap")) {
+                        GlobalConfig.ExtractApPathName(name);
+                    }
+                }), 
+                new MoveToByPath2025Cmd(m_moveToSubSys, s_Swerve, name))
+            );
+            
+            // NamedCommands.registerCommand(name,new InstantCommand(()->{}));
+        }
+
+        // NamedCommands.registerCommand("SetHead", new InstantCommand(()->{
+            
+        // }));
     }
 
     /**
@@ -255,7 +292,7 @@ public class RobotContainer2025 implements RobotContainerInterface {
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
-        return s_Swerve.followPathPlannerAuto("A1 test");
+        return s_Swerve.followPathPlannerAuto("test001");
     }
 
     public void update() {

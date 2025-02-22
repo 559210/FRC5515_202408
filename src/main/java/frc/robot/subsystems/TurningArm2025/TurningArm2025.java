@@ -119,11 +119,16 @@ public class TurningArm2025 extends SubsystemBase {
         return elevatorConfiguration;
     }
 
+    boolean isFirstTimeInit = true;
     public void init() {
         m_armMotor.getConfigurator().apply(getMotorConfiguration(true));
-        if (!loadLastPosition()) {
-            m_canCoder.setPosition(0);
+        if (isFirstTimeInit) {
+            isFirstTimeInit = false;
+            if (!loadLastPosition()) {
+                m_canCoder.setPosition(0);
+            }
         }
+
     }
 
     public void initInTestMode() {

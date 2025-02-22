@@ -14,6 +14,7 @@ import com.pathplanner.lib.path.Waypoint;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -33,8 +34,6 @@ public class MoveTo2025 extends SubsystemBase{
 
     private boolean isDidScheduled = false;
 
-    private Pose2d m_targetPose;
-
     public MoveTo2025(Swerve2025 swerve){
         s_Swerve = swerve;
     }
@@ -49,6 +48,31 @@ public class MoveTo2025 extends SubsystemBase{
             moveCmd.schedule();
             
         }
+    }
+
+    public void init(String pathname) {
+        moveCmd = null;
+        isDidScheduled = false;
+
+        moveCmd = createPathCmd(pathname);
+        if (moveCmd != null) {
+            moveCmd.schedule();
+        }
+    }
+
+    private Command createPathCmd(String pathName) {
+        PathPlannerPath path = GlobalConfig.getAimPath(pathName);
+                // Create the constraints to use while pathfinding. The constraints defined in the path will only be used for the path.
+        PathConstraints constraints = new PathConstraints(
+            3.0, 3.0,
+            Units.degreesToRadians(540), Units.degreesToRadians(720));
+
+            System.out.println("---------------> 3");
+        // Since AutoBuilder is configured, we can use it to build pathfinding commands
+        // return AutoBuilder.pathfindToPose(to, constraints, 0);
+        return AutoBuilder.pathfindThenFollowPath(
+            path,
+            constraints);
     }
 
     private Command createPathCmd(Pose2d from, Pose2d to) {
@@ -98,7 +122,7 @@ public class MoveTo2025 extends SubsystemBase{
             return MOVE_TO_CMD_STATE.MOVE_TO_CMD_STATE_RUNNING;
         }
 
-        if (isDidScheduled && moveCmd.isFinished()) {
+        if (isDidScheduled && (moveCmd.isFinished() || !moveCmd.isScheduled())) {
             return MOVE_TO_CMD_STATE.MOVE_TO_CMD_STATE_FINISHED;
         }
 
@@ -115,6 +139,12 @@ public class MoveTo2025 extends SubsystemBase{
 
     @Override
     public void periodic() {
+
+        if (this.moveCmd != null) {
+            MOVE_TO_CMD_STATE state = getAimMoveCmdState();
+            SmartDashboard.putString("Move to ...", "state: " + state.name());    
+            SmartDashboard.putString("Move to ...", "isFinished: " + moveCmd.isFinished() + " , isSchudled: " + moveCmd.isScheduled());        
+        }
 
     }
 }

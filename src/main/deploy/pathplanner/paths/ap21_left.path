@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.179,
-        "y": 3.774
+        "x": 7.093919836956522,
+        "y": 3.97
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.08202435764093,
-        "y": 3.862
+        "x": 6.173807363574127,
+        "y": 3.9595669298917944
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 5.879,
-        "y": 3.774
+        "x": 5.89,
+        "y": 3.97
       },
       "prevControl": {
-        "x": 6.321,
-        "y": 3.862
+        "x": 6.4666159766020455,
+        "y": 3.9569274435412356
       },
       "nextControl": null,
       "isLocked": false,
@@ -52,7 +52,7 @@
     "rotation": 180.0
   },
   "reversed": false,
-  "folder": "ManualCoralB",
+  "folder": "aim",
   "idealStartingState": {
     "velocity": 3,
     "rotation": 180.0

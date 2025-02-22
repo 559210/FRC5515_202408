@@ -14,7 +14,7 @@ import edu.wpi.first.math.util.Units;
 import frc.lib.util.SwerveModuleConstants;
 
 public final class Constants2025 {
-    public static double TeleSpeedScale = 0.4;
+    public static double TeleSpeedScale = 0.65;
     public static final double stickDeadband = 0.1;
     public static final String canivore_name = "Canivore5515";
     public static final class Swerve {
@@ -207,7 +207,7 @@ public final class Constants2025 {
         // bigger value means arm is more expanded(clockwise)
         public static final double zeroPos = 0;
         public static final double basePos = 0.3146980;
-        public static final double l1Pos = 0.407227;
+        public static final double l1Pos = 1.139307;//0.407227;
         public static final double l2Pos = 1.139307;
         public static final double dodgePos =  1.139307;  // the pos that allows elevator to move
         public static final double l3Pos = 1.139307;
@@ -227,7 +227,7 @@ public final class Constants2025 {
             public static final double KD = 0; //0.2;
         }
         public static class Down {
-            public static final double KP = 2; // 10.0;
+            public static final double KP = 5; // 10.0;
             public static final double KI = 0.05;
             public static final double KD = 0;
         }
@@ -243,7 +243,7 @@ public final class Constants2025 {
         public static final double zeroPos = 0;
         public static final double basePos = 0;
 
-        public static final double l1Pos = -1.75;
+        public static final double l1Pos = -5.41582; // -1.75;
         public static final double l2Pos = -5.41582;
         public static final double l3Pos = -9.885644;
         public static final double l4Pos = -15.3;

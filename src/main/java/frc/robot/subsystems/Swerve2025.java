@@ -14,6 +14,7 @@ import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
@@ -224,6 +225,7 @@ public class Swerve2025 extends SubsystemBase {
 
     public void setHeading(Rotation2d heading) {
         if (useEstimatorOdo) {
+            System.out.println("=========ppppppp ------ > " + heading);
             est_swerveOdometry.resetPosition(getGyroYaw(), getModulePositions(),
             new Pose2d(getPose().getTranslation(), heading));
         }
@@ -237,6 +239,10 @@ public class Swerve2025 extends SubsystemBase {
     public void zeroHeading() {
         // setHeading(new Rotation2d(Units.degreesToRadians(180)));
         setHeading(new Rotation2d());
+    }
+
+    public void setHeading(double angle) {
+        setHeading(new Rotation2d(Units.degreesToRadians(angle)));
     }
 
     public Rotation2d getGyroYaw() {

@@ -8,20 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.262,
-        "y": 5.69598729810778
+        "x": 5.089759362769431,
+        "y": 5.605765108059695
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 4.965,
-        "y": 5.357
+        "x": 4.99,
+        "y": 5.44
       },
       "prevControl": {
-        "x": 5.262,
-        "y": 5.6960127018922195
+        "x": 5.310338693427266,
+        "y": 5.953471845119381
       },
       "nextControl": null,
       "isLocked": false,
@@ -52,7 +52,7 @@
     "rotation": -119.99999999999999
   },
   "reversed": false,
-  "folder": "ManualCoralB",
+  "folder": "aim",
   "idealStartingState": {
     "velocity": 3,
     "rotation": -119.99999999999999

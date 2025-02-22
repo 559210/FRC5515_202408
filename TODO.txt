@@ -99,3 +99,12 @@ s0，s1 all off
 
 
 usb camera ip: 10.55.15.30
+
+
+
+const ap17_pos = [4.073906, 3.306318];
+const ap18_pos = [3.6576, 4.0259];
+const ap19_pos = [4.073906, 4.745482];
+const ap20_pos = [4.90474, 4.7475482];
+const ap21_pos = [5.321046, 4.0259];
+const ap22_pos = [4.90474, 3.306318];

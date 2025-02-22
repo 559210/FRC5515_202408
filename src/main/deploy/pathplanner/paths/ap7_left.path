@@ -45,7 +45,7 @@
     "rotation": 180.0
   },
   "reversed": false,
-  "folder": "ManualCoralR",
+  "folder": "aim",
   "idealStartingState": {
     "velocity": 3,
     "rotation": 180.0

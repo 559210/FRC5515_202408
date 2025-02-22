@@ -68,6 +68,7 @@ public class ControlPadHelper {
         }
         public ControlPadInfoData data = new ControlPadInfoData();
         ControlPadInfoData backupData = new ControlPadInfoData();
+        ControlPadInfoData autoData = new ControlPadInfoData();
 
         public boolean isChanged = false;
 
@@ -314,10 +315,24 @@ public class ControlPadHelper {
     }
 
     public static ControlPadInfo.ControlPadInfoData getControlPadInfo() {
+        if (Robot.inst.isAutonomous()) {
+            return controlPadInfo.autoData;
+        }
+        
         if (controlPadInfo.data.aprilTagId == -1) {
             return null;
         }
         return controlPadInfo.data;
+    }
+
+    public static ControlPadInfo.ControlPadInfoData getControlPadInfoInAuto() {
+        return controlPadInfo.autoData;
+    }
+
+    public static void setControlPadInfoDataInAuto(long aprilTagId, boolean isLeft, long level) {
+        controlPadInfo.autoData.aprilTagId = aprilTagId;
+        controlPadInfo.autoData.branch = isLeft ? -1 : 1;
+        controlPadInfo.autoData.level = level;
     }
 
     public static VirtualControl getVirtualControl() {

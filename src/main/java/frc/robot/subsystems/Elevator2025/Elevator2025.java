@@ -134,6 +134,7 @@ public class Elevator2025 extends SubsystemBase {
     //     return cc_cfg;
     // }
 
+    boolean isFirstTimeInit = true;
     // int initCount = 0;
     public void init() {
         // SmartDashboard.putNumber("ccc init", m_canCoder.getPosition().getValueAsDouble());
@@ -146,9 +147,13 @@ public class Elevator2025 extends SubsystemBase {
         // m_primaryMotor.setSafetyEnabled(true);      // 例子代码，不知道有什么用，不明白safetyEnabled是什么
         // m_canCode=gurator().apply(getCCConfig());
 
-        if (!loadLastPosition()) {
-            m_canCoder.setPosition(0);
+        if (isFirstTimeInit) {
+            isFirstTimeInit = false;
+            if (!loadLastPosition()) {
+                m_canCoder.setPosition(0);
+            }
         }
+
         motionMagicVoltage1 = new MotionMagicVoltage(0);
 
     }

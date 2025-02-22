@@ -1,6 +1,8 @@
 package frc.robot;
 
 import java.util.HashMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import com.pathplanner.lib.path.PathPlannerPath;
 
@@ -39,10 +41,32 @@ public final class GlobalConfig {
     //     "ap_22_right",
     // };
 
+    private static final String[] sourcePath = new String[]{
+        "source12A",
+        "source12B",
+    };
     
     private static String getApPathName(int apId, boolean isLeft) {
         return "ap" + apId + "_" + (isLeft ? "left" : "right");
     }
+
+    public static boolean ExtractApPathName(String pathName) {
+        String regex = "ap(\\d+)_(\\w+)";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(pathName);
+        if (matcher.find()) {
+            String apId = matcher.group(1);
+            String suffix = matcher.group(2);
+
+            ControlPadHelper.setControlPadInfoDataInAuto(Long.parseLong(apId), suffix == "left", 3);
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+
 
     public static boolean init() {
         try {
@@ -54,6 +78,13 @@ public final class GlobalConfig {
                     aimPathDic.put(pathName, path);
                 }
                 
+            }
+
+            for (int i = 0; i < sourcePath.length; ++i) {
+                String pathName = sourcePath[i];
+                PathPlannerPath path = PathPlannerPath.fromPathFile(pathName);
+                System.out.println("=========== " + pathName + " loaded ===============");
+                aimPathDic.put(pathName, path);
             }
 
             return true;
@@ -71,5 +102,9 @@ public final class GlobalConfig {
         }
 
         return aimPathDic.get(name);
+    }
+
+    public static String[] getAllAimPathNames() {
+        return (String[]) aimPathDic.keySet().toArray(new String[0]);
     }
 }

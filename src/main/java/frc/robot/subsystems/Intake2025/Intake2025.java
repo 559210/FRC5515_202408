@@ -223,8 +223,15 @@ public class Intake2025 extends SubsystemBase {
         switch (curState) {
             case READY:
             case CARRYING_BALL:
-            case CARRYING_CORAL:
                 speed = 0;
+                break;
+            case CARRYING_CORAL:
+                if (!intakeCoralSensor1.get()) {
+                    speed = Constants2025.Intake.coralInReverseSpeed;
+                }
+                else {
+                    speed = 0;
+                }
                 break;
             case CORAL_IN:
                 speed = updateCoralIn();
