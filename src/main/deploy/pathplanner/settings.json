@@ -3,9 +3,9 @@
   "robotLength": 0.857,
   "holonomicMode": true,
   "pathFolders": [
-    "ManualCoralR",
+    "BAuto",
     "ManualCoralB",
-    "BAuto"
+    "ManualCoralR"
   ],
   "autoFolders": [
     "Blue Auto"

@@ -91,8 +91,8 @@ public class NTManager
     }
     public bool init()
     {
-        //nt = new("10.55.15.2", ID_NAME, false, 5810);
-        nt = new("127.0.0.1", ID_NAME, false, 5810);
+        nt = new("10.55.15.2", ID_NAME, false, 5810);
+        //nt = new("127.0.0.1", ID_NAME, false, 5810);
 
         startGuard();
         return true;
