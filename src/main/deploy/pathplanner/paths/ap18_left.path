@@ -1,61 +1,61 @@
 {
-  "version": "2025.0",
-  "waypoints": [
-    {
-      "anchor": {
-        "x": 1.758576766304348,
-        "y": 4.28
-      },
-      "prevControl": null,
-      "nextControl": {
-        "x": 2.644188603125631,
-        "y": 4.2429703450074845
-      },
-      "isLocked": false,
-      "linkedName": null
+    "version": "2025.0",
+    "waypoints": [
+        {
+            "anchor": {
+                "x": 1.758576766304348,
+                "y": 4.28
+            },
+            "prevControl": null,
+            "nextControl": {
+                "x": 3.1475999999999997,
+                "y": 4.1459
+            },
+            "isLocked": false,
+            "linkedName": null
+        },
+        {
+            "anchor": {
+                "x": 3.1475999999999997,
+                "y": 4.1459
+            },
+            "prevControl": {
+                "x": 2.0483775902464707,
+                "y": 4.254782029579891
+            },
+            "nextControl": null,
+            "isLocked": false,
+            "linkedName": null
+        }
+    ],
+    "rotationTargets": [],
+    "constraintZones": [],
+    "pointTowardsZones": [],
+    "eventMarkers": [
+        {
+            "name": "LN",
+            "waypointRelativePos": 0.6,
+            "endWaypointRelativePos": null,
+            "command": null
+        }
+    ],
+    "globalConstraints": {
+        "maxVelocity": 3.5,
+        "maxAcceleration": 3.5,
+        "maxAngularVelocity": 540,
+        "maxAngularAcceleration": 720,
+        "nominalVoltage": 12,
+        "unlimited": false
     },
-    {
-      "anchor": {
-        "x": 3.14,
-        "y": 4.28
-      },
-      "prevControl": {
-        "x": 2.0483775902464707,
-        "y": 4.254782029579891
-      },
-      "nextControl": null,
-      "isLocked": false,
-      "linkedName": null
-    }
-  ],
-  "rotationTargets": [],
-  "constraintZones": [],
-  "pointTowardsZones": [],
-  "eventMarkers": [
-    {
-      "name": "LN",
-      "waypointRelativePos": 0.75,
-      "endWaypointRelativePos": null,
-      "command": null
-    }
-  ],
-  "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 3.0,
-    "maxAngularVelocity": 540.0,
-    "maxAngularAcceleration": 720.0,
-    "nominalVoltage": 12.0,
-    "unlimited": false
-  },
-  "goalEndState": {
-    "velocity": 0,
-    "rotation": 0.0
-  },
-  "reversed": false,
-  "folder": "aim",
-  "idealStartingState": {
-    "velocity": 3.0,
-    "rotation": 0.0
-  },
-  "useDefaultConstraints": true
+    "goalEndState": {
+        "velocity": 0,
+        "rotation": 0
+    },
+    "reversed": false,
+    "folder": "aim",
+    "idealStartingState": {
+        "velocity": 3.5,
+        "rotation": 0
+    },
+    "useDefaultConstraints": false
 }

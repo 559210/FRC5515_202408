@@ -1,17 +1,6 @@
+const fs = require("fs");
+const ph = require('path');
 // 输入数据
-
-// const ap17_pos = { x: 4.073906, y: 3.306318, theta: 330 };
-// const ap18_pos = { x: 3.6576, y: 4.0259, theta: 270 };
-// const ap19_pos = { x: 4.073906, y: 4.745482, theta: 210 };
-// const ap20_pos = { x: 4.90474, y: 4.7475482, theta: 150 };
-// const ap21_pos = { x: 5.321046, y: 4.0259, theta: 90 };
-// const ap22_pos = { x: 4.90474, y: 3.306318, theta: 30 };
-// const ap6_pos = { x: 13.474446, y: 3.306318, theta: 30 };
-// const ap7_pos = { x: 13.890498, y: 4.0259, theta: 90 };
-// const ap8_pos = { x: 13.474446, y: 4.745482, theta: 150 };
-// const ap9_pos = { x: 12.643358, y: 4.745482, theta: 210 };
-// const ap10_pos = { x: 12.227306, y: 4.0259, theta: 270 };
-// const ap11_pos = { x: 12.643358, y: 3.306318, theta: 330 };
 
 const APRIL_TAG = {
     "ap17": { x: 4.073906, y: 3.306318, theta: 330 },
@@ -28,20 +17,8 @@ const APRIL_TAG = {
     "ap11": { x: 12.643358, y: 3.306318, theta: 330 },
 }
 
-
-
-
-
-// const midPoints = [
-//     ap22_pos, ap21_pos, ap20_pos, ap19_pos, ap18_pos, ap17_pos,
-//     // ap6_pos, ap7_pos, ap8_pos, ap9_pos, ap10_pos, ap11_pos,
-// ];
-
-// const angles = [30, 90, 150, 210, 270, 330]; // 每条边相对于 X 轴正方向的角度（单位：度）
-
 const N = -.51; // 垂直偏移量
 const OFFSET = 0.12; // 沿边偏移量, >0 right, < 0 left
-
 
 function calcOffsetPoint(midPoint, angle, n, offset) {
         const angleRad = (angle * Math.PI) / 180; // 将角度转换为弧度
@@ -61,31 +38,79 @@ function calcOffsetPoint(midPoint, angle, n, offset) {
             newPoint: { x: newPx, y: newPy } // 沿边偏移后的新点
         };
 }
-// 计算垂直偏移点和沿边偏移后的新点
-// function calculateAllOffsetPoints(midPoints, angles, n, offset) {
-//     return midPoints.map((midPoint, index) => {
-//         const angle = angles[index]; // 当前边的角度
-//         const angleRad = (angle * Math.PI) / 180; // 将角度转换为弧度
 
-//         // 计算垂直偏移点
-//         const perpendicularAngleRad = angleRad + Math.PI / 2; // 垂直方向的角度（弧度）
-//         const px = midPoint.x + n * Math.cos(perpendicularAngleRad); // 垂直偏移点的 x 坐标
-//         const py = midPoint.y + n * Math.sin(perpendicularAngleRad); // 垂直偏移点的 y 坐标
+// try wirit to the pathplan path file.
+const PP_PATH = "../src/main/deploy/pathplanner/paths/"
 
-//         // 计算沿边偏移后的新点
-//         const newPx = px + offset * Math.cos(angleRad); // 新点的 x 坐标
-//         const newPy = py + offset * Math.sin(angleRad); // 新点的 y 坐标
+let testPath = "ap6_left.path";
 
-//         return {
-//             midPoint: midPoint, // 原始中点
-//             perpendicularPoint: { x: px, y: py }, // 垂直偏移点
-//             newPoint: { x: newPx, y: newPy } // 沿边偏移后的新点
-//         };
-//     });
-// }
+const PATH_MODIFY_PROTO = {
+    waypointRelativePos: 0.6,
+    maxV: 3.5,
+    maxA: 3.5,
+}
+
+function eventMarkerParser(obj) {
+    if (!obj["eventMarkers"] || obj["eventMarkers"].length == 0) {
+        obj["eventMarkers"] = [{
+            "name": "LN",
+            "waypointRelativePos": 0.75,
+            "endWaypointRelativePos": null,
+            "command": null
+        }];
+    }
+
+    return obj;
+}
+function eventMarkerLNTime(obj, newT) {
+    for (let i = 0; i < obj["eventMarkers"].length; ++i) {
+        let o = obj["eventMarkers"][i];
+        if (o.name == "LN") {
+            o.waypointRelativePos = newT;
+        }
+    }
+    return obj;
+}
+function targetPos(obj, x, y) {
+    let wp = obj["waypoints"];
+    if (wp.length != 2) {
+        throw "waypoint error!";
+    }
+    let firstP = wp[0];
+    let lastP = wp[1];
+    firstP.nextControl.x = x;
+    firstP.nextControl.y = y;
+
+    lastP.anchor.x = x;
+    lastP.anchor.y = y;
+    return obj;
+}
+
+function speed(obj, v, a) {
+    let constrain = obj['globalConstraints'];
+    constrain.maxVelocity = v;
+    constrain.maxAcceleration = a;
+
+    obj['goalEndState'].velocity = 0;
+    obj['idealStartingState'].velocity = v;
+
+    obj['useDefaultConstraints'] = false;
+}
+function processPathPlannerPath(aprilTagName, isLeft, newTargetX, newTargetY) {
+    let filename = ph.join(PP_PATH, aprilTagName + "_" + (isLeft ? "left" : "right") + ".path");
+    console.log(filename)
+    // read filename as a json text file
+    let text = fs.readFileSync(filename);
+    let data = JSON.parse(text);
+    targetPos(data, newTargetX, newTargetY)
+    eventMarkerParser(data);
+    eventMarkerLNTime(data, PATH_MODIFY_PROTO.waypointRelativePos);
+    speed(data, PATH_MODIFY_PROTO.maxV, PATH_MODIFY_PROTO.maxA);
+    fs.writeFileSync(filename, JSON.stringify(data, null, 4), 'utf8');
+}
 
 
-function calcAllOffsetPoints() {
+function main() {
     let result = {};
     for (let key in APRIL_TAG) {
         let apInfo = APRIL_TAG[key];
@@ -98,24 +123,13 @@ function calcAllOffsetPoints() {
         r.right = calcOffsetPoint({x : apInfo.x, y: apInfo.y}, apInfo.theta, N, OFFSET).newPoint;
         r.left = calcOffsetPoint({x : apInfo.x, y: apInfo.y}, apInfo.theta, N, -OFFSET).newPoint;
         result[key] = r;
+
+        processPathPlannerPath(key, true, r.left.x, r.left.y);
+        processPathPlannerPath(key, false, r.right.x, r.right.y);
     }
 
     return result;
 }
 
-// // 计算结果
-// const result = calculateOffsetPoints(midPoints, angles, n, offset);
 
-// // 输出结果
-// console.log("计算结果：");
-// result.forEach((res, index) => {
-//     console.log(`边 ${index + 1}:`);
-//     console.log(`  中点坐标: (${res.midPoint.x}, ${res.midPoint.y})`);
-//     console.log(`  垂直偏移点坐标: (${res.perpendicularPoint.x.toFixed(2)}, ${res.perpendicularPoint.y.toFixed(2)})`);
-//     console.log(`  沿边偏移后的新点坐标: (${res.newPoint.x.toFixed(2)}, ${res.newPoint.y.toFixed(2)})`);
-//     console.log("-----------------------------");
-// });
-
-const result = calcAllOffsetPoints();
-
-console.log(result);
+main();
