@@ -43,7 +43,7 @@ public class InfoPanel
         RED = 1
     }
     GComponent root;
-
+    Controller[] parentToggleSideCtr;
 
     GButton toRedBtn;
     GButton toBlueBtn;
@@ -63,9 +63,10 @@ public class InfoPanel
     GTextField upsCarryingCoral;
     GTextField upsCarryingBall;
 
-    public InfoPanel(GComponent comp)
+    public InfoPanel(GComponent comp, Controller[] pc)
     {
         root = comp;
+        parentToggleSideCtr = pc;
 
         toRedBtn = root.GetChild("toRedBtn").asButton;
         toRedBtn.onClick.Set(toRedClicked);
@@ -180,12 +181,22 @@ public class InfoPanel
             // 靠左
             root.Center();
             root.x = root.parent.width - root.width;
+
+            
+            toggleSideCtr(0);
         }
         else if (side == SIDE.RED)
         {
             // 靠右
             root.Center();
             root.x = 0;
+            toggleSideCtr(1);
+        }
+    }
+
+    private void toggleSideCtr(int index) {
+        for (int i = 0; i < parentToggleSideCtr.Length; ++i) {
+            parentToggleSideCtr[i].selectedIndex = index;
         }
     }
 
@@ -446,6 +457,8 @@ public class FieldMap : MonoBehaviour
 
     GButton[] apBtns;
     GButton[] apMenuBtns;
+    GTextField apMenuTitle;
+    GButton apMenuCloseBtn;
 
     InfoPanel infoPanel;
     DebugPanel debugPanel;
@@ -487,11 +500,16 @@ public class FieldMap : MonoBehaviour
             apMenuBtns[i].onClick.Set(onApMenuBtnClick);
             apMenuBtns[i].data = i;
         }
+        apMenuTitle = apMenu.GetChild("apTitle").asTextField;
+        apMenuCloseBtn = apMenu.GetChild("closeBtn").asButton;
+        apMenuCloseBtn.onClick.Set(() => {
+            apMenu.visible = false;
+        });
 
+        
         robot = field.GetChild("robot").asCom;
+        infoPanel = new(fieldRoot.GetChild("infoPanel").asCom, new Controller[]{fieldRoot.GetController("c1"), field.GetController("c1")});
 
-
-        infoPanel = new(fieldRoot.GetChild("infoPanel").asCom);
         infoPanel.toggleSide(InfoPanel.SIDE.BLUE);
 
         debugPanel = new(fieldRoot.GetChild("debugMenu").asCom, fieldRoot.GetChild("arrowPanel").asCom);
@@ -516,6 +534,7 @@ public class FieldMap : MonoBehaviour
         Debug.LogErrorFormat("April tag clicked: {0}, {1}", aprilTagNames[(int)btn.data], aprilTagId);
 
         apMenu.visible = true;
+        apMenuTitle.text = "Ap" + aprilTagId;
     }
 
     void onApMenuBtnClick(EventContext context)

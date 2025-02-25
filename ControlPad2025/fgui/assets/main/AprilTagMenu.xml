@@ -20,5 +20,9 @@
     <component id="n6_j42b" name="btnR3" src="j42b8" fileName="AprilTagMenuBtn0.xml" xy="61,4">
       <Button title="右3"/>
     </component>
+    <text id="n7_ly54" name="apTitle" xy="14,-39" size="71,39" fontSize="28" color="#33ff00" align="center" text="AP22"/>
+    <component id="n8_mtr2" name="closeBtn" src="frd4c" fileName="commonBtn.xml" xy="86,-56" size="16,18">
+      <Button title="x"/>
+    </component>
   </displayList>
 </component>

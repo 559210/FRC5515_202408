@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using System.IO;
 
 public class Main : MonoBehaviour
 {
@@ -26,7 +27,10 @@ public class Main : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        _NT.init();
+        // read file that store ip to connect.
+        string contents = File.ReadAllText(@"ip.txt");
+        Debug.LogError("ip: " + contents);
+        _NT.init(contents);
     }
 
     // Update is called once per frame

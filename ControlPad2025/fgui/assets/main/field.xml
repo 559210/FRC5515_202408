@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <component size="937,430">
+  <controller name="c1" alias="SIDE" pages="0,BLUE,1,RED" selected="0"/>
   <displayList>
     <graph id="n30_j42b" name="BG" xy="0,0" size="937,430" type="rect" lineSize="0" fillColor="#ffcccccc">
       <relation target="" sidePair="width-width,height-height"/>
@@ -91,7 +92,8 @@
       <Button title="6"/>
     </component>
     <group id="n19_j42b" name="RED_AP" xy="635,159" size="125,112"/>
-    <component id="n22_j42b" name="ApMenu" src="j42b7" fileName="AprilTagMenu.xml" xy="312,123" size="100,200">
+    <component id="n22_j42b" name="ApMenu" src="j42b7" fileName="AprilTagMenu.xml" xy="306,123" size="100,200">
+      <gearXY controller="c1" pages="0,1" values="306,123|535,123"/>
       <relation target="" sidePair="width-width,height-height"/>
     </component>
   </displayList>

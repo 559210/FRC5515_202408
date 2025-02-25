@@ -15,6 +15,7 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructArrayPublisher;
 import edu.wpi.first.networktables.StructPublisher;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
@@ -109,8 +110,19 @@ public class RobotContainer2025 implements RobotContainerInterface {
         );
 
         // setHeading here for auto 
-        //  TODO: RED...
-        s_Swerve.setHeading(180);
+        double headingAngle = 0;
+        var alliance = DriverStation.getAlliance();
+        if (alliance.isPresent()) {
+            switch (alliance.get()) {
+                case Blue:
+                headingAngle = 180;
+                break;
+                case Red:
+                headingAngle = 0;
+                break;
+            }
+        }
+        s_Swerve.setHeading(headingAngle);
 
         new UpperSystem2025Cmd(
             m_turningArm, m_elevator, m_intake, m_candle, m_moveToSubSys,
@@ -146,9 +158,9 @@ public class RobotContainer2025 implements RobotContainerInterface {
         StateController.getInstance().useVisionOdometry = true;
         UpperSystem2025Cmd.inst.schedule();
 
-        UpperSystem2025Cmd.inst.getRequirements().forEach(sys -> {
-            System.out.println("up: " + sys.getName());
-        });
+        // UpperSystem2025Cmd.inst.getRequirements().forEach(sys -> {
+        //     System.out.println("up: " + sys.getName());
+        // });
     }
 
     public void testInit() {

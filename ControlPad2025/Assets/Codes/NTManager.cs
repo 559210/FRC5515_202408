@@ -89,10 +89,10 @@ public class NTManager
             return nt.Connected();
         }
     }
-    public bool init()
+    public bool init(string ip)
     {
-        nt = new("10.55.15.2", ID_NAME, false, 5810);
-        //nt = new("127.0.0.1", ID_NAME, false, 5810);
+        // nt = new("10.55.15.2", ID_NAME, false, 5810);
+        nt = new(ip, ID_NAME, false, 5810);
 
         startGuard();
         return true;

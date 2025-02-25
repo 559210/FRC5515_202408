@@ -85,17 +85,17 @@ public class Robot extends TimedRobot {
 
     @Override
     public void autonomousInit() {
-        System.out.println("---------------------- 1111111");
+        // System.out.println("---------------------- 1111111");
         m_robotContainer.autoInit();
 
-        System.out.println("---------------------- 2222222");
+        // System.out.println("---------------------- 2222222");
         m_autonomousCommand = m_robotContainer.getAutonomousCommand();
         // schedule the autonomous command (example)
         
         if (m_autonomousCommand != null) {
-            m_autonomousCommand.getRequirements().forEach(sys -> {
-                System.out.println("auto: " + sys.getName());
-            });
+            // m_autonomousCommand.getRequirements().forEach(sys -> {
+            //     System.out.println("auto: " + sys.getName());
+            // });
             m_autonomousCommand.schedule();
             // PathPlannerAuto ppa = (PathPlannerAuto)m_autonomousCommand;
             // ppa.isR

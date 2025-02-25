@@ -21,10 +21,10 @@
       <Button title="L4"/>
     </component>
     <group id="n8_gh6e" name="n8" xy="20,6" size="439,20"/>
-    <component id="n2_gh6e" name="ball1Btn" src="frd4c" fileName="commonBtn.xml" xy="489,6" size="69,20" group="n9_gh6e">
+    <component id="n2_gh6e" name="ball1Btn" src="frd4c" fileName="commonBtn.xml" xy="489,6" size="69,20" group="n9_gh6e" visible="false">
       <Button title="Ball1"/>
     </component>
-    <component id="n7_gh6e" name="ball2Btn" src="frd4c" fileName="commonBtn.xml" xy="567,6" size="69,20" group="n9_gh6e">
+    <component id="n7_gh6e" name="ball2Btn" src="frd4c" fileName="commonBtn.xml" xy="567,6" size="69,20" group="n9_gh6e" visible="false">
       <Button title="Ball2"/>
     </component>
     <group id="n9_gh6e" name="n9" xy="489,6" size="147,20"/>
