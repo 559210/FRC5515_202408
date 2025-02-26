@@ -18,7 +18,7 @@ const APRIL_TAG = {
 }
 
 const N = -.51; // 垂直偏移量
-const OFFSET = 0.12; // 沿边偏移量, >0 right, < 0 left
+const OFFSET = 0.164338; // 沿边偏移量, >0 right, < 0 left
 
 function calcOffsetPoint(midPoint, angle, n, offset) {
         const angleRad = (angle * Math.PI) / 180; // 将角度转换为弧度
