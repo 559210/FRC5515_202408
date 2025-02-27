@@ -11,7 +11,8 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 
 public class TeleopSwerve2025 extends Command {    
     private Swerve2025 s_Swerve;    
@@ -53,6 +54,14 @@ public class TeleopSwerve2025 extends Command {
             double maxSpeedScale = 1;
             if (!robotCentricSup.getAsBoolean() && isSlowSpeedRobotCentric.getAsBoolean()) {
                 maxSpeedScale = 0.4;
+            }
+
+            var alliance = DriverStation.getAlliance();
+            if (alliance.isPresent()) {
+                if (alliance.get() == Alliance.Red) {
+                    translationVal *= -1;
+                    strafeVal *= -1;
+                }
             }
 
             /* Drive */

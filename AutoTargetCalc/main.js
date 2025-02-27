@@ -17,7 +17,7 @@ const APRIL_TAG = {
     "ap11": { x: 12.643358, y: 3.306318, theta: 330 },
 }
 
-const N = -.51; // 垂直偏移量
+const N = -.565; // 垂直偏移量
 const OFFSET = 0.164338; // 沿边偏移量, >0 right, < 0 left
 
 function calcOffsetPoint(midPoint, angle, n, offset) {

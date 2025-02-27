@@ -62,6 +62,7 @@ public class MoveTo2025 extends SubsystemBase{
 
     private Command createPathCmd(String pathName) {
         PathPlannerPath path = GlobalConfig.getAimPath(pathName);
+        path.preventFlipping = true;
                 // Create the constraints to use while pathfinding. The constraints defined in the path will only be used for the path.
         PathConstraints constraints = new PathConstraints(
             3.0, 3.0,
@@ -91,6 +92,7 @@ public class MoveTo2025 extends SubsystemBase{
         String leftORright = info.branch == -1 ? "left" : "right";
         String pathName = String.format("ap%d_%s", fid, leftORright);
         PathPlannerPath path = GlobalConfig.getAimPath(pathName);
+        path.preventFlipping = true;
         System.out.println("---------------> 2");
         // Create the constraints to use while pathfinding. The constraints defined in the path will only be used for the path.
         PathConstraints constraints = new PathConstraints(
