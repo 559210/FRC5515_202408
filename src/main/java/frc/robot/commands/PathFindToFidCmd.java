@@ -40,6 +40,7 @@ public class PathFindToFidCmd extends Command {
     public void initialize() {
         try {
             PathPlannerPath path = PathPlannerPath.fromPathFile(pathName);
+            path.preventFlipping = true;
             System.out.println("path find 000000000");
             // Create the constraints to use while pathfinding. The constraints defined in
             // the path will only be used for the path.
