@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 import frc.robot.SwerveModule2025;
 import frc.robot.Constants2025;
 import frc.robot.LimelightHelpers;
+import frc.robot.Robot;
 import frc.robot.StateController;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -39,7 +40,10 @@ import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 
 import static edu.wpi.first.units.Units.*;
 
+import java.util.concurrent.ThreadPoolExecutor.DiscardOldestPolicy;
+
 public class Swerve2025 extends SubsystemBase {
+    static final boolean useLLImu = false;
     static final boolean useEstimatorOdo = true;
     private final String llName = Constants2025.LIME_LIGHT_ARPIL_TAG_NAME;
     private SwerveDrivePoseEstimator est_swerveOdometry;
@@ -259,6 +263,18 @@ public class Swerve2025 extends SubsystemBase {
 
     @Override
     public void periodic() {
+        if (useLLImu) {
+            if (Robot.inst.isDisabled()) {
+                LimelightHelpers.SetIMUMode(llName, 1);
+            }
+            else {
+                LimelightHelpers.SetIMUMode(llName, 2);
+            }            
+        }
+        else {
+            LimelightHelpers.SetIMUMode(llName, 0);
+        }
+
         if (useEstimatorOdo) {
             est_swerveOdometry.update(getGyroYaw(), getModulePositions());
         }
@@ -318,7 +334,7 @@ public class Swerve2025 extends SubsystemBase {
             if (StateController.getInstance().useVisionOdometry) {
                 LimelightHelpers.PoseEstimate mt2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(llName);
                 if (mt2 != null) {
-                    Pose2d pos = new Pose2d(mt2.pose.getX()+0.5, mt2.pose.getY(), mt2.pose.getRotation());
+                    Pose2d pos = new Pose2d(mt2.pose.getX(), mt2.pose.getY(), mt2.pose.getRotation());
                     if (Math.abs(gyro.getAngularVelocityZWorld().getValueAsDouble()) > 720) // if our angular velocity is greater than 720 degrees per second,
                                                         // ignore vision updates
                     {

@@ -337,26 +337,26 @@ public class DebugPanel
         send((int)NTManager.DebugPanelInfo.L4);
     }
 
-    void onUpBtnClick()
+    public void onUpBtnClick()
     {
         send((int)NTManager.DebugPanelInfo.UP_ARROW, false);
     }
-    void reset()
+    public void reset()
     {
         send((int)NTManager.DebugPanelInfo.NONE, false);
     }
 
-    void onDownBtnClick()
+    public void onDownBtnClick()
     {
         send((int)NTManager.DebugPanelInfo.DOWN_ARROW, false);
     }
 
-    void onLeftBtnClick()
+    public void onLeftBtnClick()
     {
         send((int)NTManager.DebugPanelInfo.LEFT_ARROW, false);
     }
 
-    void onRightBtnClick()
+    public void onRightBtnClick()
     {
         send((int)NTManager.DebugPanelInfo.RIGHT_ARROW, false);
     }
@@ -464,6 +464,8 @@ public class FieldMap : MonoBehaviour
     DebugPanel debugPanel;
     Controller debugPanelCtrl;
 
+    EventListener onKeyUpEvent;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -516,6 +518,10 @@ public class FieldMap : MonoBehaviour
         debugPanelCtrl = fieldRoot.GetController("debugMenuC");
         debugPanelCtrl.selectedIndex = debugPanelCtrl.selectedIndex = 0;
         Stage.inst.onKeyDown.Add(onKeyDown);
+        // Stage.inst.onKeyUp.Add(onKeyUp);
+
+        onKeyUpEvent = new EventListener(Stage.inst, "onKeyUp");
+        onKeyUpEvent.Add(onKeyUp);
     }
 
     void onKeyDown(EventContext context)
@@ -524,6 +530,36 @@ public class FieldMap : MonoBehaviour
         if (context.inputEvent.keyCode == KeyCode.F1 && (Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl)))
         {
             debugPanelCtrl.selectedIndex = debugPanelCtrl.selectedIndex == 0 ? 1 : 0;
+        }
+
+        if (context.inputEvent.keyCode == KeyCode.UpArrow) {
+            debugPanel.onUpBtnClick();
+        }
+        else if (context.inputEvent.keyCode == KeyCode.DownArrow) {
+            debugPanel.onDownBtnClick();
+        }
+        else if (context.inputEvent.keyCode == KeyCode.RightArrow) {
+            debugPanel.onRightBtnClick();
+        }
+        else if (context.inputEvent.keyCode == KeyCode.LeftArrow) {
+            debugPanel.onLeftBtnClick();
+        }
+    }
+
+    void onKeyUp(EventContext context)
+    {
+
+        if (context.inputEvent.keyCode == KeyCode.UpArrow) {
+            debugPanel.reset();
+        }
+        else if (context.inputEvent.keyCode == KeyCode.DownArrow) {
+            debugPanel.reset();
+        }
+        else if (context.inputEvent.keyCode == KeyCode.RightArrow) {
+            debugPanel.reset();
+        }
+        else if (context.inputEvent.keyCode == KeyCode.LeftArrow) {
+            debugPanel.reset();
         }
     }
 

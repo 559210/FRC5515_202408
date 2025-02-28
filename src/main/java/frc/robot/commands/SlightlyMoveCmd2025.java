@@ -48,7 +48,7 @@ public class SlightlyMoveCmd2025 extends Command {
 
     @Override
     public void execute() {
-        double data = 0.5;
+        double data = 0.3;
         double x = 0;
         double y = 0;
         switch (m_dir) {

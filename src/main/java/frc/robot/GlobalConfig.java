@@ -42,8 +42,11 @@ public final class GlobalConfig {
     // };
 
     private static final String[] sourcePath = new String[]{
+        "source1A",
+        "source2A",
         "source12A",
         "source12B",
+        "source13A",
     };
     
     private static String getApPathName(int apId, boolean isLeft) {

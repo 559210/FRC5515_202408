@@ -20,12 +20,12 @@
         "y": 0.6396448863636351
       },
       "prevControl": {
-        "x": 1.8275582685639686,
+        "x": 1.827558268563969,
         "y": 0.9065563481444514
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "Source12"
     }
   ],
   "rotationTargets": [],
@@ -45,7 +45,7 @@
     "rotation": 55.0
   },
   "reversed": false,
-  "folder": "aim",
+  "folder": null,
   "idealStartingState": {
     "velocity": 3.0,
     "rotation": 55.0
