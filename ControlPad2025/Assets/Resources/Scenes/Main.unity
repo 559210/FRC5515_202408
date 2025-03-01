@@ -97,7 +97,7 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 0}
+  m_LightingDataAsset: {fileID: 112000000, guid: a40e848eafffbc4458b8d7a4df154ce8, type: 2}
   m_LightingSettings: {fileID: 0}
 --- !u!196 &4
 NavMeshSettings:
@@ -156,6 +156,27 @@ MonoBehaviour:
   gridPrefab: {fileID: 0}
   gridParentNode: {fileID: 0}
   scale: 1
+  aprilTagNames:
+  - AP6
+  - AP7
+  - AP8
+  - AP9
+  - AP10
+  - AP11
+  - AP17
+  - AP18
+  - AP19
+  - AP20
+  - AP21
+  - AP22
+  apMenuBtnNames:
+  - btn0
+  - btnL1
+  - btnL2
+  - btnL3
+  - btnR1
+  - btnR2
+  - btnR3
 --- !u!114 &672020728
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -275,7 +296,7 @@ Transform:
   m_GameObject: {fileID: 865825524}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 8.8932295, y: -5, z: 0}
+  m_LocalPosition: {x: 9.513514, y: -5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

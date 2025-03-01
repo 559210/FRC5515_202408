@@ -321,19 +321,19 @@ public class DebugPanel
         send((int)NTManager.DebugPanelInfo.READY_FOR_LOAD_CORAL);
     }
 
-    void onL1BtnClick() {
+    public void onL1BtnClick() {
         send((int)NTManager.DebugPanelInfo.L1);
     }
 
-    void onL2BtnClick() {
+    public void onL2BtnClick() {
         send((int)NTManager.DebugPanelInfo.L2);
     }
 
-    void onL3BtnClick() {
+    public void onL3BtnClick() {
         send((int)NTManager.DebugPanelInfo.L3);
     }
 
-    void onL4BtnClick() {
+    public void onL4BtnClick() {
         send((int)NTManager.DebugPanelInfo.L4);
     }
 
@@ -380,6 +380,10 @@ public class DebugPanel
         isLoadBall = !isLoadBall;
         loadBallBtn.text = isLoadBall ? "UnloadBall" : "loadBall";
         send((int)NTManager.DebugPanelInfo.NONE);
+    }
+
+    public void onShootClick() {
+        send((int)NTManager.DebugPanelInfo.SHOOT);
     }
 
     void send(int val, bool autoReset = true) {
@@ -532,33 +536,48 @@ public class FieldMap : MonoBehaviour
             debugPanelCtrl.selectedIndex = debugPanelCtrl.selectedIndex == 0 ? 1 : 0;
         }
 
-        if (context.inputEvent.keyCode == KeyCode.UpArrow) {
+        if (context.inputEvent.keyCode == KeyCode.UpArrow || context.inputEvent.keyCode == KeyCode.W) {
             debugPanel.onUpBtnClick();
         }
-        else if (context.inputEvent.keyCode == KeyCode.DownArrow) {
+        else if (context.inputEvent.keyCode == KeyCode.DownArrow || context.inputEvent.keyCode == KeyCode.S) {
             debugPanel.onDownBtnClick();
         }
-        else if (context.inputEvent.keyCode == KeyCode.RightArrow) {
+        else if (context.inputEvent.keyCode == KeyCode.RightArrow || context.inputEvent.keyCode == KeyCode.D) {
             debugPanel.onRightBtnClick();
         }
-        else if (context.inputEvent.keyCode == KeyCode.LeftArrow) {
+        else if (context.inputEvent.keyCode == KeyCode.LeftArrow || context.inputEvent.keyCode == KeyCode.A) {
             debugPanel.onLeftBtnClick();
+        }
+        else if (context.inputEvent.keyCode == KeyCode.Alpha1) {
+            debugPanel.onL1BtnClick();
+        }
+        else if (context.inputEvent.keyCode == KeyCode.Alpha2) {
+            debugPanel.onL2BtnClick();
+        }
+        else if (context.inputEvent.keyCode == KeyCode.Alpha3) {
+            debugPanel.onL3BtnClick();
+        }
+        else if (context.inputEvent.keyCode == KeyCode.Alpha4) {
+            debugPanel.onL4BtnClick();
+        }
+        else if (context.inputEvent.keyCode == KeyCode.Space) {
+            debugPanel.onShootClick();
         }
     }
 
     void onKeyUp(EventContext context)
     {
 
-        if (context.inputEvent.keyCode == KeyCode.UpArrow) {
+        if (context.inputEvent.keyCode == KeyCode.UpArrow || context.inputEvent.keyCode == KeyCode.W) {
             debugPanel.reset();
         }
-        else if (context.inputEvent.keyCode == KeyCode.DownArrow) {
+        else if (context.inputEvent.keyCode == KeyCode.DownArrow || context.inputEvent.keyCode == KeyCode.S) {
             debugPanel.reset();
         }
-        else if (context.inputEvent.keyCode == KeyCode.RightArrow) {
+        else if (context.inputEvent.keyCode == KeyCode.RightArrow || context.inputEvent.keyCode == KeyCode.D) {
             debugPanel.reset();
         }
-        else if (context.inputEvent.keyCode == KeyCode.LeftArrow) {
+        else if (context.inputEvent.keyCode == KeyCode.LeftArrow || context.inputEvent.keyCode == KeyCode.A) {
             debugPanel.reset();
         }
     }

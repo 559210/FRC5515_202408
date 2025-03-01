@@ -40,6 +40,7 @@ public class ControlPadHelper {
             DOWN_ARROW,
             LEFT_ARROW,
             RIGHT_ARROW,
+            SHOOT,
         }
         static public long val = -1;
         static public boolean isLoadCoral = false;
@@ -59,7 +60,8 @@ public class ControlPadHelper {
         static public Trigger down = new Trigger(eventLoop, () -> val == DebugPanelInfo.DOWN_ARROW.ordinal());
         static public Trigger left = new Trigger(eventLoop, () -> val == DebugPanelInfo.LEFT_ARROW.ordinal());
         static public Trigger right = new Trigger(eventLoop, () -> val == DebugPanelInfo.RIGHT_ARROW.ordinal());
-    }
+        static public Trigger shoot = new Trigger(eventLoop, () -> val == DebugPanelInfo.SHOOT.ordinal()))/;
+    }   
     public static class ControlPadInfo {
         public static class ControlPadInfoData {
             public long aprilTagId = -1;

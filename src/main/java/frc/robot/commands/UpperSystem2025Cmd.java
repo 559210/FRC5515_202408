@@ -355,6 +355,10 @@ public class UpperSystem2025Cmd extends Command {
             ControlPadHelper.DebugCtrl.onBall2.onTrue(new InstantCommand(() -> {
                 setState(STATE.BALL2);
             }));
+
+            ControlPadHelper.DebugCtrl.shoot.onTrue(new InstantCommand(() -> {
+                startShoot();
+            }));
             // ControlPadHelper.DebugCtrl.onLoadCoral.onTrue(new InstantCommand(() -> {
             //     isCarryingCoralFromDebug = true;
             // })).whileFalse(new InstantCommand(() -> {

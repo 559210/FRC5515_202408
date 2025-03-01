@@ -59,6 +59,7 @@ public class NTManager
         DOWN_ARROW,
         LEFT_ARROW,
         RIGHT_ARROW,
+        SHOOT,
     }
     readonly static string ID_NAME = "5515ControlPad"; 
     readonly string ROBOT_POS_ENTRY_NAME = $"/{ID_NAME}/RobotPos";
