@@ -110,18 +110,18 @@ public class RobotContainer2025 implements RobotContainerInterface {
         );
 
         // setHeading here for auto 
-        double headingAngle = 0;
-        var alliance = DriverStation.getAlliance();
-        if (alliance.isPresent()) {
-            switch (alliance.get()) {
-                case Blue:
-                headingAngle = 180;
-                break;
-                case Red:
-                headingAngle = 0;
-                break;
-            }
-        }
+        double headingAngle = 180;  // 0 red , 180 blue
+        // var alliance = DriverStation.getAlliance();
+        // if (alliance.isPresent()) {
+        //     switch (alliance.get()) {
+        //         case Blue:
+        //         headingAngle = 180;
+        //         break;
+        //         case Red:
+        //         headingAngle = 0;
+        //         break;
+        //     }
+        // }
         s_Swerve.setHeading(headingAngle);
 
         new UpperSystem2025Cmd(
@@ -304,7 +304,7 @@ public class RobotContainer2025 implements RobotContainerInterface {
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
-        return s_Swerve.followPathPlannerAuto("test001");
+        return s_Swerve.followPathPlannerAuto("Autoap20");
     }
 
     public void update() {
