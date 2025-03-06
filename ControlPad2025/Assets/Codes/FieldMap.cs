@@ -560,7 +560,7 @@ public class FieldMap : MonoBehaviour
         else if (context.inputEvent.keyCode == KeyCode.Alpha4) {
             debugPanel.onL4BtnClick();
         }
-        else if (context.inputEvent.keyCode == KeyCode.Space) {
+        else if (context.inputEvent.keyCode == KeyCode.Z) {
             debugPanel.onShootClick();
         }
     }
