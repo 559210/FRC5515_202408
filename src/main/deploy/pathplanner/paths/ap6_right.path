@@ -8,8 +8,24 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 13.899266882807128,
-        "y": 2.8991826468617923
+        "x": 14.45645501723354,
+        "y": 2.104682285316969
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 14.244451530612244,
+        "y": 2.398341836734694
+      },
+      "prevControl": {
+        "x": 14.395722347495633,
+        "y": 2.1993012882039182
+      },
+      "nextControl": {
+        "x": 14.093180713728854,
+        "y": 2.59738238526547
       },
       "isLocked": false,
       "linkedName": null
@@ -20,8 +36,8 @@
         "y": 2.899
       },
       "prevControl": {
-        "x": 14.536108310037765,
-        "y": 1.8668652187571644
+        "x": 14.006686256628958,
+        "y": 2.6733815829032523
       },
       "nextControl": null,
       "isLocked": false,
@@ -34,7 +50,7 @@
   "eventMarkers": [
     {
       "name": "LN",
-      "waypointRelativePos": 0.6,
+      "waypointRelativePos": 1.2,
       "endWaypointRelativePos": null,
       "command": null
     }
@@ -55,7 +71,7 @@
   "folder": null,
   "idealStartingState": {
     "velocity": 3.5,
-    "rotation": 119.99999999999999
+    "rotation": 119.58756352987189
   },
   "useDefaultConstraints": false
 }
