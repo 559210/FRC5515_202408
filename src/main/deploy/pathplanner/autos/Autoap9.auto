@@ -31,7 +31,7 @@
         {
           "type": "named",
           "data": {
-            "name": "soure2A"
+            "name": "source2A"
           }
         },
         {
@@ -43,7 +43,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.5
+            "waitTime": 0.75
           }
         },
         {
