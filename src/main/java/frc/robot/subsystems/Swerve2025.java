@@ -335,7 +335,7 @@ public class Swerve2025 extends SubsystemBase {
                 LimelightHelpers.PoseEstimate mt2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(llName);
                 if (mt2 != null) {
                     Pose2d pos = new Pose2d(mt2.pose.getX(), mt2.pose.getY(), mt2.pose.getRotation());
-                    if (Math.abs(gyro.getAngularVelocityZWorld().getValueAsDouble()) > 720) // if our angular velocity is greater than 720 degrees per second,
+                    if (Math.abs(gyro.getAngularVelocityZWorld().getValueAsDouble()) > 360) // if our angular velocity is greater than 360 degrees per second,
                                                         // ignore vision updates
                     {
                         doRejectUpdate = true;
