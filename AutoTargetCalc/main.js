@@ -40,14 +40,25 @@ function calcOffsetPoint(midPoint, angle, n, offset) {
 }
 
 // try wirit to the pathplan path file.
-const PP_PATH = "../src/main/deploy/pathplanner/paths/"
+const PP_PATH = __dirname + "/../src/main/deploy/pathplanner/paths/"
 
 let testPath = "ap6_left.path";
 
 const PATH_MODIFY_PROTO = {
-    waypointRelativePos: 0.6,
+    waypointRelativePos: 1.6,
     maxV: 3.5,
     maxA: 3.5,
+}
+
+function calculateNewPoint(x, y, theta, d) {
+    // 将角度转换为弧度
+    const radians = theta * (Math.PI / 180);
+
+    // 计算新点的坐标
+    const newX = x + d * Math.cos(radians);
+    const newY = y + d * Math.sin(radians);
+
+    return { x: newX, y: newY };
 }
 
 function eventMarkerParser(obj) {
@@ -73,18 +84,50 @@ function eventMarkerLNTime(obj, newT) {
 }
 function targetPos(obj, x, y) {
     let wp = obj["waypoints"];
-    if (wp.length != 2) {
+    if (wp.length < 2) {
         throw "waypoint error!";
     }
-    let firstP = wp[0];
-    let lastP = wp[1];
-    firstP.nextControl.x = x;
-    firstP.nextControl.y = y;
+    // let firstP = wp[0];
+    let lastP = wp[wp.length - 1];
+    // firstP.nextControl.x = x;
+    // firstP.nextControl.y = y;
 
     lastP.anchor.x = x;
     lastP.anchor.y = y;
     return obj;
 }
+
+function targetPosNew(obj, x, y, theta) {
+    const count = 4;
+    const wayPointOffset = -0.2;
+    const controlPointOffset = 0.1;
+
+    let points = new Array(count);
+    for (let i = count - 1; i >= 0; --i) {
+        let preControlPoint = calculateNewPoint(x, y, theta, -controlPointOffset);
+        let nextControlPoint = calculateNewPoint(x, y, theta, controlPointOffset);
+        let p = {
+            "anchor": {
+                "x": x,
+                "y": y
+            },
+            "prevControl": (i == 0) ? null : preControlPoint,
+            "nextControl": (i == count - 1) ? null : nextControlPoint,
+            "isLocked": false,
+            "linkedName": null
+        }
+        let nextPoint = calculateNewPoint(x, y, theta, wayPointOffset);
+        x = nextPoint.x;
+        y = nextPoint.y;
+
+        points[i] = p;
+    }
+
+    obj["waypoints"] = points;
+
+    return obj;
+}
+
 
 function speed(obj, v, a) {
     let constrain = obj['globalConstraints'];
@@ -96,13 +139,13 @@ function speed(obj, v, a) {
 
     obj['useDefaultConstraints'] = false;
 }
-function processPathPlannerPath(aprilTagName, isLeft, newTargetX, newTargetY) {
+function processPathPlannerPath(aprilTagName, isLeft, newTargetX, newTargetY, theta) {
     let filename = ph.join(PP_PATH, aprilTagName + "_" + (isLeft ? "left" : "right") + ".path");
     console.log(filename)
     // read filename as a json text file
     let text = fs.readFileSync(filename);
     let data = JSON.parse(text);
-    targetPos(data, newTargetX, newTargetY)
+    targetPosNew(data, newTargetX, newTargetY, theta + 90);
     eventMarkerParser(data);
     eventMarkerLNTime(data, PATH_MODIFY_PROTO.waypointRelativePos);
     speed(data, PATH_MODIFY_PROTO.maxV, PATH_MODIFY_PROTO.maxA);
@@ -124,8 +167,8 @@ function main() {
         r.left = calcOffsetPoint({x : apInfo.x, y: apInfo.y}, apInfo.theta, N, -OFFSET).newPoint;
         result[key] = r;
 
-        processPathPlannerPath(key, true, r.left.x, r.left.y);
-        processPathPlannerPath(key, false, r.right.x, r.right.y);
+        processPathPlannerPath(key, true, r.left.x, r.left.y, apInfo.theta);
+        processPathPlannerPath(key, false, r.right.x, r.right.y, apInfo.theta);
     }
 
     return result;
