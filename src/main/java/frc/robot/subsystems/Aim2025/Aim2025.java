@@ -22,6 +22,7 @@ import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Constants2025;
 import frc.robot.GlobalConfig;
 import frc.robot.LimelightHelpers;
 import frc.robot.StateController;
@@ -136,7 +137,7 @@ public class Aim2025  extends SubsystemBase {
         System.out.println("to: " + to.toString());
         List<Waypoint> waypoints = PathPlannerPath.waypointsFromPoses(from, to);
         PathConstraints constraints = new PathConstraints(
-            2.0, 2.0,
+            Constants2025.PathPlanner.constraintsSpeed, Constants2025.PathPlanner.constraintsAccel,
             Units.degreesToRadians(540), Units.degreesToRadians(720));
 
         PathPlannerPath path = new PathPlannerPath(waypoints, constraints, new IdealStartingState(0.05, Rotation2d.fromDegrees(60)), new GoalEndState(0.05, Rotation2d.fromDegrees(60)));

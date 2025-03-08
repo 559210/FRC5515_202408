@@ -21,7 +21,7 @@ public final class Constants2025 {
         public static final int pigeonID = 0;
 
 
-        public static final double wheelDiameter = Units.inchesToMeters(4.0);
+        public static final double wheelDiameter = Units.inchesToMeters(4);
         public static final double wheelCircumference = wheelDiameter * Math.PI;        
 
         public static final double angleGearRatio = (18.75 / 1.0);
@@ -68,14 +68,14 @@ public final class Constants2025 {
         /* Angle Motor PID Values */
 
         /* Drive Motor PID Values */
-        public static final double driveKP = 1.1695;//TODO
+        public static final double driveKP = 1.25;//TODO
         public static final double driveKI = 0.0;
         public static final double driveKD = 0.0;
 
         /* Drive Motor Characterization Values From SYSID */
-        public static final double driveKS = 0.17201; //TODO
-        public static final double driveKV = 2.2429;//TODO
-        public static final double driveKA = 0.30202;//TODO
+        public static final double driveKS = 0.19024; //TODO
+        public static final double driveKV = 1.9429;//TODO
+        public static final double driveKA = 0.20202;//TODO
         // public static final double driveKS = 0; //TODO
         // public static final double driveKV = 0;//TODO
         // public static final double driveKA = 0;//TODO
@@ -100,7 +100,7 @@ public final class Constants2025 {
             public static final int driveMotorID = 1;
             public static final int angleMotorID = 2;
             public static final int canCoderID = 9;
-            public static final Rotation2d angleOffset = Rotation2d.fromRotations(-0.003662);
+            public static final Rotation2d angleOffset = Rotation2d.fromRotations(-0.007324);
         }
 
         /* Front Right Module - Module 1 */
@@ -112,7 +112,7 @@ public final class Constants2025 {
             public static final int driveMotorID = 3;
             public static final int angleMotorID = 4;
             public static final int canCoderID = 10;
-            public static final Rotation2d angleOffset = Rotation2d.fromRotations(-0.351562);
+            public static final Rotation2d angleOffset = Rotation2d.fromRotations(-0.352051);
         }
         
         /* Back Left Module - Module 2 */
@@ -124,7 +124,7 @@ public final class Constants2025 {
             public static final int driveMotorID = 5;
             public static final int angleMotorID = 6;
             public static final int canCoderID = 11;
-            public static final Rotation2d angleOffset = Rotation2d.fromRotations(0.036865);
+            public static final Rotation2d angleOffset = Rotation2d.fromRotations(0.036377);
         }
 
         /* Back Right Module - Module 3 */
@@ -136,7 +136,7 @@ public final class Constants2025 {
             public static final int driveMotorID = 7;
             public static final int angleMotorID = 8;
             public static final int canCoderID = 12;
-            public static final Rotation2d angleOffset = Rotation2d.fromRotations(-0.243164);
+            public static final Rotation2d angleOffset = Rotation2d.fromRotations(0.263672 - 0.5);
         }
 
         public static class Mod {
@@ -246,7 +246,7 @@ public final class Constants2025 {
         public static final double l1Pos = -6.01582; // -1.75;
         public static final double l2Pos = -6.01582;
         public static final double l3Pos = -10.585644;
-        public static final double l4Pos = -16.3;
+        public static final double l4Pos = -15.9;
         public static final double ball1Pos = -6;
         public static final double ball2Pos = -10;
         public static final double upDodgePos = -9.135644;
@@ -274,5 +274,10 @@ public final class Constants2025 {
     public static final class Candle {
         public static final int candleID = 19;
         public static final String canBusName = "rio";
+    }
+
+    public static final class PathPlanner {
+        public static final double constraintsSpeed = 2.;
+        public static final double constraintsAccel = 2.;
     }
 }

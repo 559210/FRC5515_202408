@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants2025;
 import frc.robot.ControlPadHelper;
 import frc.robot.GlobalConfig;
 import frc.robot.StateController;
@@ -65,7 +66,7 @@ public class MoveTo2025 extends SubsystemBase{
         path.preventFlipping = true;
                 // Create the constraints to use while pathfinding. The constraints defined in the path will only be used for the path.
         PathConstraints constraints = new PathConstraints(
-            3.0, 3.0,
+            Constants2025.PathPlanner.constraintsSpeed, Constants2025.PathPlanner.constraintsAccel,
             Units.degreesToRadians(540), Units.degreesToRadians(720));
 
             System.out.println("---------------> 3");
@@ -96,7 +97,7 @@ public class MoveTo2025 extends SubsystemBase{
         System.out.println("---------------> 2");
         // Create the constraints to use while pathfinding. The constraints defined in the path will only be used for the path.
         PathConstraints constraints = new PathConstraints(
-                3.0, 3.0,
+            Constants2025.PathPlanner.constraintsSpeed, Constants2025.PathPlanner.constraintsAccel,
                 Units.degreesToRadians(540), Units.degreesToRadians(720));
 
                 System.out.println("---------------> 3");

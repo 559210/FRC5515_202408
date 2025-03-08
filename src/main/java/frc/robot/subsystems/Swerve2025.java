@@ -50,6 +50,7 @@ public class Swerve2025 extends SubsystemBase {
     private SwerveDriveOdometry swerveOdometry;
     public SwerveModule2025[] mSwerveMods;
     public Pigeon2 gyro;
+    private double gyroOffset = 0;
     public Translation2d currentVelTranslation2d = new Translation2d();
     public Timer reset_time = new Timer();
 
@@ -164,6 +165,9 @@ public class Swerve2025 extends SubsystemBase {
         }
     }
 
+    public void resetGyroOffset(double v) {
+        gyroOffset = v;
+    }
 
     public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop, double maxSpeedScale) {
         // System.out.println("trans x, y: " + translation.getX() + ", " + translation.getY());
@@ -330,7 +334,9 @@ public class Swerve2025 extends SubsystemBase {
             }
         } else if (useMegaTag2 == true) {
             LimelightHelpers.SetRobotOrientation(llName,
-                est_swerveOdometry.getEstimatedPosition().getRotation().getDegrees(), 0, 0, 0, 0, 0);
+                est_swerveOdometry.getEstimatedPosition().getRotation().getDegrees(),
+                // gyro.getYaw().getValueAsDouble() - gyroOffset,
+                 0, 0, 0, 0, 0);
             if (StateController.getInstance().useVisionOdometry) {
                 LimelightHelpers.PoseEstimate mt2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(llName);
                 if (mt2 != null) {
@@ -427,8 +433,8 @@ public class Swerve2025 extends SubsystemBase {
                 this::getRobotRelativeSpeeds,
                 this::driveRobotRelative,
                 new PPHolonomicDriveController( // HolonomicPathFollowerConfig, this should likely live in your
-                        new PIDConstants(17, 0.0, 0.0), // Translation PID constants
-                        new PIDConstants(10.0, 0.0, 0.0) // Rotation PID constants
+                        new PIDConstants(12, 0.0, 0.0), // Translation PID constants
+                        new PIDConstants(6.0, 0.0, 0.0) // Rotation PID constants
                 ),
                 config,
                 () -> {

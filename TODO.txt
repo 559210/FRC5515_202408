@@ -108,3 +108,18 @@ const ap19_pos = [4.073906, 4.745482];
 const ap20_pos = [4.90474, 4.7475482];
 const ap21_pos = [5.321046, 4.0259];
 const ap22_pos = [4.90474, 3.306318];
+
+复位操作流程：
+1. DriverStation上Reboot Code
+2. DriverStation上手柄拖到2号位
+3. DriverStation上test方式，Enable
+4. 按手柄A键，解锁电机，然后Disable
+5. 手动归位手臂和电梯
+6. 再次test模式Enable，按手柄start键归零。之后Disable。
+7. 复位完成。
+检查：
+1. 手柄拖回1号位
+2. tele模式Enable，应该看到手臂抬起到1号位。
+3. 按手柄select键，手臂会回到0号位。
+4. Disable，检查结束。
+注意：手臂回到0号位的时候，必须Disable后再Enable才可以继续操控机器。

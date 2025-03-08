@@ -13,6 +13,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants2025;
 import frc.robot.StateController;
 import frc.robot.subsystems.Swerve2025;
 import frc.robot.subsystems.Aim2025.Aim2025;
@@ -45,7 +46,7 @@ public class PathFindToFidCmd extends Command {
             // Create the constraints to use while pathfinding. The constraints defined in
             // the path will only be used for the path.
             PathConstraints constraints = new PathConstraints(
-                    3.0, 3.0,
+                    Constants2025.PathPlanner.constraintsSpeed, Constants2025.PathPlanner.constraintsAccel,
                     Units.degreesToRadians(540), Units.degreesToRadians(720));
     
             // Since AutoBuilder is configured, we can use it to build pathfinding commands

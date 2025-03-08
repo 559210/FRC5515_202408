@@ -217,6 +217,11 @@ public class Elevator2025 extends SubsystemBase {
         return curRunningState;
     }
 
+    public double getDifferFromTarget() {
+        double pos = getStatePos(curState);
+        return Math.abs(m_canCoder.getPosition().getValueAsDouble() - pos);
+    }
+
     private boolean isDone(double targetPos) {
         if (Math.abs(m_canCoder.getPosition().getValueAsDouble() - targetPos) < threshold) {
             return true;

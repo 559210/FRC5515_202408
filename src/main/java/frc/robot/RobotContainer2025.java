@@ -63,8 +63,9 @@ public class RobotContainer2025 implements RobotContainerInterface {
     
     /* Driver Buttons */
     private final JoystickButton aimBtn = new JoystickButton(driver, 1);
-    private final JoystickButton zeroGyro = new JoystickButton(driver, 5);
+    private final JoystickButton zeroHeader = new JoystickButton(driver, 5);
     private final JoystickButton robotCentric = new JoystickButton(driver, 6);
+    private final JoystickButton zeroGyro = new JoystickButton(driver, 8);
     private final POVButton downButton = new POVButton(driver, 180);
     private final POVButton rightButton = new POVButton(driver, 90);
     private final POVButton upButton = new POVButton(driver, 0);
@@ -111,17 +112,17 @@ public class RobotContainer2025 implements RobotContainerInterface {
 
         // setHeading here for auto 
         double headingAngle = 180;  // 0 red , 180 blue
-        // var alliance = DriverStation.getAlliance();
-        // if (alliance.isPresent()) {
-        //     switch (alliance.get()) {
-        //         case Blue:
-        //         headingAngle = 180;
-        //         break;
-        //         case Red:
-        //         headingAngle = 0;
-        //         break;
-        //     }
-        // }
+        // // var alliance = DriverStation.getAlliance();
+        // // if (alliance.isPresent()) {
+        // //     switch (alliance.get()) {
+        // //         case Blue:
+        // //         headingAngle = 180;
+        // //         break;
+        // //         case Red:
+        // //         headingAngle = 0;
+        // //         break;
+        // //     }
+        // // }
         s_Swerve.setHeading(headingAngle);
 
         new UpperSystem2025Cmd(
@@ -139,8 +140,8 @@ public class RobotContainer2025 implements RobotContainerInterface {
         
         ControlPadHelper.init();
         s_Swerve.configPathPlanner();
-        PathfindingCommand.warmupCommand().schedule();
-        FollowPathCommand.warmupCommand().schedule();
+        // PathfindingCommand.warmupCommand().schedule();
+        // FollowPathCommand.warmupCommand().schedule();
         // LimelightHelpers.setLEDMode_PipelineControl("limelight-one");
         swerveStatePublisher = NetworkTableInstance.getDefault()
             .getStructArrayTopic("/MyStates", SwerveModuleState.struct).publish();
@@ -208,7 +209,8 @@ public class RobotContainer2025 implements RobotContainerInterface {
 
 
 
-        zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
+        zeroHeader.onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
+        zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.resetGyroOffset(0)));
         // aimBtn.whileTrue(new Aim2025Cmd(m_moveToSubSys, s_Swerve));
 
         // ControlPadHelper.goTargetTrigger.whileTrue(new Aim2025Cmd(m_moveToSubSys, s_Swerve));
@@ -272,9 +274,9 @@ public class RobotContainer2025 implements RobotContainerInterface {
         NamedCommands.registerCommand("Intake",new InstantCommand(() -> {
             UpperSystem2025Cmd.inst.startIntake();
         }));
-        NamedCommands.registerCommand("Shoot",new InstantCommand(() -> {
-            UpperSystem2025Cmd.inst.startShoot();
-        }));
+        // NamedCommands.registerCommand("Shoot",new InstantCommand(() -> {
+        //     UpperSystem2025Cmd.inst.startShoot();
+        // }));
 
         
         String[] list = GlobalConfig.getAllAimPathNames();
@@ -287,7 +289,11 @@ public class RobotContainer2025 implements RobotContainerInterface {
                         GlobalConfig.ExtractApPathName(name);
                     }
                 }), 
-                new MoveToByPath2025Cmd(m_moveToSubSys, s_Swerve, name))
+                new MoveToByPath2025Cmd(m_moveToSubSys, s_Swerve, name),
+                new WaitShooterCmd2025(m_elevator),
+                new InstantCommand(() -> {
+                    UpperSystem2025Cmd.inst.startShoot();
+                }))
             );
             
             // NamedCommands.registerCommand(name,new InstantCommand(()->{}));
@@ -304,7 +310,7 @@ public class RobotContainer2025 implements RobotContainerInterface {
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
-        return s_Swerve.followPathPlannerAuto("Autoap20");
+        return s_Swerve.followPathPlannerAuto("Blue3Ball");
     }
 
     public void update() {

@@ -49,7 +49,7 @@ public class TeleopSwerve2025 extends Command {
             /* Get Values, Deadband*/
             double translationVal = MathUtil.applyDeadband(translationSup.getAsDouble(), Constants2025.stickDeadband);
             double strafeVal = MathUtil.applyDeadband(strafeSup.getAsDouble(), Constants2025.stickDeadband);
-            double rotationVal = MathUtil.applyDeadband(rotationSup.getAsDouble(), Constants2025.stickDeadband);
+            double rotationVal = MathUtil.applyDeadband(rotationSup.getAsDouble() * 0.75, Constants2025.stickDeadband);
 
             double maxSpeedScale = 1;
             if (!robotCentricSup.getAsBoolean() && isSlowSpeedRobotCentric.getAsBoolean()) {
