@@ -13,25 +13,13 @@
         {
           "type": "named",
           "data": {
-            "name": "ap21_left"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 1.0
+            "name": "ap21_right"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Shoot"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "source12A"
+            "name": "source21-12"
           }
         },
         {
@@ -49,25 +37,13 @@
         {
           "type": "named",
           "data": {
-            "name": "ap21_right"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 1.0
+            "name": "ap21_left"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Shoot"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "source12A"
+            "name": "source21-12"
           }
         }
       ]
