@@ -41,7 +41,7 @@ import static edu.wpi.first.units.Units.*;
 
 public class Swerve extends SubsystemBase {
     static final boolean useEstimatorOdo = true;
-    private final String llName = Constants2025.LIME_LIGHT_ARPIL_TAG_NAME;
+    private final String llName = Constants2025.LIME_LIGHT_ARPIL_TAG_NAME_LEFT;
     private SwerveDrivePoseEstimator est_swerveOdometry;
     private SwerveDriveOdometry swerveOdometry;
     public SwerveModule[] mSwerveMods;

@@ -133,6 +133,8 @@ public class UpperSystem2025Cmd extends Command {
     private Trigger armTuningUpTrigger;
     private Trigger armTuningDownTrigger;
 
+    private Trigger catchBall;
+
     private final boolean isDebugEnabled = true;
 
     private boolean isCarryingCoralFromDebug = false;
@@ -142,7 +144,7 @@ public class UpperSystem2025Cmd extends Command {
 
     public UpperSystem2025Cmd(
             TurningArm2025 turningArm, Elevator2025 elev, Intake2025 intake, Candle2025 candle, MoveTo2025 moveto,
-            Trigger resetToZeroPosBtn, Trigger switchCnB, Trigger aimCoral, Trigger intakeTrigger,
+            Trigger resetToZeroPosBtn, Trigger switchCnB, Trigger aimCoral, Trigger intakeTrigger, Trigger _catchBall,
             Trigger test_arm, Trigger test_zero) {
 
         inst = this;
@@ -242,6 +244,20 @@ public class UpperSystem2025Cmd extends Command {
             }));
         }
 
+        if (_catchBall != null) {
+            this.catchBall = _catchBall;
+            this.catchBall.whileTrue(new InstantCommand(()-> {
+                if ((curState == STATE.BALL1 || curState == STATE.BALL2) && curRunningState == RUNNING_STATE.DONE) {
+                    m_elevator.setOffset(-1.5);
+                    m_intake.toggleBallIntake(true);                    
+                }
+
+            })).onFalse(new InstantCommand(() -> {
+                m_elevator.clearOffset();
+                m_intake.toggleBallIntake(false);
+            }));
+        }
+
         initDebug();
     }
 
@@ -271,6 +287,7 @@ public class UpperSystem2025Cmd extends Command {
         }
         armTuningUpTrigger = t;
         t.onTrue(new InstantCommand(() -> {
+            System.out.println("Arm up --------------------------------");
             m_turningArm.toggleTuningUp();
         }));
     }
@@ -577,6 +594,7 @@ public class UpperSystem2025Cmd extends Command {
 
     private void doStateAction(TA_STATE taState, EV_STATE evState) {
         boolean isNeedDodge = false;
+        boolean isBall2Down = false;
         if (curRunningState == RUNNING_STATE.NEW_SET)
         {
             STATE sx = lastState;
@@ -589,8 +607,18 @@ public class UpperSystem2025Cmd extends Command {
             System.out.println("doStateAction NEW_SET: tx: " + tx + " ty: " + ty);
             System.out.println("doStateAction NEW_SET: curRunningDir is " + curRunningDir);
 
-            if (curState == STATE.BALL1 || curState == STATE.BALL2) {
+            if ((lastState != STATE.BALL1 && lastState != STATE.BALL2) &&
+                (curState == STATE.BALL1 || curState == STATE.BALL2)) {
                 isNeedDodge = false;
+            }
+            else if ((lastState == STATE.BALL1 || lastState == STATE.BALL2) &&
+                (curState == STATE.BALL1 || curState == STATE.BALL2)) {
+                isNeedDodge = false;
+            }
+            else if ((lastState == STATE.BALL1 || lastState == STATE.BALL2) &&
+                (curState == STATE.READY_FOR_LOAD_CORAL)) {
+                isNeedDodge = false;
+                isBall2Down = true;
             }
             else {
                 double[] dodgePosList = m_elevator.getDodgePosOrderFromUp2Down();
@@ -647,8 +675,10 @@ public class UpperSystem2025Cmd extends Command {
                     isNeedDodge ?
                     () -> { 
                         return m_elevator.isCurPosBelow(Constants2025.Elevator.downDodgePos);
+                    } : (isBall2Down ? () -> {
+                        return m_elevator.isCurPosBelow(m_elevator.getStatePos(EV_STATE.BALL1));
                     } :
-                    () -> true,
+                    () -> true),
                     () -> { // endCondition
                         return m_turningArm.getCurRunningState() == TurningArm2025.RUNNING_STATE.DONE;
                     }

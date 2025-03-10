@@ -45,7 +45,8 @@ import java.util.concurrent.ThreadPoolExecutor.DiscardOldestPolicy;
 public class Swerve2025 extends SubsystemBase {
     static final boolean useLLImu = false;
     static final boolean useEstimatorOdo = true;
-    private final String llName = Constants2025.LIME_LIGHT_ARPIL_TAG_NAME;
+    private final String llNameLeft = Constants2025.LIME_LIGHT_ARPIL_TAG_NAME_LEFT;
+    private final String llNameRight = Constants2025.LIME_LIGHT_ARPIL_TAG_NAME_RIGHT;
     private SwerveDrivePoseEstimator est_swerveOdometry;
     private SwerveDriveOdometry swerveOdometry;
     public SwerveModule2025[] mSwerveMods;
@@ -131,10 +132,12 @@ public class Swerve2025 extends SubsystemBase {
                     this));
 
     public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {
+        resetModulesToAbsolute();
         return m_sysIdRoutine.quasistatic(direction);
     }
 
     public Command sysIdDynamic(SysIdRoutine.Direction direction) {
+        resetModulesToAbsolute();
         return m_sysIdRoutine.dynamic(direction);
     }
     // SysIdRoutine end
@@ -269,14 +272,17 @@ public class Swerve2025 extends SubsystemBase {
     public void periodic() {
         if (useLLImu) {
             if (Robot.inst.isDisabled()) {
-                LimelightHelpers.SetIMUMode(llName, 1);
+                LimelightHelpers.SetIMUMode(llNameLeft, 1);
+                LimelightHelpers.SetIMUMode(llNameRight, 1);
             }
             else {
-                LimelightHelpers.SetIMUMode(llName, 2);
+                LimelightHelpers.SetIMUMode(llNameLeft, 2);
+                LimelightHelpers.SetIMUMode(llNameRight, 2);
             }            
         }
         else {
-            LimelightHelpers.SetIMUMode(llName, 0);
+            LimelightHelpers.SetIMUMode(llNameLeft, 0);
+            LimelightHelpers.SetIMUMode(llNameRight, 0);
         }
 
         if (useEstimatorOdo) {
@@ -300,11 +306,13 @@ public class Swerve2025 extends SubsystemBase {
         SmartDashboard.putNumber("Gyro", getGyroYaw().getDegrees());
 
         if (useEstimatorOdo) {
-            updateOdometryWithVision();
+            // System.out.println("===============>");
+            updateOdometryWithVision(llNameLeft);
+            updateOdometryWithVision(llNameRight);
         }
     }
 
-    private void updateOdometryWithVision() {
+    private void updateOdometryWithVision(String llName) {
         boolean useMegaTag2 = true; // set to false to use MegaTag1
         boolean doRejectUpdate = false;
 
@@ -349,7 +357,9 @@ public class Swerve2025 extends SubsystemBase {
                     if (mt2.tagCount == 0) {
                         doRejectUpdate = true;
                     }
+                    
                     if (!doRejectUpdate) {
+                        // System.out.println("===============>" + llName + ": " + pos.toString());
                         est_swerveOdometry.setVisionMeasurementStdDevs(VecBuilder.fill(.7, .7, 9999999));
                         est_swerveOdometry.addVisionMeasurement(
                                 pos,

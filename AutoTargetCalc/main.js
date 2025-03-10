@@ -46,8 +46,8 @@ let testPath = "ap6_left.path";
 
 const PATH_MODIFY_PROTO = {
     waypointRelativePos: 1.6,
-    maxV: 3.5,
-    maxA: 3.5,
+    maxV: 3,//3.5,
+    maxA: 3,//3.5,
 }
 
 function calculateNewPoint(x, y, theta, d) {

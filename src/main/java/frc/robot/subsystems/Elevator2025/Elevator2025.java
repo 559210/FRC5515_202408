@@ -65,6 +65,8 @@ public class Elevator2025 extends SubsystemBase {
     private final double NONE_POS = -9999;
     private final double threshold = 0.05;
 
+    private double elevatorOffset = 0;
+
     EV_STATE curState = EV_STATE.NONE;
     RUNNING_STATE curRunningState = RUNNING_STATE.READY;
 
@@ -175,6 +177,18 @@ public class Elevator2025 extends SubsystemBase {
         m_primaryMotor.getConfigurator().apply(getMotorConfiguration(true, true));
         m_followerMotor.getConfigurator().apply(getMotorConfiguration(false, true));
         m_followerMotor.setControl(new Follower(m_primaryMotor.getDeviceID(), false));
+    }
+
+    public void setOffset(double v) {
+        elevatorOffset = v;
+    }
+
+    public double getOffset() {
+        return elevatorOffset;
+    }
+
+    public void clearOffset() {
+        elevatorOffset = 0;
     }
 
     public void toggleTuningUp() {
@@ -320,6 +334,7 @@ public class Elevator2025 extends SubsystemBase {
             return;
         }
         double pos = getStatePos(curState);
+        pos += elevatorOffset;
         SmartDashboard.putNumber("ELEVATOR ccc targetPos", pos);
         SmartDashboard.putString("ELEVATOR ccc curState", curState.name());
         SmartDashboard.putString("ELEVATOR ccc curRuningState", curRunningState.name());

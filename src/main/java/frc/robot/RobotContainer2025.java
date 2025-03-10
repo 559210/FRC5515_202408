@@ -63,9 +63,14 @@ public class RobotContainer2025 implements RobotContainerInterface {
     
     /* Driver Buttons */
     private final JoystickButton aimBtn = new JoystickButton(driver, 1);
-    private final JoystickButton zeroHeader = new JoystickButton(driver, 5);
-    private final JoystickButton robotCentric = new JoystickButton(driver, 6);
-    private final JoystickButton zeroGyro = new JoystickButton(driver, 8);
+    private final JoystickButton zeroHeader = new JoystickButton(driver, 8);
+    // private final JoystickButton robotCentric = new JoystickButton(driver, 6);
+    // private final JoystickButton zeroHeader = null; // new JoystickButton(driver, 5);
+    private final JoystickButton robotCentric = null; // new JoystickButton(driver, 6);
+
+    private final JoystickButton leftMove = new JoystickButton(driver, 5);
+    private final JoystickButton rightMove = new JoystickButton(driver, 6);
+    // private final JoystickButton zeroGyro = new JoystickButton(driver, 8);
     private final POVButton downButton = new POVButton(driver, 180);
     private final POVButton rightButton = new POVButton(driver, 90);
     private final POVButton upButton = new POVButton(driver, 0);
@@ -75,7 +80,7 @@ public class RobotContainer2025 implements RobotContainerInterface {
     private final JoystickButton turningArmBtn = null; //new JoystickButton(driver,2);
     private final JoystickButton intakeBtn = new JoystickButton(driver,2);
     private final JoystickButton zeroStateBtn = null; //new JoystickButton(driver, 3);
-    
+    private final JoystickButton catchBallBtn = new JoystickButton(driver, 3);
 
 
     private final JoystickButton zeroUpperPosBtn = new JoystickButton(driver, 7);
@@ -104,7 +109,7 @@ public class RobotContainer2025 implements RobotContainerInterface {
                     () -> -driver.getRawAxis(strafeAxis), 
                     () -> -driver.getRawAxis(rotationAxis), 
                     // ()->0, ()->0, ()->0,
-                    () -> robotCentric.getAsBoolean(),
+                    () -> robotCentric == null ? false : robotCentric.getAsBoolean(),
                     () -> driver.getRawAxis(leftTriggerAxis) > 0.5
                 )
             )
@@ -127,7 +132,7 @@ public class RobotContainer2025 implements RobotContainerInterface {
 
         new UpperSystem2025Cmd(
             m_turningArm, m_elevator, m_intake, m_candle, m_moveToSubSys,
-            zeroUpperPosBtn, switchCoralnBallBtn, aimBtn, intakeBtn,
+            zeroUpperPosBtn, switchCoralnBallBtn, aimBtn, intakeBtn, catchBallBtn,
             turningArmBtn, zeroStateBtn
         );
 
@@ -209,8 +214,17 @@ public class RobotContainer2025 implements RobotContainerInterface {
 
 
 
-        zeroHeader.onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
-        zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.resetGyroOffset(0)));
+        if (zeroHeader != null) {
+            zeroHeader.onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
+        }
+        
+        if (leftMove != null) {
+            leftMove.whileTrue(new SlightlyMoveCmd2025(s_Swerve, DIR.LEFT));
+        }
+        if (rightMove != null) {
+            rightMove.whileTrue(new SlightlyMoveCmd2025(s_Swerve, DIR.RIGHT));
+        }
+        // zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.resetGyroOffset(0)));
         // aimBtn.whileTrue(new Aim2025Cmd(m_moveToSubSys, s_Swerve));
 
         // ControlPadHelper.goTargetTrigger.whileTrue(new Aim2025Cmd(m_moveToSubSys, s_Swerve));
@@ -225,10 +239,10 @@ public class RobotContainer2025 implements RobotContainerInterface {
         ControlPadHelper.DebugCtrl.left.whileTrue(new SlightlyMoveCmd2025(s_Swerve, DIR.LEFT));
         ControlPadHelper.DebugCtrl.down.whileTrue(new SlightlyMoveCmd2025(s_Swerve, DIR.DOWN));
 
-        // new JoystickButton(tester, 1).whileTrue(s_Swerve.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
-        // new JoystickButton(tester, 2).whileTrue(s_Swerve.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
-        // new JoystickButton(tester, 3).whileTrue(s_Swerve.sysIdDynamic(SysIdRoutine.Direction.kForward));
-        // new JoystickButton(tester, 4).whileTrue(s_Swerve.sysIdDynamic(SysIdRoutine.Direction.kReverse));
+        // new JoystickButton(driver, 1).whileTrue(s_Swerve.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
+        // new JoystickButton(driver, 2).whileTrue(s_Swerve.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
+        // new JoystickButton(driver, 3).whileTrue(s_Swerve.sysIdDynamic(SysIdRoutine.Direction.kForward));
+        // new JoystickButton(driver, 4).whileTrue(s_Swerve.sysIdDynamic(SysIdRoutine.Direction.kReverse));
     }
 
     private void registerPathplannerEventsAndNamedCommands() {

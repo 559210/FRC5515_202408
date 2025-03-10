@@ -68,14 +68,14 @@ public final class Constants2025 {
         /* Angle Motor PID Values */
 
         /* Drive Motor PID Values */
-        public static final double driveKP = 1.25;//TODO
+        public static final double driveKP = 1;//TODO
         public static final double driveKI = 0.0;
         public static final double driveKD = 0.0;
 
         /* Drive Motor Characterization Values From SYSID */
-        public static final double driveKS = 0.19024; //TODO
+        public static final double driveKS = 0.08; //TODO
         public static final double driveKV = 1.9429;//TODO
-        public static final double driveKA = 0.20202;//TODO
+        public static final double driveKA = 0.2987;//TODO
         // public static final double driveKS = 0; //TODO
         // public static final double driveKV = 0;//TODO
         // public static final double driveKA = 0;//TODO
@@ -100,7 +100,7 @@ public final class Constants2025 {
             public static final int driveMotorID = 1;
             public static final int angleMotorID = 2;
             public static final int canCoderID = 9;
-            public static final Rotation2d angleOffset = Rotation2d.fromRotations(-0.007324);
+            public static final Rotation2d angleOffset = Rotation2d.fromRotations(-0.008057);
         }
 
         /* Front Right Module - Module 1 */
@@ -136,7 +136,7 @@ public final class Constants2025 {
             public static final int driveMotorID = 7;
             public static final int angleMotorID = 8;
             public static final int canCoderID = 12;
-            public static final Rotation2d angleOffset = Rotation2d.fromRotations(0.263672 - 0.5);
+            public static final Rotation2d angleOffset = Rotation2d.fromRotations(-0.229492);
         }
 
         public static class Mod {
@@ -171,7 +171,8 @@ public final class Constants2025 {
         };
     }
 
-    public static String LIME_LIGHT_ARPIL_TAG_NAME = "limelight-one";
+    public static String LIME_LIGHT_ARPIL_TAG_NAME_RIGHT = "limelight-right";
+    public static String LIME_LIGHT_ARPIL_TAG_NAME_LEFT = "limelight-left";
 
     public static HashMap<Long, Pose2d> aimPoses = new HashMap<Long, Pose2d>() {{
         put(17l, new Pose2d(3.651, 2.552, Rotation2d.fromDegrees(60)));
@@ -199,14 +200,14 @@ public final class Constants2025 {
         public static final double KV = 0.0; // 0.1
         public static final double KS = 0.0;
         public static final double KA = 0.0;
-        public static final double Velocity = 2; // 100.0;
+        public static final double Velocity = 4; // 100.0;
         public static final double Acceleration = 20; // 600.0;
         public static final double Jerk = 0.0;
         public static final double SensorToMechanismRatio = 1.0;
         public static final double RotorToSensorRatio = 44;
         // bigger value means arm is more expanded(clockwise)
         public static final double zeroPos = 0;
-        public static final double basePos = 0.3146980;
+        public static final double basePos = 0.4146980;
         public static final double l1Pos = 1.039307;//0.407227;
         public static final double l2Pos = 1.039307;
         public static final double dodgePos =  1.139307;  // the pos that allows elevator to move
@@ -247,7 +248,7 @@ public final class Constants2025 {
         public static final double l2Pos = -6.01582;
         public static final double l3Pos = -10.585644;
         public static final double l4Pos = -15.9;
-        public static final double ball1Pos = -6;
+        public static final double ball1Pos = -5;
         public static final double ball2Pos = -10;
         public static final double upDodgePos = -9.135644;
         public static final double downDodgePos = -4.66582;
@@ -266,8 +267,8 @@ public final class Constants2025 {
         public static final double coralInSpeed = 15;
         public static final double coralInSlowSpeed = 2;
         public static final double coralInReverseSpeed = -3;
-        public static final double coralOutSpeed = 15;
-        public static final double BallInSpeed = -15;
+        public static final double coralOutSpeed = 30;
+        public static final double BallInSpeed = -40;
         public static final double BAllOutSpeed = 15;
     }
 
@@ -277,7 +278,7 @@ public final class Constants2025 {
     }
 
     public static final class PathPlanner {
-        public static final double constraintsSpeed = 2.;
-        public static final double constraintsAccel = 2.;
+        public static final double constraintsSpeed = 3.;
+        public static final double constraintsAccel = 3.;
     }
 }

@@ -119,6 +119,15 @@ public class Intake2025 extends SubsystemBase {
         }
     }
 
+    public void toggleBallIntake(boolean isOn) {
+        if (this.curState == STATE.READY && isOn) {
+            setState(STATE.BALL_IN);
+        }
+        else if (this.curState == STATE.BALL_IN && !isOn) {
+            setState(STATE.READY);
+        }
+    }
+
     public void startIntake() {
         if (this.curState == STATE.READY) {
             setState(STATE.CORAL_IN);
