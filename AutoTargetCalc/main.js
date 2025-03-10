@@ -17,6 +17,12 @@ const APRIL_TAG = {
     "ap11": { x: 12.643358, y: 3.306318, theta: 330 },
 }
 
+const APRIL_TAG_POS = {
+    LEFT: "left",
+    CENTER: "center",
+    RIGHT: "right",
+}
+
 const N = -.565; // 垂直偏移量
 const OFFSET = 0.164338; // 沿边偏移量, >0 right, < 0 left
 
@@ -46,8 +52,8 @@ let testPath = "ap6_left.path";
 
 const PATH_MODIFY_PROTO = {
     waypointRelativePos: 1.6,
-    maxV: 3,//3.5,
-    maxA: 3,//3.5,
+    maxV: 2,//3.5,
+    maxA: 2,//3.5,
 }
 
 function calculateNewPoint(x, y, theta, d) {
@@ -73,6 +79,31 @@ function eventMarkerParser(obj) {
 
     return obj;
 }
+
+function contsrainZoneParser(obj) {
+    let zones = [];
+    let count = obj["waypoints"].length - 1;
+    let v = PATH_MODIFY_PROTO.maxV / count;
+    let a = PATH_MODIFY_PROTO.maxA / count;
+    for (let i = 0; i < count; ++i) {
+        let zone = {
+            "name": "Constraints Zone" + "_" + i,
+            "minWaypointRelativePos": i,
+            "maxWaypointRelativePos": i + 1,
+            "constraints": {
+                "maxVelocity": PATH_MODIFY_PROTO.maxV - v * i,
+                "maxAcceleration": PATH_MODIFY_PROTO.maxA - a * i,
+                "maxAngularVelocity": 540,
+                "maxAngularAcceleration": 720,
+                "nominalVoltage": 12,
+                "unlimited": false
+            }
+        };
+        zones.push(zone);
+    }
+    obj["constraintZones"] = zones;
+}
+
 function eventMarkerLNTime(obj, newT) {
     for (let i = 0; i < obj["eventMarkers"].length; ++i) {
         let o = obj["eventMarkers"][i];
@@ -139,16 +170,22 @@ function speed(obj, v, a) {
 
     obj['useDefaultConstraints'] = false;
 }
-function processPathPlannerPath(aprilTagName, isLeft, newTargetX, newTargetY, theta) {
-    let filename = ph.join(PP_PATH, aprilTagName + "_" + (isLeft ? "left" : "right") + ".path");
+function processPathPlannerPath(aprilTagName, aprilTagPos, newTargetX, newTargetY, theta) {
+    let filename = ph.join(PP_PATH, aprilTagName + "_" + aprilTagPos + ".path");
     console.log(filename)
     // read filename as a json text file
-    let text = fs.readFileSync(filename);
+    let text = '';
+    if (fs.existsSync(filename)) {
+        text = fs.readFileSync(filename);
+    } else {
+        text = fs.readFileSync(ph.join(PP_PATH, aprilTagName + "_" + APRIL_TAG_POS.LEFT + ".path"));
+    }
     let data = JSON.parse(text);
     targetPosNew(data, newTargetX, newTargetY, theta + 90);
     eventMarkerParser(data);
     eventMarkerLNTime(data, PATH_MODIFY_PROTO.waypointRelativePos);
     speed(data, PATH_MODIFY_PROTO.maxV, PATH_MODIFY_PROTO.maxA);
+    contsrainZoneParser(data);
     fs.writeFileSync(filename, JSON.stringify(data, null, 4), 'utf8');
 }
 
@@ -160,15 +197,18 @@ function main() {
 
         let r = {
             left: null,
+            center: null,
             right: null,
         }
         
         r.right = calcOffsetPoint({x : apInfo.x, y: apInfo.y}, apInfo.theta, N, OFFSET).newPoint;
         r.left = calcOffsetPoint({x : apInfo.x, y: apInfo.y}, apInfo.theta, N, -OFFSET).newPoint;
+        r.center = calcOffsetPoint({x : apInfo.x, y: apInfo.y}, apInfo.theta, N, 0).newPoint;
         result[key] = r;
 
-        processPathPlannerPath(key, true, r.left.x, r.left.y, apInfo.theta);
-        processPathPlannerPath(key, false, r.right.x, r.right.y, apInfo.theta);
+        processPathPlannerPath(key, APRIL_TAG_POS.LEFT, r.left.x, r.left.y, apInfo.theta);
+        processPathPlannerPath(key, APRIL_TAG_POS.CENTER, r.center.x, r.center.y, apInfo.theta);
+        processPathPlannerPath(key, APRIL_TAG_POS.RIGHT, r.right.x, r.right.y, apInfo.theta);
     }
 
     return result;
