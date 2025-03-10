@@ -13,25 +13,13 @@
         {
           "type": "named",
           "data": {
-            "name": "ap10_left"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 1.0
+            "name": "ap10_right"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Shoot"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "source2A"
+            "name": "source10-2"
           }
         },
         {
@@ -49,25 +37,13 @@
         {
           "type": "named",
           "data": {
-            "name": "ap10_right"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 1.0
+            "name": "ap10_left"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Shoot"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "source2A"
+            "name": "source10-2"
           }
         }
       ]

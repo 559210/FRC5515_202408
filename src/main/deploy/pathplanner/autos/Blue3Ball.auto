@@ -19,7 +19,31 @@
         {
           "type": "named",
           "data": {
-            "name": "source12B"
+            "name": "source22-12"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Intake"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ap17_right"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "source17-12"
           }
         },
         {
@@ -38,30 +62,6 @@
           "type": "named",
           "data": {
             "name": "ap17_left"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "source12B"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Intake"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.5
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "ap18_right"
           }
         }
       ]

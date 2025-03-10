@@ -266,7 +266,7 @@ public final class Constants2025 {
         public static final double coralInSpeed = 15;
         public static final double coralInSlowSpeed = 2;
         public static final double coralInReverseSpeed = -3;
-        public static final double coralOutSpeed = 15;
+        public static final double coralOutSpeed = 30;
         public static final double BallInSpeed = -15;
         public static final double BAllOutSpeed = 15;
     }
