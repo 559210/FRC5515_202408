@@ -49,7 +49,7 @@ public class InfoPanel
     GButton toBlueBtn;
     GButton showBtn;
     GButton hideBtn;
-    GButton goTargetBtn;
+    GButton setHeadBtn;
 
     Controller hideCtrl;
     Controller sideCtrl;
@@ -77,9 +77,9 @@ public class InfoPanel
         hideBtn = root.GetChild("toHideBtn").asButton;
         hideBtn.onClick.Set(toHideClicked);
 
-        goTargetBtn = root.GetChild("goTargetBtn").asButton;
-        goTargetBtn.onTouchBegin.Set(onGoTargetDown);
-        goTargetBtn.onTouchEnd.Set(onGoTargetUp);
+        setHeadBtn = root.GetChild("setHeadBtn").asButton;
+        setHeadBtn.onTouchBegin.Set(onSetHeadDown);
+        setHeadBtn.onTouchEnd.Set(onSetHeadUp);
 
         hideCtrl = root.GetController("HIDE");
         sideCtrl = root.GetController("SIDE");
@@ -152,20 +152,27 @@ public class InfoPanel
             aprilTagSelectedInfoLbl.text = "Waiting data...";
             return;
         }
-        string levelName = "ERR";
-        switch (ti.level)
+        string branchName = "ERR";
+        switch (ti.branch)
         {
             case -1:
-                levelName = "LEFT";
+                branchName = "LEFT";
                 break;
             case 0:
-                levelName = "BOTTOM";
+                if (ti.level == 0)
+                {
+                    branchName = "BOTTOM";
+                }
+                else if(ti.level == -1)
+                {
+                    branchName = "ALGEA";
+                }
                 break;
             case 1:
-                levelName = "RIGHT";
+                branchName = "RIGHT";
                 break;
         }
-        aprilTagSelectedInfoLbl.text = String.Format("AprilTag {0}, {1}, {2}", ti.aprilTagId, levelName, ti.branch);
+        aprilTagSelectedInfoLbl.text = String.Format("AprilTag {0}, {1}, {2}", ti.aprilTagId, branchName, ti.level);
     }
 
     public void toggleSide()
@@ -225,13 +232,13 @@ public class InfoPanel
         showPanel(false);
     }
 
-    protected void onGoTargetDown()
+    protected void onSetHeadDown()
     {
-        Main.inst.NT.publishGoTarget(true);
+        Main.inst.NT.publishSetHead(true);
     }
 
-    protected void onGoTargetUp() {
-        Main.inst.NT.publishGoTarget(false);
+    protected void onSetHeadUp() {
+        Main.inst.NT.publishSetHead(false);
     }
 }
 
@@ -434,18 +441,20 @@ public class FieldMap : MonoBehaviour
         "AP22",
     };
 
-    public string[] apMenuBtnNames = new string[]
-    {
+    public string[] apMenuBtnNames2 = new string[] {
+        "btnA",
         "btn0",
         "btnL1",
         "btnL2",
         "btnL3",
         "btnR1",
         "btnR2",
-        "btnR3"
+        "btnR3",
     };
 
+    // branch, level
     public Tuple<long, long>[] apMenuData = new Tuple<long, long>[] {
+        new (0, -1),
         new (0, 0),
         new (-1, 1),
         new (-1, 2),
@@ -499,10 +508,11 @@ public class FieldMap : MonoBehaviour
         apMenu = field.GetChild("ApMenu").asCom;
         apMenu.visible = false;
 
-        apMenuBtns = new GButton[apMenuBtnNames.Length];
+        apMenuBtns = new GButton[apMenuBtnNames2.Length];
         for (int i = 0; i < apMenuBtns.Length; i++)
         {
-            apMenuBtns[i] = apMenu.GetChild(apMenuBtnNames[i]).asButton;
+            Debug.LogError("aa: " + apMenuBtnNames2[i]);
+            apMenuBtns[i] = apMenu.GetChild(apMenuBtnNames2[i]).asButton;
             apMenuBtns[i].onClick.Set(onApMenuBtnClick);
             apMenuBtns[i].data = i;
         }
@@ -596,8 +606,8 @@ public class FieldMap : MonoBehaviour
     {
         GButton btn = context.sender as GButton;
         var data = apMenuData[(int)btn.data];
-        level = data.Item1;
-        branch = data.Item2;
+        level = data.Item2;
+        branch = data.Item1;
 
         Main.inst.NT.publishControlPadInfo(aprilTagId, level, branch);
 

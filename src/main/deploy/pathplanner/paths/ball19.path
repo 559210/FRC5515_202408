@@ -105,7 +105,7 @@
     "pointTowardsZones": [],
     "eventMarkers": [
         {
-            "name": "LN",
+            "name": "Ball1",
             "waypointRelativePos": 1.6,
             "endWaypointRelativePos": null,
             "command": null

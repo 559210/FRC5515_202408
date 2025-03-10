@@ -18,6 +18,7 @@
     <component id="wi65g" name="ArrowPanel.xml" path="/"/>
     <image id="wi65h" name="arrow.png" path="/"/>
     <component id="wi65i" name="ArrowBtn.xml" path="/"/>
+    <component id="r6dwj" name="AprilTagMenuBtnA.xml" path="/"/>
   </resources>
   <publish name=""/>
 </packageDescription>

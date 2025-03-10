@@ -67,7 +67,7 @@ public class NTManager
     readonly string CONTROL_PAD_INFO_RECALL_ENTRY_NAME = $"/{ID_NAME}/ControlPadInfoRecall";
     //readonly string CONTROL_PAD_INFO_RECALL_ENTRY_NAME = $"/{ID_NAME}/aaa";
     readonly string VIRTUAL_CONTROL_ENTRY_NAME = $"/{ID_NAME}/VirtualControl";
-    readonly string GO_TARGET_ENTRY_NAME = $"/{ID_NAME}/GoTarget";
+    readonly string SET_HEAD_ENTRY_NAME = $"/{ID_NAME}/SetHead";
     readonly string DEBUG_PANEL_ENTRY_NAME = $"/{ID_NAME}/Debug";
     readonly string UPPER_SYSTEM_STATE = "/SmartDashboard/US2025Cmd_State";
     readonly string UPPER_SYSTEM_CARRYING_STATE = "/SmartDashboard/US2025Cmd_CarryingState";
@@ -138,7 +138,7 @@ public class NTManager
             nt.Subscribe(UPPER_SYSTEM_CARRYING_STATE);
             nt.PublishTopic(CONTROL_PAD_INFO_ENTRY_NAME, "int[]");
             nt.PublishTopic(VIRTUAL_CONTROL_ENTRY_NAME, "double[]");
-            nt.PublishTopic(GO_TARGET_ENTRY_NAME, "int[]");
+            nt.PublishTopic(SET_HEAD_ENTRY_NAME, "int[]");
             nt.PublishTopic(DEBUG_PANEL_ENTRY_NAME, "int[]");
 
             Main.inst.StartCoroutine(arrangeRefreshAprilTagTargetInfoRecall());
@@ -186,14 +186,14 @@ public class NTManager
         return true;
     }
 
-    public bool publishGoTarget(bool isGo)
+    public bool publishSetHead(bool isSet)
     {
         if (!check())
         {
             Debug.LogError("publishGoTarget check fail");
             return false;
         }
-        nt.PublishValue(GO_TARGET_ENTRY_NAME, new long[] { isGo ? 1 : 0, Time.frameCount });
+        nt.PublishValue(SET_HEAD_ENTRY_NAME, new long[] { isSet ? 1 : 0, Time.frameCount });
         return true;
     }
 

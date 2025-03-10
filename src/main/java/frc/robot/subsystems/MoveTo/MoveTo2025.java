@@ -90,8 +90,13 @@ public class MoveTo2025 extends SubsystemBase{
             return null;
         }
         int fid = (int)info.aprilTagId;
-        String leftORright = info.branch == -1 ? "left" : "right";
-        String pathName = String.format("ap%d_%s", fid, leftORright);
+        String pathName = "";
+        if (info.level == -1) {
+            pathName = GlobalConfig.getBallPathName(fid);
+        }
+        else {
+            pathName = GlobalConfig.getApPathName(fid, info.branch == -1);
+        }
         PathPlannerPath path = GlobalConfig.getAimPath(pathName);
         path.preventFlipping = true;
         System.out.println("---------------> 2");

@@ -3,12 +3,12 @@
     "waypoints": [
         {
             "anchor": {
-                "x": 11.062306000000003,
+                "x": 15.055497999999996,
                 "y": 4.0259
             },
             "prevControl": null,
             "nextControl": {
-                "x": 11.162306000000003,
+                "x": 14.955497999999997,
                 "y": 4.0259
             },
             "isLocked": false,
@@ -16,15 +16,15 @@
         },
         {
             "anchor": {
-                "x": 11.262306000000002,
+                "x": 14.855497999999997,
                 "y": 4.0259
             },
             "prevControl": {
-                "x": 11.162306000000003,
+                "x": 14.955497999999997,
                 "y": 4.0259
             },
             "nextControl": {
-                "x": 11.362306000000002,
+                "x": 14.755497999999998,
                 "y": 4.0259
             },
             "isLocked": false,
@@ -32,15 +32,15 @@
         },
         {
             "anchor": {
-                "x": 11.462306000000002,
+                "x": 14.655497999999998,
                 "y": 4.0259
             },
             "prevControl": {
-                "x": 11.362306000000002,
+                "x": 14.755497999999998,
                 "y": 4.0259
             },
             "nextControl": {
-                "x": 11.562306000000001,
+                "x": 14.555497999999998,
                 "y": 4.0259
             },
             "isLocked": false,
@@ -48,11 +48,11 @@
         },
         {
             "anchor": {
-                "x": 11.662306000000001,
+                "x": 14.455497999999999,
                 "y": 4.0259
             },
             "prevControl": {
-                "x": 11.562306000000001,
+                "x": 14.555497999999998,
                 "y": 4.0259
             },
             "nextControl": null,
@@ -105,7 +105,7 @@
     "pointTowardsZones": [],
     "eventMarkers": [
         {
-            "name": "LN",
+            "name": "Ball2",
             "waypointRelativePos": 1.6,
             "endWaypointRelativePos": null,
             "command": null
@@ -121,13 +121,13 @@
     },
     "goalEndState": {
         "velocity": 0,
-        "rotation": 0
+        "rotation": 180
     },
     "reversed": false,
     "folder": null,
     "idealStartingState": {
         "velocity": 2,
-        "rotation": 0
+        "rotation": 180
     },
     "useDefaultConstraints": false
 }

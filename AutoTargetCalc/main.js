@@ -3,18 +3,19 @@ const ph = require('path');
 // 输入数据
 
 const APRIL_TAG = {
-    "ap17": { x: 4.073906, y: 3.306318, theta: 330 },
-    "ap18": { x: 3.6576, y: 4.0259, theta: 270 },
-    "ap19": { x: 4.073906, y: 4.745482, theta: 210 },
-    "ap20": { x: 4.90474, y: 4.7475482, theta: 150 },
-    "ap21": { x: 5.321046, y: 4.0259, theta: 90 },
-    "ap22": { x: 4.90474, y: 3.306318, theta: 30 },
-    "ap6": { x: 13.474446, y: 3.306318, theta: 30 },
-    "ap7": { x: 13.890498, y: 4.0259, theta: 90 },
-    "ap8": { x: 13.474446, y: 4.745482, theta: 150 },
-    "ap9": { x: 12.643358, y: 4.745482, theta: 210 },
-    "ap10": { x: 12.227306, y: 4.0259, theta: 270 },
-    "ap11": { x: 12.643358, y: 3.306318, theta: 330 },
+    // algea 0: low, 1: high
+    "ap17": { x: 4.073906, y: 3.306318, theta: 330, algea: 0 },
+    "ap18": { x: 3.6576, y: 4.0259, theta: 270, algea: 1 },
+    "ap19": { x: 4.073906, y: 4.745482, theta: 210, algea: 0 },
+    "ap20": { x: 4.90474, y: 4.7475482, theta: 150, algea: 1 },
+    "ap21": { x: 5.321046, y: 4.0259, theta: 90, algea: 0 },
+    "ap22": { x: 4.90474, y: 3.306318, theta: 30, algea: 1 },
+    "ap6": { x: 13.474446, y: 3.306318, theta: 30, algea: 0 },
+    "ap7": { x: 13.890498, y: 4.0259, theta: 90, algea: 1 },
+    "ap8": { x: 13.474446, y: 4.745482, theta: 150, algea: 0 },
+    "ap9": { x: 12.643358, y: 4.745482, theta: 210, algea: 1 },
+    "ap10": { x: 12.227306, y: 4.0259, theta: 270, algea: 0 },
+    "ap11": { x: 12.643358, y: 3.306318, theta: 330, algea: 1 },
 }
 
 const APRIL_TAG_POS = {
@@ -67,14 +68,28 @@ function calculateNewPoint(x, y, theta, d) {
     return { x: newX, y: newY };
 }
 
-function eventMarkerParser(obj) {
-    if (!obj["eventMarkers"] || obj["eventMarkers"].length == 0) {
-        obj["eventMarkers"] = [{
-            "name": "LN",
-            "waypointRelativePos": 0.75,
-            "endWaypointRelativePos": null,
-            "command": null
-        }];
+function eventMarkerParser(obj, aprilTagName, aprilTagPos) {
+    console.log("ddd: ", aprilTagName, aprilTagPos);
+    if (aprilTagPos == APRIL_TAG_POS.CENTER) {
+        // if (!obj["eventMarkers"] || obj["eventMarkers"].length == 0) {
+            obj["eventMarkers"] = [{
+                "name": APRIL_TAG[aprilTagName].algea == 0 ? "Ball1" : "Ball2",
+                "waypointRelativePos": 0.75,
+                "endWaypointRelativePos": null,
+                "command": null
+            }];
+        // }
+
+    }
+    else {
+        // if (!obj["eventMarkers"] || obj["eventMarkers"].length == 0) {
+            obj["eventMarkers"] = [{
+                "name": "LN",
+                "waypointRelativePos": 0.75,
+                "endWaypointRelativePos": null,
+                "command": null
+            }];
+        // }
     }
 
     return obj;
@@ -107,12 +122,13 @@ function contsrainZoneParser(obj) {
 function eventMarkerLNTime(obj, newT) {
     for (let i = 0; i < obj["eventMarkers"].length; ++i) {
         let o = obj["eventMarkers"][i];
-        if (o.name == "LN") {
+        if (o.name == "LN" || o.name == "Ball1" || o.name == "Ball2") {
             o.waypointRelativePos = newT;
         }
     }
     return obj;
 }
+
 function targetPos(obj, x, y) {
     let wp = obj["waypoints"];
     if (wp.length < 2) {
@@ -171,7 +187,14 @@ function speed(obj, v, a) {
     obj['useDefaultConstraints'] = false;
 }
 function processPathPlannerPath(aprilTagName, aprilTagPos, newTargetX, newTargetY, theta) {
-    let filename = ph.join(PP_PATH, aprilTagName + "_" + aprilTagPos + ".path");
+    let filename = '';
+    if (aprilTagPos == APRIL_TAG_POS.CENTER) {
+        filename = ph.join(PP_PATH, aprilTagName + ".path");
+        filename = filename.replace("ap", "ball");
+    }
+    else {
+        filename = ph.join(PP_PATH, aprilTagName + "_" + aprilTagPos + ".path");
+    }
     console.log(filename)
     // read filename as a json text file
     let text = '';
@@ -182,7 +205,7 @@ function processPathPlannerPath(aprilTagName, aprilTagPos, newTargetX, newTarget
     }
     let data = JSON.parse(text);
     targetPosNew(data, newTargetX, newTargetY, theta + 90);
-    eventMarkerParser(data);
+    eventMarkerParser(data, aprilTagName, aprilTagPos);
     eventMarkerLNTime(data, PATH_MODIFY_PROTO.waypointRelativePos);
     speed(data, PATH_MODIFY_PROTO.maxV, PATH_MODIFY_PROTO.maxA);
     contsrainZoneParser(data);

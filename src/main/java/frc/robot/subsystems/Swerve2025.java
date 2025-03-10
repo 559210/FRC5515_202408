@@ -236,7 +236,7 @@ public class Swerve2025 extends SubsystemBase {
 
     public void setHeading(Rotation2d heading) {
         if (useEstimatorOdo) {
-            System.out.println("=========ppppppp ------ > " + heading);
+            // System.out.println("=========ppppppp ------ > " + heading);
             est_swerveOdometry.resetPosition(getGyroYaw(), getModulePositions(),
             new Pose2d(getPose().getTranslation(), heading));
         }

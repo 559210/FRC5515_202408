@@ -133,7 +133,8 @@ public class UpperSystem2025Cmd extends Command {
     private Trigger armTuningUpTrigger;
     private Trigger armTuningDownTrigger;
 
-    private Trigger catchBall;
+    private Trigger catchBallTrigger;
+    private Trigger toggleBallTrigger;
 
     private final boolean isDebugEnabled = true;
 
@@ -144,7 +145,7 @@ public class UpperSystem2025Cmd extends Command {
 
     public UpperSystem2025Cmd(
             TurningArm2025 turningArm, Elevator2025 elev, Intake2025 intake, Candle2025 candle, MoveTo2025 moveto,
-            Trigger resetToZeroPosBtn, Trigger switchCnB, Trigger aimCoral, Trigger intakeTrigger, Trigger _catchBall,
+            Trigger resetToZeroPosBtn, Trigger switchCnB, Trigger aimCoral, Trigger intakeTrigger, Trigger _catchBall, Trigger _toggleBall,
             Trigger test_arm, Trigger test_zero) {
 
         inst = this;
@@ -245,8 +246,8 @@ public class UpperSystem2025Cmd extends Command {
         }
 
         if (_catchBall != null) {
-            this.catchBall = _catchBall;
-            this.catchBall.whileTrue(new InstantCommand(()-> {
+            this.catchBallTrigger = _catchBall;
+            this.catchBallTrigger.whileTrue(new InstantCommand(()-> {
                 if ((curState == STATE.BALL1 || curState == STATE.BALL2) && curRunningState == RUNNING_STATE.DONE) {
                     m_elevator.setOffset(-1.5);
                     m_intake.toggleBallIntake(true);                    
@@ -255,6 +256,13 @@ public class UpperSystem2025Cmd extends Command {
             })).onFalse(new InstantCommand(() -> {
                 m_elevator.clearOffset();
                 m_intake.toggleBallIntake(false);
+            }));
+        }
+
+        if (_toggleBall != null) {
+            this.toggleBallTrigger = _toggleBall;
+            this.toggleBallTrigger.onTrue(new InstantCommand(() -> {
+                setState(STATE.READY_FOR_LOAD_CORAL);
             }));
         }
 
@@ -820,21 +828,26 @@ public class UpperSystem2025Cmd extends Command {
             this.m_candle.clearLn();
         }
         else {
-            if (info.level == 0) {
+            if (info.level == -1) {
+                // show aglea
+            }
+            else if (info.level == 0) {
                 this.m_candle.showL1();
             }
             else {
-                boolean isLeft = (info.branch == -1);
-                switch ((int)info.level) {
-                    case 1:
-                        m_candle.showL2(isLeft);
-                        break;
-                    case 2:
-                        m_candle.showL3(isLeft);
-                        break;
-                    case 3:
-                        m_candle.showL4(isLeft);
-                        break;
+                if (info.branch != 0) {
+                    boolean isLeft = (info.branch == -1);
+                    switch ((int)info.level) {
+                        case 1:
+                            m_candle.showL2(isLeft);
+                            break;
+                        case 2:
+                            m_candle.showL3(isLeft);
+                            break;
+                        case 3:
+                            m_candle.showL4(isLeft);
+                            break;
+                    }                    
                 }
             }
             
@@ -889,6 +902,14 @@ public class UpperSystem2025Cmd extends Command {
 
     public void startShoot() {
         m_intake.startShoot();
+    }
+
+    public void setStateBall1() {
+        setState(STATE.BALL1);
+    }
+
+    public void setStateBall2() {
+        setState(STATE.BALL2);
     }
 
 

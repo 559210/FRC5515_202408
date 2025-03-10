@@ -81,6 +81,7 @@ public class RobotContainer2025 implements RobotContainerInterface {
     private final JoystickButton intakeBtn = new JoystickButton(driver,2);
     private final JoystickButton zeroStateBtn = null; //new JoystickButton(driver, 3);
     private final JoystickButton catchBallBtn = new JoystickButton(driver, 3);
+    private final JoystickButton toggleBallBtn = new JoystickButton(driver, 4);
 
 
     private final JoystickButton zeroUpperPosBtn = new JoystickButton(driver, 7);
@@ -132,7 +133,7 @@ public class RobotContainer2025 implements RobotContainerInterface {
 
         new UpperSystem2025Cmd(
             m_turningArm, m_elevator, m_intake, m_candle, m_moveToSubSys,
-            zeroUpperPosBtn, switchCoralnBallBtn, aimBtn, intakeBtn, catchBallBtn,
+            zeroUpperPosBtn, switchCoralnBallBtn, aimBtn, intakeBtn, catchBallBtn, toggleBallBtn,
             turningArmBtn, zeroStateBtn
         );
 
@@ -217,6 +218,8 @@ public class RobotContainer2025 implements RobotContainerInterface {
         if (zeroHeader != null) {
             zeroHeader.onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
         }
+
+        ControlPadHelper.setHeadTrigger.onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
         
         if (leftMove != null) {
             leftMove.whileTrue(new SlightlyMoveCmd2025(s_Swerve, DIR.LEFT));
@@ -230,14 +233,12 @@ public class RobotContainer2025 implements RobotContainerInterface {
         // ControlPadHelper.goTargetTrigger.whileTrue(new Aim2025Cmd(m_moveToSubSys, s_Swerve));
         // ControlPadHelper.tapTrigger.whileTrue(new MoveTo2025Cmd(m_moveToSubSys, s_Swerve));
 
-        ControlPadHelper.goTargetTrigger.onTrue(new InstantCommand(()-> {
-            System.out.println("abc");
-        }));
 
         ControlPadHelper.DebugCtrl.up.whileTrue(new SlightlyMoveCmd2025(s_Swerve, DIR.UP));
         ControlPadHelper.DebugCtrl.right.whileTrue(new SlightlyMoveCmd2025(s_Swerve, DIR.RIGHT));
         ControlPadHelper.DebugCtrl.left.whileTrue(new SlightlyMoveCmd2025(s_Swerve, DIR.LEFT));
         ControlPadHelper.DebugCtrl.down.whileTrue(new SlightlyMoveCmd2025(s_Swerve, DIR.DOWN));
+
 
         // new JoystickButton(driver, 1).whileTrue(s_Swerve.sysIdQuasistatic(SysIdRoutine.Direction.kForward));
         // new JoystickButton(driver, 2).whileTrue(s_Swerve.sysIdQuasistatic(SysIdRoutine.Direction.kReverse));
@@ -283,6 +284,14 @@ public class RobotContainer2025 implements RobotContainerInterface {
         }));
         NamedCommands.registerCommand("Raise2L4",new InstantCommand(() -> {
             UpperSystem2025Cmd.inst.setStateL4();
+        }));
+
+        NamedCommands.registerCommand("Ball1",new InstantCommand(() -> {
+            UpperSystem2025Cmd.inst.setStateBall1();
+        }));
+
+        NamedCommands.registerCommand("Ball2",new InstantCommand(() -> {
+            UpperSystem2025Cmd.inst.setStateBall2();
         }));
 
         NamedCommands.registerCommand("Intake",new InstantCommand(() -> {

@@ -20,9 +20,12 @@
       <relation target="" sidePair="width-width,center-center,top-top"/>
     </graph>
     <group id="n9_l60g" name="AprilTagTarget" xy="11,237" size="378,114" group="n22_l60g"/>
-    <component id="n8_l60g" name="goTargetBtn" src="frd4c" fileName="commonBtn.xml" xy="147,320" size="100,23" group="n9_l60g">
+    <graph id="n7_l60g" name="n7" xy="11,237" size="378,114" group="n9_l60g" type="rect" lineSize="2" lineColor="#ffffffff" fillColor="#00ffffff" corner="10">
       <relation target="" sidePair="width-width,center-center,top-top"/>
-      <Button title="GO"/>
+    </graph>
+    <component id="n8_l60g" name="setHeadBtn" src="frd4c" fileName="commonBtn.xml" xy="147,320" size="100,23" group="n9_l60g">
+      <relation target="" sidePair="width-width,center-center,top-top"/>
+      <Button title="SET HEAD"/>
     </component>
     <text id="n6_l60g" name="ArpilTagSelectedInfo" xy="18,276" size="357,39" group="n9_l60g" fontSize="28" color="#0000ff" align="center" autoSize="none" text="AprilTag 17, LEFT, 3">
       <relation target="" sidePair="width-width,center-center,top-top"/>
@@ -30,9 +33,6 @@
     <text id="n5_l60g" name="n5" xy="24,247" size="351,24" group="n9_l60g" fontSize="16" align="center" autoSize="shrink" text="Selected AprilTag:">
       <relation target="" sidePair="width-width,center-center,top-top"/>
     </text>
-    <graph id="n7_l60g" name="n7" xy="11,237" size="378,114" group="n9_l60g" type="rect" lineSize="2" lineColor="#ffffffff" fillColor="#00ffffff" corner="10">
-      <relation target="" sidePair="width-width,center-center,top-top"/>
-    </graph>
     <graph id="n13_l60g" name="n13" xy="11,136" size="378,81" group="n15_l60g" type="rect" lineSize="2" lineColor="#ffffffff" fillColor="#00ffffff" corner="10">
       <relation target="" sidePair="width-width,center-center,top-top"/>
     </graph>

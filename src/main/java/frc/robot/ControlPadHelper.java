@@ -93,8 +93,8 @@ public class ControlPadHelper {
         public boolean isTap = false;
     }
 
-    public static class GoTarget {
-        public boolean isGo = false;
+    public static class SetHeadData {
+        public boolean isSetHead = false;
         public long frameCount = 0; // no use, just a timestamp like frame count
     }
 
@@ -228,17 +228,17 @@ public class ControlPadHelper {
 
     private static ControlPadInfo controlPadInfo = new ControlPadInfo();
     private static VirtualControl virtualControl = new VirtualControl();
-    private static GoTarget goTarget = new GoTarget();
+    private static SetHeadData setHeadData = new SetHeadData();
 
     private static EventLoop eventLoop = new EventLoop();
     public static Trigger tapTrigger = new Trigger(eventLoop, () -> tapTriggerSupplier());
-    public static Trigger goTargetTrigger = new Trigger(eventLoop, () -> goTargetSupplier());
+    public static Trigger setHeadTrigger = new Trigger(eventLoop, () -> setHeadSupplier());
 
     private static NetworkTableInstance ntInst = null;
     private static NetworkTable ntTable = null;
     private static TopicWrap controlPadInfoTopic = new TopicWrap(TopicType.INT_ARRAY, "ControlPadInfo", TopicWrap.ActionType.SUB);
     private static TopicWrap virtualControlTopic = new TopicWrap(TopicType.DOUBLE_ARRAY, "VirtualControl", TopicWrap.ActionType.SUB);
-    private static TopicWrap goTargetTopic = new TopicWrap(TopicType.INT_ARRAY, "GoTarget", TopicWrap.ActionType.SUB);
+    private static TopicWrap setHeadTopic = new TopicWrap(TopicType.INT_ARRAY, "SetHead", TopicWrap.ActionType.SUB);
     private static TopicWrap robotPosTopic = new TopicWrap(TopicType.DOUBLE_ARRAY, "RobotPos", TopicWrap.ActionType.PUB);
     private static TopicWrap controlPadInfoRecallTopic = new TopicWrap(TopicType.INT_ARRAY, "ControlPadInfoRecall", TopicWrap.ActionType.PUB);
 
@@ -288,8 +288,8 @@ public class ControlPadHelper {
         }
         controlPadInfo.backup();
         controlPadInfo.data.aprilTagId = datas[0];
-        controlPadInfo.data.level = datas[2];
-        controlPadInfo.data.branch = datas[1];
+        controlPadInfo.data.level = datas[1];
+        controlPadInfo.data.branch = datas[2];
         controlPadInfo.compareOld();
 
         SmartDashboard.putNumber("ControlPad aprilTagId", controlPadInfo.data.aprilTagId);
@@ -307,13 +307,13 @@ public class ControlPadHelper {
         virtualControl.y = datas[2];
     }
 
-    private static void refreshGoTarget() {
-        long[] datas = goTargetTopic.getIntArrayValue();
+    private static void refreshSetHead() {
+        long[] datas = setHeadTopic.getIntArrayValue();
         if (datas.length == 0) {
             return;
         }
-        goTarget.isGo = datas[0] == 1;
-        goTarget.frameCount = datas[1];
+        setHeadData.isSetHead = datas[0] == 1;
+        setHeadData.frameCount = datas[1];
     }
 
     public static ControlPadInfo.ControlPadInfoData getControlPadInfo() {
@@ -345,8 +345,8 @@ public class ControlPadHelper {
         return virtualControl.isTap;
     }
 
-    private static boolean goTargetSupplier() {
-        return goTarget.isGo;
+    private static boolean setHeadSupplier() {
+        return setHeadData.isSetHead;
     }
 
     private static void refreshDebugCtrl() {
@@ -374,7 +374,7 @@ public class ControlPadHelper {
         refreshControlPad();
         refreshVirtualControl();
         publishControlPadInfoRecall();
-        refreshGoTarget();
+        refreshSetHead();
         refreshDebugCtrl();
         eventLoop.poll();
     }

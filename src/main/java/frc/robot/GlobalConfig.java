@@ -14,43 +14,31 @@ public final class GlobalConfig {
         6, 7, 8, 9, 10, 11, 17, 18, 19, 20, 21, 22,
     };
 
-    // private static final String[] aimPathNames = new String[] {
-    //     "ap10_left",
-    //     "ap10_right",
-    //     "ap11_left",
-    //     "ap11_right",
-    //     "ap6_left",
-    //     "ap6_right",
-    //     "ap7_left",
-    //     "ap7_right",
-    //     "ap8_left",
-    //     "ap8_right",
-    //     "ap9_left",
-    //     "ap9_right",
-    //     "ap_17_left",
-    //     "ap_17_right",
-    //     "ap_18_left",
-    //     "ap_18_right",
-    //     "ap_19_left",
-    //     "ap_19_right",
-    //     "ap_20_left",
-    //     "ap_20_right",
-    //     "ap_21_left",
-    //     "ap_21_right",
-    //     "ap_22_left",
-    //     "ap_22_right",
-    // };
-
-    private static final String[] sourcePath = new String[]{
-        "source1A",
-        "source2A",
-        "source12A",
-        "source12B",
-        "source13A",
+    private static final String[] sourcePath = new String[]{                                         
+        "source10-1",                                                      
+        "source10-2",                                                      
+        "source11-1",                                                      
+        "source17-12",                                                     
+        "source18-12",                                                     
+        "source18-13",                                                     
+        "source19-13",                                                     
+        "source20-13",                                                     
+        "source21-12",                                                     
+        "source21-13",                                                     
+        "source22-12",                                                     
+        "source6-1",                                                       
+        "source7-1",                                                       
+        "source7-2",                                                       
+        "source8-2",                                                       
+        "source9-2",    
     };
     
-    private static String getApPathName(int apId, boolean isLeft) {
+    public static String getApPathName(int apId, boolean isLeft) {
         return "ap" + apId + "_" + (isLeft ? "left" : "right");
+    }
+
+    public static String getBallPathName(int apId) {
+        return "ball" + apId;
     }
 
     public static boolean ExtractApPathName(String pathName) {
@@ -80,7 +68,11 @@ public final class GlobalConfig {
                     System.out.println("=========== " + pathName + " loaded ===============");
                     aimPathDic.put(pathName, path);
                 }
-                
+
+                String pathName = getBallPathName(aimAprilTagIds[i]);
+                PathPlannerPath path = PathPlannerPath.fromPathFile(pathName);
+                System.out.println("=========== " + pathName + " loaded ===============");
+                aimPathDic.put(pathName, path);
             }
 
             for (int i = 0; i < sourcePath.length; ++i) {
@@ -89,6 +81,7 @@ public final class GlobalConfig {
                 System.out.println("=========== " + pathName + " loaded ===============");
                 aimPathDic.put(pathName, path);
             }
+
 
             return true;
         }
