@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
     "version": "2025.0",
     "waypoints": [
         {
@@ -78,16 +79,105 @@
         "maxAngularAcceleration": 720,
         "nominalVoltage": 12,
         "unlimited": false
+=======
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 14.199266882807127,
+        "y": 2.3795674045911293
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 14.074266882807125,
+        "y": 2.596073755537238
+      },
+      "isLocked": false,
+      "linkedName": null
+>>>>>>> 39355b34151a4e31a9fef8f0e8529910cb9efe52
     },
-    "goalEndState": {
-        "velocity": 0,
-        "rotation": 119.99999999999999
+    {
+      "anchor": {
+        "x": 14.099266882807127,
+        "y": 2.552772485348017
+      },
+      "prevControl": {
+        "x": 14.224266882807129,
+        "y": 2.336266134401908
+      },
+      "nextControl": {
+        "x": 13.974266882807125,
+        "y": 2.769278836294126
+      },
+      "isLocked": false,
+      "linkedName": null
     },
+<<<<<<< HEAD
     "reversed": false,
     "folder": null,
     "idealStartingState": {
         "velocity": 3,
         "rotation": 119.58756352987189
+=======
+    {
+      "anchor": {
+        "x": 13.999266882807127,
+        "y": 2.7259775661049046
+      },
+      "prevControl": {
+        "x": 14.12426688280713,
+        "y": 2.5094712151587957
+      },
+      "nextControl": {
+        "x": 13.874266882807126,
+        "y": 2.9424839170510135
+      },
+      "isLocked": false,
+      "linkedName": null
+>>>>>>> 39355b34151a4e31a9fef8f0e8529910cb9efe52
     },
-    "useDefaultConstraints": false
+    {
+      "anchor": {
+        "x": 13.899266882807128,
+        "y": 2.8991826468617923
+      },
+      "prevControl": {
+        "x": 14.02426688280713,
+        "y": 2.6826762959156834
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [
+    {
+      "name": "LN",
+      "waypointRelativePos": 1.6,
+      "endWaypointRelativePos": null,
+      "command": null
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 1.5,
+    "maxAcceleration": 1.5,
+    "maxAngularVelocity": 540,
+    "maxAngularAcceleration": 720,
+    "nominalVoltage": 12,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 119.99999999999999
+  },
+  "reversed": false,
+  "folder": null,
+  "idealStartingState": {
+    "velocity": 1.5,
+    "rotation": 119.58756352987189
+  },
+  "useDefaultConstraints": false
 }
