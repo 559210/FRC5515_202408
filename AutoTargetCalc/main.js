@@ -106,8 +106,8 @@ function contsrainZoneParser(obj) {
             "minWaypointRelativePos": i,
             "maxWaypointRelativePos": i + 1,
             "constraints": {
-                "maxVelocity": PATH_MODIFY_PROTO.maxV - v * i,
-                "maxAcceleration": PATH_MODIFY_PROTO.maxA - a * i,
+                "maxVelocity": PATH_MODIFY_PROTO.maxV,// - v * i,
+                "maxAcceleration": PATH_MODIFY_PROTO.maxA,// - a * i,
                 "maxAngularVelocity": 540,
                 "maxAngularAcceleration": 720,
                 "nominalVoltage": 12,
