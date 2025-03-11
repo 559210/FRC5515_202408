@@ -129,7 +129,7 @@ public class RobotContainer2025 implements RobotContainerInterface {
         // //         break;
         // //     }
         // // }
-        s_Swerve.setHeading(headingAngle);
+        s_Swerve.resetGyroForOdo(headingAngle);
 
         new UpperSystem2025Cmd(
             m_turningArm, m_elevator, m_intake, m_candle, m_moveToSubSys,
@@ -216,10 +216,10 @@ public class RobotContainer2025 implements RobotContainerInterface {
 
 
         if (zeroHeader != null) {
-            zeroHeader.onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
+            zeroHeader.onTrue(new InstantCommand(() -> s_Swerve.resetGyroForOdo(0)));
         }
 
-        ControlPadHelper.setHeadTrigger.onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
+        ControlPadHelper.setHeadTrigger.onTrue(new InstantCommand(() -> s_Swerve.resetGyroForOdo(0)));
         
         if (leftMove != null) {
             leftMove.whileTrue(new SlightlyMoveCmd2025(s_Swerve, DIR.LEFT));
@@ -261,6 +261,14 @@ public class RobotContainer2025 implements RobotContainerInterface {
         })));
         pathplannerEvents.add(new EventTrigger(("Raise2L4")).onTrue(new InstantCommand(() -> {
             UpperSystem2025Cmd.inst.setStateL4();
+        })));
+
+        pathplannerEvents.add(new EventTrigger(("Ball1")).onTrue(new InstantCommand(() -> {
+            UpperSystem2025Cmd.inst.setStateBall1();
+        })));
+
+        pathplannerEvents.add(new EventTrigger(("Ball2")).onTrue(new InstantCommand(() -> {
+            UpperSystem2025Cmd.inst.setStateBall2();
         })));
 
         pathplannerEvents.add(new EventTrigger(("Intake")).onTrue(new InstantCommand(() -> {

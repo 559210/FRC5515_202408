@@ -67,7 +67,7 @@ public class UpperSystem2025Cmd extends Command {
         new int[]{  0,    1,     1,                    1,  1,  0,  -1, -1,    0     },// L3
         new int[]{  0,    1,     1,                    1,  1,  1,  0,  -1,    0     },// L4
         new int[]{  0,    0,     1,                    0,  0,  0,  0,   0,    1    },// BALL1
-        new int[]{  0,    0,     0,                    0,  0,  0,  0,  -1 ,    0    },// BALL2
+        new int[]{  0,    0,     1,                    0,  0,  0,  0,  -1 ,    0    },// BALL2
     };
 
     // private STATE[] STATE_UP_DIR = new STATE[] {
@@ -521,7 +521,7 @@ public class UpperSystem2025Cmd extends Command {
         lastState = curState;
         curState = newState;
 
-        System.out.println("UpperSystem2025Cmd::setState: try set: comfirmed");
+        // System.out.println("UpperSystem2025Cmd::setState: try set: comfirmed");
     }
 
 
@@ -672,7 +672,8 @@ public class UpperSystem2025Cmd extends Command {
                     () -> { // endCondition
                         return m_elevator.getCurRunningState() == Elevator2025.RUNNING_STATE.DONE;
                     }
-                ).addConditionAction(
+                )
+                .addConditionAction(
                     () -> { // init
                         m_turningArm.setState(taState);
                     },
@@ -690,7 +691,18 @@ public class UpperSystem2025Cmd extends Command {
                     () -> { // endCondition
                         return m_turningArm.getCurRunningState() == TurningArm2025.RUNNING_STATE.DONE;
                     }
-                ).start();
+                )
+                // .addQueueAction(                    
+                //     () -> { // init
+                //         m_turningArm.setState(taState);
+                //     },
+                //     () -> { // update
+                //     },
+                //     () -> {},   // onCancel
+                //     () -> { // endCondition
+                //         return m_turningArm.getCurRunningState() == TurningArm2025.RUNNING_STATE.DONE;
+                // })
+                .start();
             }
             else if (curRunningDir == 1) {
                 // up
@@ -734,7 +746,19 @@ public class UpperSystem2025Cmd extends Command {
                     () -> { // endCondition
                         return m_turningArm.getCurRunningState() == TurningArm2025.RUNNING_STATE.DONE;
                     }
-                ).start();
+                )
+                // .addQueueAction(                    
+                //     () -> { // init
+                //         m_turningArm.setState(taState);
+                //     },
+                //     () -> { // update
+                //     },
+                //     () -> {},   // onCancel
+                //     () -> { // endCondition
+                //         return m_turningArm.getCurRunningState() == TurningArm2025.RUNNING_STATE.DONE;
+                //     }
+                // )
+                .start();
             }
 
             curRunningState = RUNNING_STATE.RUNNING;

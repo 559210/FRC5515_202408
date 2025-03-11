@@ -256,6 +256,11 @@ public class Swerve2025 extends SubsystemBase {
         setHeading(new Rotation2d(Units.degreesToRadians(angle)));
     }
 
+    public void resetGyroForOdo(double angle) {
+        gyroOffset  = gyro.getYaw().getValueAsDouble();
+        setHeading(angle);
+    }
+
     public Rotation2d getGyroYaw() {
         // return new Rotation2d();
         SmartDashboard.putNumber("gryo111", gyro.getYaw().getValueAsDouble());
@@ -307,8 +312,8 @@ public class Swerve2025 extends SubsystemBase {
 
         if (useEstimatorOdo) {
             // System.out.println("===============>");
-            updateOdometryWithVision(llNameLeft);
-            updateOdometryWithVision(llNameRight);
+            updateOdometryWithVision(llNameLeft);    // limelight3
+            updateOdometryWithVision(llNameRight);      // limelight4
         }
     }
 
@@ -316,8 +321,8 @@ public class Swerve2025 extends SubsystemBase {
         boolean useMegaTag2 = true; // set to false to use MegaTag1
         boolean doRejectUpdate = false;
 
-        // int[] validIDs = {17};
-        // LimelightHelpers.SetFiducialIDFiltersOverride(llName, validIDs);
+        int[] validIDs = {16, 7, 8, 9, 10, 11, 17, 18, 19, 20, 21, 22,};
+        LimelightHelpers.SetFiducialIDFiltersOverride(llName, validIDs);
 
         if (useMegaTag2 == false) {
             LimelightHelpers.PoseEstimate mt1 = LimelightHelpers.getBotPoseEstimate_wpiBlue(llName);
@@ -341,9 +346,11 @@ public class Swerve2025 extends SubsystemBase {
                         mt1.timestampSeconds);
             }
         } else if (useMegaTag2 == true) {
+            SmartDashboard.putNumber("degree111", gyro.getYaw().getValueAsDouble() - gyroOffset);
+            SmartDashboard.putNumber("degree222", est_swerveOdometry.getEstimatedPosition().getRotation().getDegrees());
             LimelightHelpers.SetRobotOrientation(llName,
-                est_swerveOdometry.getEstimatedPosition().getRotation().getDegrees(),
-                // gyro.getYaw().getValueAsDouble() - gyroOffset,
+                // est_swerveOdometry.getEstimatedPosition().getRotation().getDegrees(),
+                gyro.getYaw().getValueAsDouble() - gyroOffset,
                  0, 0, 0, 0, 0);
             if (StateController.getInstance().useVisionOdometry) {
                 LimelightHelpers.PoseEstimate mt2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(llName);
