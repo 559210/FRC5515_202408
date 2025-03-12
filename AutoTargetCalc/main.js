@@ -4,19 +4,20 @@ const ph = require('path');
 
 const APRIL_TAG = {
     // algea 0: low, 1: high
-    "ap17": { x: 4.073906, y: 3.306318, theta: 330, algea: 0 },
-    "ap18": { x: 3.6576, y: 4.0259, theta: 270, algea: 1 },
-    "ap19": { x: 4.073906, y: 4.745482, theta: 210, algea: 0 },
-    "ap20": { x: 4.90474, y: 4.7475482, theta: 150, algea: 1 },
-    "ap21": { x: 5.321046, y: 4.0259, theta: 90, algea: 0 },
-    "ap22": { x: 4.90474, y: 3.306318, theta: 30, algea: 1 },
-    "ap6": { x: 13.474446, y: 3.306318, theta: 30, algea: 0 },
-    "ap7": { x: 13.890498, y: 4.0259, theta: 90, algea: 1 },
-    "ap8": { x: 13.474446, y: 4.745482, theta: 150, algea: 0 },
-    "ap9": { x: 12.643358, y: 4.745482, theta: 210, algea: 1 },
-    "ap10": { x: 12.227306, y: 4.0259, theta: 270, algea: 0 },
-    "ap11": { x: 12.643358, y: 3.306318, theta: 330, algea: 1 },
+    "ap17": { id: 17, x: 4.073906, y: 3.306318, theta: 330, algea: 0, sourceList:[12] },
+    "ap18": { id: 18,  x: 3.6576, y: 4.0259, theta: 270, algea: 1, sourceList:[12, 13] },
+    "ap19": { id: 19, x: 4.073906, y: 4.745482, theta: 210, algea: 0, sourceList:[13] },
+    "ap20": { id: 20, x: 4.90474, y: 4.7475482, theta: 150, algea: 1, sourceList:[13] },
+    "ap21": { id: 21, x: 5.321046, y: 4.0259, theta: 90, algea: 0, sourceList:[12, 13] },
+    "ap22": { id: 22, x: 4.90474, y: 3.306318, theta: 30, algea: 1, sourceList:[12] },
+    "ap6": { id: 6, x: 13.474446, y: 3.306318, theta: 30, algea: 0, sourceList:[1] },
+    "ap7": { id: 7, x: 13.890498, y: 4.0259, theta: 90, algea: 1, sourceList:[1, 2] },
+    "ap8": { id: 8, x: 13.474446, y: 4.745482, theta: 150, algea: 0, sourceList:[2] },
+    "ap9": { id: 9, x: 12.643358, y: 4.745482, theta: 210, algea: 1, sourceList:[2] },
+    "ap10": { id: 10, x: 12.227306, y: 4.0259, theta: 270, algea: 0, sourceList:[1, 2] },
+    "ap11": { id: 11, x: 12.643358, y: 3.306318, theta: 330, algea: 1, sourceList:[1] },
 }
+
 
 const APRIL_TAG_POS = {
     LEFT: "left",
@@ -212,6 +213,35 @@ function processPathPlannerPath(aprilTagName, aprilTagPos, newTargetX, newTarget
     fs.writeFileSync(filename, JSON.stringify(data, null, 4), 'utf8');
 }
 
+function processSourcePathPlannerPath(key, aprilTagPos, newTargetX, newTargetY, theta) {
+    let apObj = APRIL_TAG[key];
+    let sourceList = apObj.sourceList;
+    for (let i = 0; i < sourceList.length; ++i) {
+        let sourceId = sourceList[i];
+        let sourcePathOrigin = ph.join(PP_PATH,  "source" + apObj.id + "-" + sourceId + ".path");
+        let text = fs.readFileSync(sourcePathOrigin);
+
+        let data = JSON.parse(text);
+        let firstWp = data["waypoints"][0]['anchor'];
+        firstWp.x = newTargetX;
+        firstWp.y = newTargetY;
+
+        data['idealStartingState'].velocity = 0.1;
+        data["idealStartingState"].rotation = theta + 90;
+
+        while (data["idealStartingState"].rotation > 360) {
+            data["idealStartingState"].rotation -= 360;
+        }
+
+        while (data["idealStartingState"].rotation < 0) {
+            data["idealStartingState"].rotation + 360;
+        }
+
+        let outFilename = ph.join(PP_PATH,  "source" + apObj.id + "-" + sourceId + "_" + aprilTagPos + ".path");
+        fs.writeFileSync(outFilename, JSON.stringify(data, null, 4), 'utf8');
+    }
+    
+}
 
 function main() {
     let result = {};
@@ -230,8 +260,10 @@ function main() {
         result[key] = r;
 
         processPathPlannerPath(key, APRIL_TAG_POS.LEFT, r.left.x, r.left.y, apInfo.theta);
+        processSourcePathPlannerPath(key, APRIL_TAG_POS.LEFT, r.left.x, r.left.y, apInfo.theta);
         processPathPlannerPath(key, APRIL_TAG_POS.CENTER, r.center.x, r.center.y, apInfo.theta);
         processPathPlannerPath(key, APRIL_TAG_POS.RIGHT, r.right.x, r.right.y, apInfo.theta);
+        processSourcePathPlannerPath(key, APRIL_TAG_POS.RIGHT, r.right.x, r.right.y, apInfo.theta);
     }
 
     return result;

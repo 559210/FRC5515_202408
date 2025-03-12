@@ -19,7 +19,7 @@
         {
           "type": "named",
           "data": {
-            "name": "source9-2"
+            "name": "source9-2_right"
           }
         },
         {
@@ -31,7 +31,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.75
+            "waitTime": 0.5
           }
         },
         {
@@ -43,7 +43,7 @@
         {
           "type": "named",
           "data": {
-            "name": "source9-2"
+            "name": "source9-2_left"
           }
         }
       ]

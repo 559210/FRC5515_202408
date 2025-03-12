@@ -19,7 +19,7 @@
         {
           "type": "named",
           "data": {
-            "name": "source22-12"
+            "name": "source22-12_right"
           }
         },
         {
@@ -43,7 +43,7 @@
         {
           "type": "named",
           "data": {
-            "name": "source22-12"
+            "name": "source22-12_left"
           }
         }
       ]
