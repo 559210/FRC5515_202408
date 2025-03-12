@@ -17,9 +17,15 @@
           }
         },
         {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.15
+          }
+        },
+        {
           "type": "named",
           "data": {
-            "name": "source22-12"
+            "name": "source22-12_right"
           }
         },
         {
@@ -41,9 +47,15 @@
           }
         },
         {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.15
+          }
+        },
+        {
           "type": "named",
           "data": {
-            "name": "source17-12"
+            "name": "source17-12_right"
           }
         },
         {

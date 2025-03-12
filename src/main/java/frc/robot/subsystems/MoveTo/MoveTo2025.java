@@ -74,15 +74,15 @@ public class MoveTo2025 extends SubsystemBase{
         // Since AutoBuilder is configured, we can use it to build pathfinding commands
         // return AutoBuilder.pathfindToPose(to, constraints, 0);
         
-        Optional<Pose2d> startPos = path.getStartingHolonomicPose();
-        if (!startPos.isEmpty()) {
-            Pose2d robotPos = s_Swerve.getPose();
-            Pose2d sP = startPos.get();
-            if (sP.getTranslation().getDistance(robotPos.getTranslation()) < 0.5) {
-                // System.out.println("---------------====================-------------------------");
-                return AutoBuilder.followPath(path);
-            }
-        }
+        // Optional<Pose2d> startPos = path.getStartingHolonomicPose();
+        // if (!startPos.isEmpty()) {
+        //     Pose2d robotPos = s_Swerve.getPose();
+        //     Pose2d sP = startPos.get();
+        //     if (sP.getTranslation().getDistance(robotPos.getTranslation()) < 0.5) {
+        //         // System.out.println("---------------====================-------------------------");
+        //         return AutoBuilder.followPath(path);
+        //     }
+        // }
         return AutoBuilder.pathfindThenFollowPath(
             path,
             constraints);

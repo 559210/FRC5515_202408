@@ -172,7 +172,7 @@ public final class Constants2025 {
     }
 
     public static String LIME_LIGHT_ARPIL_TAG_NAME_RIGHT = "limelight-right";
-    public static String LIME_LIGHT_ARPIL_TAG_NAME_LEFT = "limelight-left";
+    // public static String LIME_LIGHT_ARPIL_TAG_NAME_LEFT = "limelight-left";
 
     public static HashMap<Long, Pose2d> aimPoses = new HashMap<Long, Pose2d>() {{
         put(17l, new Pose2d(3.651, 2.552, Rotation2d.fromDegrees(60)));
@@ -225,8 +225,8 @@ public final class Constants2025 {
         public static class Up {
             public static final double KP = 5; // 25;  // 5; // 20.0;
             public static final double KI = 0; //3.2; // 0;
-            public static final double KD = 0.5; //0.2;
-            public static final double KV = 1;//1;//0.1;
+            public static final double KD = 0.1; //0.2;
+            public static final double KV = 0.5;//1;//0.1;
             public static final double KS = 0.05;//0.05;
             public static final double KA = 0;//0.07;
         }
@@ -248,12 +248,12 @@ public final class Constants2025 {
         public static final double zeroPos = 0;
         public static final double basePos = 0;
 
-        public static final double l1Pos = -4.51582; // -1.75;
-        public static final double l2Pos = -4.51582;
-        public static final double l3Pos = -8.585644;
+        public static final double l1Pos = -4.41582; // -1.75;
+        public static final double l2Pos = -4.41582;
+        public static final double l3Pos = -8.385644;
         public static final double l4Pos = -14;
-        public static final double ball1Pos = -3.8;
-        public static final double ball2Pos = -8;
+        public static final double ball1Pos = -2.8;
+        public static final double ball2Pos = -7;
         public static final double upDodgePos = -6.5;
         public static final double downDodgePos = -3.47;
     }

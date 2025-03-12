@@ -45,7 +45,7 @@ import java.util.concurrent.ThreadPoolExecutor.DiscardOldestPolicy;
 public class Swerve2025 extends SubsystemBase {
     static final boolean useLLImu = false;
     static final boolean useEstimatorOdo = true;
-    private final String llNameLeft = Constants2025.LIME_LIGHT_ARPIL_TAG_NAME_LEFT;
+    // private final String llNameLeft = Constants2025.LIME_LIGHT_ARPIL_TAG_NAME_LEFT;
     private final String llNameRight = Constants2025.LIME_LIGHT_ARPIL_TAG_NAME_RIGHT;
     private SwerveDrivePoseEstimator est_swerveOdometry;
     private SwerveDriveOdometry swerveOdometry;
@@ -277,16 +277,16 @@ public class Swerve2025 extends SubsystemBase {
     public void periodic() {
         if (useLLImu) {
             if (Robot.inst.isDisabled()) {
-                LimelightHelpers.SetIMUMode(llNameLeft, 1);
+                // LimelightHelpers.SetIMUMode(llNameLeft, 1);
                 LimelightHelpers.SetIMUMode(llNameRight, 1);
             }
             else {
-                LimelightHelpers.SetIMUMode(llNameLeft, 2);
+                // LimelightHelpers.SetIMUMode(llNameLeft, 2);
                 LimelightHelpers.SetIMUMode(llNameRight, 2);
             }            
         }
         else {
-            LimelightHelpers.SetIMUMode(llNameLeft, 0);
+            // LimelightHelpers.SetIMUMode(llNameLeft, 0);
             LimelightHelpers.SetIMUMode(llNameRight, 0);
         }
 
@@ -312,7 +312,7 @@ public class Swerve2025 extends SubsystemBase {
 
         if (useEstimatorOdo) {
             // System.out.println("===============>");
-            updateOdometryWithVision(llNameLeft);    // limelight3
+            // updateOdometryWithVision(llNameLeft);    // limelight3
             updateOdometryWithVision(llNameRight);      // limelight4
         }
     }
