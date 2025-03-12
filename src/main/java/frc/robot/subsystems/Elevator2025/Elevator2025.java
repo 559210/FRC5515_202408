@@ -107,13 +107,16 @@ public class Elevator2025 extends SubsystemBase {
         elevatorConfiguration.Slot0.kP = Constants2025.Elevator.Up.KP;
         elevatorConfiguration.Slot0.kI = Constants2025.Elevator.Up.KI;
         elevatorConfiguration.Slot0.kD = Constants2025.Elevator.Up.KD;
-        elevatorConfiguration.Slot0.kS = Constants2025.Elevator.KS;
-        elevatorConfiguration.Slot0.kV = Constants2025.Elevator.KV;
-        elevatorConfiguration.Slot0.kA = Constants2025.Elevator.KA;
+        elevatorConfiguration.Slot0.kS = Constants2025.Elevator.Up.KS;
+        elevatorConfiguration.Slot0.kV = Constants2025.Elevator.Up.KV;
+        elevatorConfiguration.Slot0.kA = Constants2025.Elevator.Up.KA;
 
         elevatorConfiguration.Slot1.kP = Constants2025.Elevator.Down.KP;
         elevatorConfiguration.Slot1.kI = Constants2025.Elevator.Down.KI;
         elevatorConfiguration.Slot1.kD = Constants2025.Elevator.Down.KD;
+        elevatorConfiguration.Slot1.kS = Constants2025.Elevator.Down.KS;
+        elevatorConfiguration.Slot1.kV = Constants2025.Elevator.Down.KV;
+        elevatorConfiguration.Slot1.kA = Constants2025.Elevator.Down.KA;
 
         elevatorConfiguration.MotionMagic.MotionMagicCruiseVelocity = Constants2025.Elevator.Velocity;
         elevatorConfiguration.MotionMagic.MotionMagicAcceleration = Constants2025.Elevator.Acceleration;

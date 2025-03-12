@@ -257,7 +257,7 @@ public class Swerve2025 extends SubsystemBase {
     }
 
     public void resetGyroForOdo(double angle) {
-        gyroOffset  = gyro.getYaw().getValueAsDouble();
+        gyroOffset  = gyro.getYaw().getValueAsDouble() + angle;
         setHeading(angle);
     }
 

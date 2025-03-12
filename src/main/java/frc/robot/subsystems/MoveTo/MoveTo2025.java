@@ -1,6 +1,7 @@
 package frc.robot.subsystems.MoveTo;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -72,6 +73,16 @@ public class MoveTo2025 extends SubsystemBase{
             System.out.println("---------------> 3");
         // Since AutoBuilder is configured, we can use it to build pathfinding commands
         // return AutoBuilder.pathfindToPose(to, constraints, 0);
+        
+        Optional<Pose2d> startPos = path.getStartingHolonomicPose();
+        if (!startPos.isEmpty()) {
+            Pose2d robotPos = s_Swerve.getPose();
+            Pose2d sP = startPos.get();
+            if (sP.getTranslation().getDistance(robotPos.getTranslation()) < 0.5) {
+                // System.out.println("---------------====================-------------------------");
+                return AutoBuilder.followPath(path);
+            }
+        }
         return AutoBuilder.pathfindThenFollowPath(
             path,
             constraints);
@@ -108,6 +119,8 @@ public class MoveTo2025 extends SubsystemBase{
                 System.out.println("---------------> 3");
         // Since AutoBuilder is configured, we can use it to build pathfinding commands
         // return AutoBuilder.pathfindToPose(to, constraints, 0);
+
+        // return AutoBuilder.followPath(path);
         return AutoBuilder.pathfindThenFollowPath(
             path,
             constraints);

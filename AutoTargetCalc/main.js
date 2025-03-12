@@ -24,7 +24,7 @@ const APRIL_TAG_POS = {
     RIGHT: "right",
 }
 
-const N = -.565; // 垂直偏移量
+const N = -.5; // 垂直偏移量
 const OFFSET = 0.164338; // 沿边偏移量, >0 right, < 0 left
 
 function calcOffsetPoint(midPoint, angle, n, offset) {

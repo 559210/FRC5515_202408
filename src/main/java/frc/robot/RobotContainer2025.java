@@ -315,16 +315,19 @@ public class RobotContainer2025 implements RobotContainerInterface {
             String name = list[i];
             // pathplannerEvents.add(new EventTrigger((name)).onTrue(new MoveToByPath2025Cmd(m_moveToSubSys, s_Swerve, name)));
             NamedCommands.registerCommand(name, 
-                new SequentialCommandGroup(new InstantCommand(() -> {
-                    if (name.startsWith("ap")) {
-                        GlobalConfig.ExtractApPathName(name);
-                    }
-                }), 
-                new MoveToByPath2025Cmd(m_moveToSubSys, s_Swerve, name),
-                new WaitShooterCmd2025(m_elevator),
-                new InstantCommand(() -> {
-                    UpperSystem2025Cmd.inst.startShoot();
-                }))
+                new SequentialCommandGroup(
+                    new InstantCommand(() -> {
+                        if (name.startsWith("ap")) {
+                            GlobalConfig.ExtractApPathName(name);
+                        }
+                    }), 
+                    new MoveToByPath2025Cmd(m_moveToSubSys, s_Swerve, name),
+                    new WaitShooterCmd2025(m_elevator),
+                    new InstantCommand(() -> {
+                        // System.out.println("auto shoot ----------------------->>>>>>>>>>>>>>>");
+                        UpperSystem2025Cmd.inst.startShoot();
+                    })
+                )
             );
             
             // NamedCommands.registerCommand(name,new InstantCommand(()->{}));
@@ -341,7 +344,7 @@ public class RobotContainer2025 implements RobotContainerInterface {
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
-        return s_Swerve.followPathPlannerAuto("Blue3Ball");
+        return s_Swerve.followPathPlannerAuto("intakeTest");
     }
 
     public void update() {

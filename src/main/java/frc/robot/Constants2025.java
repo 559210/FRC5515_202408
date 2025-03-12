@@ -200,7 +200,7 @@ public final class Constants2025 {
         public static final double KV = 0.0; // 0.1
         public static final double KS = 0.0;
         public static final double KA = 0.0;
-        public static final double Velocity = 6; // 100.0;
+        public static final double Velocity = 10; // 100.0;
         public static final double Acceleration = 20; // 600.0;
         public static final double Jerk = 0.0;
         public static final double SensorToMechanismRatio = 1.0;
@@ -225,16 +225,20 @@ public final class Constants2025 {
         public static class Up {
             public static final double KP = 5; // 25;  // 5; // 20.0;
             public static final double KI = 0; //3.2; // 0;
-            public static final double KD = 0; //0.2;
+            public static final double KD = 0.5; //0.2;
+            public static final double KV = 1;//1;//0.1;
+            public static final double KS = 0.05;//0.05;
+            public static final double KA = 0;//0.07;
         }
         public static class Down {
-            public static final double KP = 1.5; // 10.0;
-            public static final double KI = 0.05;
-            public static final double KD = 0;
+            public static final double KP = 5; // 10.0;
+            public static final double KI = 0;
+            public static final double KD = 0.1;
+            public static final double KV = 1;//1;//0.1;
+            public static final double KS = 0;//0.05;
+            public static final double KA = 0;//0.07;
         }
-        public static final double KV = 0;//1;//0.1;
-        public static final double KS = 0;//0.05;
-        public static final double KA = 0;//0.07;
+
         public static final double Velocity = 30; // 30;//50;
         public static final double Acceleration = 30;// 100;// 75;
         public static final double Jerk = 0;
@@ -247,7 +251,7 @@ public final class Constants2025 {
         public static final double l1Pos = -4.51582; // -1.75;
         public static final double l2Pos = -4.51582;
         public static final double l3Pos = -8.585644;
-        public static final double l4Pos = -14.1;
+        public static final double l4Pos = -14;
         public static final double ball1Pos = -3.8;
         public static final double ball2Pos = -8;
         public static final double upDodgePos = -6.5;
@@ -278,7 +282,7 @@ public final class Constants2025 {
     }
 
     public static final class PathPlanner {
-        public static final double constraintsSpeed = 3.;
-        public static final double constraintsAccel = 3.;
+        public static final double constraintsSpeed = 2.;
+        public static final double constraintsAccel = 2.;
     }
 }

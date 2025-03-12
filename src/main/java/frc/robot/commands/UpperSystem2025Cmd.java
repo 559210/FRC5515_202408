@@ -262,7 +262,12 @@ public class UpperSystem2025Cmd extends Command {
         if (_toggleBall != null) {
             this.toggleBallTrigger = _toggleBall;
             this.toggleBallTrigger.onTrue(new InstantCommand(() -> {
-                setState(STATE.READY_FOR_LOAD_CORAL);
+                if (curState == STATE.BALL1 || curState == STATE.BALL2) {
+                    setState(STATE.READY_FOR_LOAD_CORAL);
+                }
+                else if (curState == STATE.L3 || curState == STATE.L4) {
+                    setState(STATE.L1);
+                }
             }));
         }
 
