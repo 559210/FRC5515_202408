@@ -256,7 +256,7 @@ function processSourcePathPlannerPath(key, aprilTagPos, newTargetX, newTargetY, 
         firstWp.x = newTargetX;
         firstWp.y = newTargetY;
 
-        data['idealStartingState'].velocity = 0.1;
+        data['idealStartingState'].velocity = 1;
         data["idealStartingState"].rotation = theta + 90;
 
         while (data["idealStartingState"].rotation > 360) {

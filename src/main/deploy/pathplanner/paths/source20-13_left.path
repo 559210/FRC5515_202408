@@ -8,59 +8,64 @@
             },
             "prevControl": null,
             "nextControl": {
-                "x": 5.095418282035583,
-                "y": 5.669049926922382
+                "x": 5.0793384224787195,
+                "y": 5.628383060368414
             },
             "isLocked": false,
             "linkedName": null
         },
         {
             "anchor": {
-                "x": 4.312882653061224,
-                "y": 6.099362244897959
+                "x": 4.171109693877551,
+                "y": 5.748660714285713
             },
             "prevControl": {
-                "x": 4.538468456709816,
-                "y": 5.991607684937746
+                "x": 4.401769884305949,
+                "y": 5.652245588130452
             },
             "nextControl": {
-                "x": 3.84445605014895,
-                "y": 6.323113481252785
+                "x": 3.864200800942875,
+                "y": 5.87694752257938
             },
             "isLocked": false,
             "linkedName": null
         },
         {
             "anchor": {
-                "x": 3.1936224489795917,
-                "y": 6.629145408163265
+                "x": 2.902614795918367,
+                "y": 6.338137755102041
             },
             "prevControl": {
-                "x": 3.7412967705987104,
-                "y": 6.338043637208727
+                "x": 3.0964200233669392,
+                "y": 6.180215198722
             },
             "nextControl": {
-                "x": 2.97286853887943,
-                "y": 6.7464812985612586
+                "x": 2.5522917602996764,
+                "y": 6.623599143693327
             },
             "isLocked": false,
             "linkedName": null
         },
         {
             "anchor": {
-                "x": 1.6714285714285715,
-                "y": 7.4375
+                "x": 1.440114795918367,
+                "y": 7.696173469387754
             },
             "prevControl": {
-                "x": 1.9315521441271655,
-                "y": 7.263598253806638
+                "x": 1.6423814888343968,
+                "y": 7.549244285980194
             },
             "nextControl": null,
             "isLocked": false,
             "linkedName": "Source13"
         }
     ],
-    "rotationTargets": [],
+    "rotationTargets": [
+        {
+            "waypointRelativePos": 1.7683397683397857,
+            "rotationDegrees": -58.908294581236646
+        }
+    ],
     "constraintZones": [],
     "pointTowardsZones": [],
     "eventMarkers": [],
@@ -79,7 +84,7 @@
     "reversed": false,
     "folder": null,
     "idealStartingState": {
-        "velocity": 0.1,
+        "velocity": 1,
         "rotation": 240
     },
     "useDefaultConstraints": true

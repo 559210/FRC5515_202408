@@ -321,7 +321,7 @@ public class Swerve2025 extends SubsystemBase {
         boolean useMegaTag2 = true; // set to false to use MegaTag1
         boolean doRejectUpdate = false;
 
-        int[] validIDs = {16, 7, 8, 9, 10, 11, 17, 18, 19, 20, 21, 22,};
+        int[] validIDs = {6, 7, 8, 9, 10, 11, 17, 18, 19, 20, 21, 22,};
         LimelightHelpers.SetFiducialIDFiltersOverride(llName, validIDs);
 
         if (useMegaTag2 == false) {
