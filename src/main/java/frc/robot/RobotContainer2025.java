@@ -344,7 +344,7 @@ public class RobotContainer2025 implements RobotContainerInterface {
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
-        return s_Swerve.followPathPlannerAuto("Autoap22");
+        return s_Swerve.followPathPlannerAuto("Autoap20");
     }
 
     public void update() {
